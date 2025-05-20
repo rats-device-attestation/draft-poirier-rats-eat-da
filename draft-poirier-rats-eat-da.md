@@ -51,6 +51,12 @@ TODO Introduction
 
 {::boilerplate bcp14-tagged}
 
+# Device Attestation Claims
+
+~~~ cddl
+{::include cddl/da-eat-claims.cddl}
+~~~
+
 # Security Considerations
 
 TODO Security

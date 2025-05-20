@@ -13,3 +13,9 @@ else
 	    https://github.com/martinthomson/i-d-template $(LIBDIR)
 endif
 endif
+
+$(drafts_xml): cddl/da-eat-autogen.cddl
+
+cddl/da-eat-autogen.cddl: ; $(MAKE) -C cddl check
+
+clean:: ; $(MAKE) -C cddl clean
