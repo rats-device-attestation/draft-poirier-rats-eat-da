@@ -1,0 +1,7 @@
+claims-profile-label = 265 ; EAT profile
+
+claims-profile-type = "tag:linaro.org,2025:spdm-eat#1.0.0"
+
+claims-profile = (
+    claims-profile-label => claims-profile-type
+)

@@ -1,0 +1,45 @@
+measurement-blocks-signature-label = 10002
+
+;
+; What follows is based on SPDM v1.3.2 (DSP0274_1.3.2.pdf)
+;
+
+;
+; Algorithms currently supported by SPDM.   See "MeasurementHashAlgo", table
+; 21, page 79.
+;
+tpm_alg_sha_256 = 0
+tpm_alg_sha_384 = 2
+tpm_alg_sha_512 = 4
+tpm_alg_sha3_256 = 8
+tpm_alg_sha3_384 = 16
+tpm_alg_sha3_512 = 32
+tpm_alg_sm3_256 = 64
+
+hash-algorithm-type =
+    tpm_alg_sha_256 / tpm_alg_sha_384 / tpm_alg_sha_512 /
+    tpm_alg_sha3_256 / tpm_alg_sha3_384 / tpm_alg_sha3_512 /
+    tpm_alg_sm3_256
+
+;
+; See signature generation and verification algorithms for MEASUREMENTS 
+; messages on page 126.
+;
+; L1 = Concatenate(VCA, GET_MEASUREMENTS_REQUEST1, MEASUREMENTS_RESPONSE1, ...,
+;                  GET_MEASUREMENTS_REQUESTn-1, MEASUREMENTS_RESPONSEn-1,
+;                  GET_MEASUREMENTS_REQUESTn, MEASUREMENTS_RESPONSEn)
+;
+measurement-blocks-signature-map = {
+   &(slot: 1) => 1..7, ; Slot of the certificate chain used to authenticate the
+                       ; measurement. Default should be 0.  
+   &(requester-nonce: 2) => bytes .size 32,
+   &(responder-nonce: 3) => bytes .size 32,
+   &(combined-spdm-prefix: 4) => bytes .size 100,
+   &(IL1: 5) => bytes, ; L1 (see comment above)
+   &(base-hash-algo: 6) => hash-algorithm-type,
+   &(signature: 7) => bytes
+}
+
+measurement-blocks-signature = (
+    measurement-blocks-signature-label => measurement-blocks-signature-map
+)

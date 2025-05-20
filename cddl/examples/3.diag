@@ -1,0 +1,57 @@
+{
+  265: "tag:linaro.org,2025:spdm-eat#1.0.0",
+  10000: [ / device-log /
+    {
+      10001: [ / certificate-log /
+        {
+          1: 1, / slot /
+          2: h'4F6C6475766169' / certificate-chain /
+        }
+      ],
+      10003: { / measurement-log /
+        10004: [ / measurement-blocks /
+          {
+            10005: { / measurement-block /
+              1: 118, / index /
+              2: 1, / format /
+              3: 0, /value-type /
+              4: h'657870617472696174696E67' / measurement-value /
+            }
+          },
+          {
+            10005: { / measurement-block /
+              1: 43, / index /
+              2: 0, / format /
+              3: 5, /  value-type /
+              4: h'657870617472696174696E67' / measurement-value /
+            }
+          },
+          {
+            10005: { / measurement-block /
+              1: 254, / index /
+              2: 0, / format /
+              3: 2, / value type /
+              4: h'657870617472696174696E67' / measurement-value /
+            }
+          }
+        ]
+      }
+    },
+    {
+      10001: [ / certificate-log /
+        {
+          1: 2, / slot / 
+          2: h'6C6F6467696E672773' / certificate-chain /
+        },
+        {
+          1: 2, / slot /
+          2: h'77697368626F6E65' / certificate-chain /
+        },
+        {
+          1: 6, / slot /
+          2: h'73687574746C65636F636B73' / certificate-chain /
+        }
+      ]
+    }
+  ]
+}

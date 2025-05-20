@@ -1,0 +1,17 @@
+
+measurement-block-array = [ + measurement-block ]
+
+measurement-blocks-label = 10004
+measurement-blocks = (
+    measurement-blocks-label => measurement-block-array
+)
+
+measurement-map = {
+    measurement-blocks
+    ? measurement-blocks-signature
+}
+
+measurement-log-label = 10003
+measurement-log = (
+    measurement-log-label => measurement-map
+)

@@ -1,0 +1,21 @@
+measurement-block-label = 10005
+
+; SPDM v1.3.2 (DSP0274_1.3.2.pdf)
+
+; @index, Table 53 - Measurement block format
+measurement-block-index = 0x01..0xfe
+; 0 = hash; 1 = bitstream, Table 54 - DMTF measurement specification format
+measurement-block-format = 0 / 1
+; Table 55 — DMTFSpecMeasurementValueType values
+measuremente-block-value-type = 0x0..0xa
+
+measurement-block-map = {
+    &(index: 1) => measurement-block-index 
+    &(format: 2) => measurement-block-format
+    &(value-type: 3) => measuremente-block-value-type 
+    &(measurement-value: 4) => bytes
+}
+
+measurement-block = {
+    measurement-block-label => measurement-block-map
+}

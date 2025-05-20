@@ -1,0 +1,41 @@
+{
+  265: "tag:linaro.org,2025:spdm-eat#1.0.0",
+  10000: [ / device-log /
+    {
+      10001: [ / certificate-log /
+        {
+          1: 5, / slot /
+          2: h'5369677572642773' / certificate-chain /
+        },
+        {
+          1: 7, / slot /
+          2: h'576973636F6E73696E69746573' / certificate-chain /
+        },
+        {
+          1: 2, / slot /
+          2: h'6469736F626C6967696E67' / certificate-chain /
+        },
+        {
+          1: 1, / slot /
+          2: h'6369676172657474652773' / certificate-chain /
+        }
+      ]
+    },
+    {
+      10001: [ / certificate-log /
+        {
+          1: 1, / slot /
+          2: h'5669636B6965' / certificate-chain /
+        },
+        {
+          1: 4, / slot /
+          2: h'61737069726174696F6E' / certificate-chain /
+        },
+        {
+          1: 7, / slot /
+          2: h'6F7574696E672773' / certificate-chain /
+        }
+      ]
+    }
+  ]
+}
