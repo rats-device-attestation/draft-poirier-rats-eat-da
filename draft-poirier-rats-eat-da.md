@@ -1,5 +1,5 @@
 ---
-title: "EAT Profile for Device Attestation"
+title: "An EAT Profile for Device Attestation"
 abbrev: "EAT DA"
 category: info
 
@@ -7,7 +7,7 @@ docname: draft-poirier-rats-eat-da-latest
 submissiontype: independent
 number:
 date:
-consensus: true
+consensus: false
 v: 3
 area: AREA
 workgroup: WG Working Group
