@@ -14,8 +14,8 @@ else
 endif
 endif
 
-$(drafts_xml): cddl/da-eat-autogen.cddl
+$(drafts_xml): cddl/da-token-autogen.cddl
 
-cddl/da-eat-autogen.cddl: ; $(MAKE) -C cddl check
+cddl/da-token-autogen.cddl: ; $(MAKE) -C cddl check
 
 clean:: ; $(MAKE) -C cddl clean

@@ -1,0 +1,9 @@
+spdm-claims = {
+  &(measurements: 1) => {
+    + block-id => spdm-measurement
+    ? "signature" => spdm-measurement-blocks-signature
+  }
+  &(certificates: 2) => spdm-certificates
+}
+
+block-id = 0..239

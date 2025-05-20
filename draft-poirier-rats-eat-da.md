@@ -54,7 +54,31 @@ TODO Introduction
 # Device Attestation Claims
 
 ~~~ cddl
-{::include cddl/da-eat-claims.cddl}
+{::include cddl/da-token.cddl}
+~~~
+
+## SPDM Claims
+
+~~~ cddl
+{::include cddl/spdm-claims.cddl}
+~~~
+
+### Measurement Claims
+
+~~~ cddl
+{::include cddl/spdm-measurement.cddl}
+~~~
+
+### Certificate Claims
+
+~~~ cddl
+{::include cddl/spdm-certificates.cddl}
+~~~
+
+# Collated CDDL
+
+~~~ cddl
+{::include cddl/da-token-autogen.cddl}
 ~~~
 
 # Security Considerations
@@ -63,9 +87,21 @@ TODO Security
 
 # IANA Considerations
 
-TODO IANA
+## New CWT Claims Registrations
+
+TODO IANA CWT allocations
+
+## New CBOR Tags Registrations
+
+TODO IANA CBOR Tag allocations
 
 --- back
+
+# Examples
+
+~~~ cbor-diag
+{::include cddl/examples/1.diag}
+~~~
 
 # Acknowledgments
 {:numbered="false"}

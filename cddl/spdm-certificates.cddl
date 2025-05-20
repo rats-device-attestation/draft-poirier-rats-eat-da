@@ -1,0 +1,11 @@
+spdm-certificates = {
+  device-cert-slot => cert-chain
+  ? aux-cert-slots => cert-chain
+}
+
+; ASN.1 DER-encoded certificates concatenated with no intermediate
+; padding.
+cert-chain = bytes
+
+device-cert-slot = 0
+aux-cert-slots = 1..7

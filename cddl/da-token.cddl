@@ -1,0 +1,13 @@
+da-token = {
+  &(eat_profile: 265) => "tag:linaro.org,2025:device#1.0.0"
+  &(eat_nonce: 10) => bytes .size 64 ; same as realm nonce
+  &(eat_submods: 266) => {
+    + device-name => $device-claims
+  }
+}
+
+device-name = text .regexp "dev-[A-Za-z0-9]+"
+
+$device-claims /= #6.1000000(spdm-claims)
+$device-claims /= #6.1000001(cxl-claims)
+$device-claims /= #6.1000002(chi-claims)

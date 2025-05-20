@@ -1,0 +1,27 @@
+spdm-measurement = {
+  &(component-type: 1) => component-type
+  measurement
+}
+
+measurement //= ( &(digest-measurement: 2) => digest-measurement )
+measurement //= ( &(raw-measurement: 3) => raw-measurement )
+
+component-type /= &(immutable-rom: 0)
+component-type /= &(mutable-firmware: 1)
+component-type /= &(hardware-config: 2)
+component-type /= &(firmware-config: 3)
+component-type /= &(freeform-measurement-manifest: 4)
+component-type /= &(device-mode: 5)
+component-type /= &(mutable-firmware-version: 6)
+component-type /= &(mutable-firmware-svn: 7)
+component-type /= &(hash-extend-measurement: 8)
+component-type /= &(informational: 9)
+component-type /= &(structured-measurement-manifest: 10)
+
+raw-measurement = bytes
+digest-measurement = digest
+
+digest = [
+  alg: uint / text
+  val: bytes
+]
