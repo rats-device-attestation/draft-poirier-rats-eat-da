@@ -65,31 +65,31 @@ This document defines an attestation Evidence format for DA as an EAT {{-rats-ea
 # Device Attestation Claims
 
 ~~~ cddl
-{::include cddl/da-token.cddl}
+{::include-fold cddl/da-token.cddl}
 ~~~
 
 ## SPDM Claims
 
 ~~~ cddl
-{::include cddl/spdm-claims.cddl}
+{::include-fold cddl/spdm-claims.cddl}
 ~~~
 
 ### Measurement Claims
 
 ~~~ cddl
-{::include cddl/spdm-measurement.cddl}
+{::include-fold cddl/spdm-measurement.cddl}
 ~~~
 
 ### Certificate Claims
 
 ~~~ cddl
-{::include cddl/spdm-certificates.cddl}
+{::include-fold cddl/spdm-certificates.cddl}
 ~~~
 
 # Collated CDDL
 
 ~~~ cddl
-{::include cddl/da-token-autogen.cddl}
+{::include-fold cddl/da-token-autogen.cddl}
 ~~~
 
 # Security Considerations
@@ -111,7 +111,7 @@ TODO IANA CBOR Tag allocations
 # Examples
 
 ~~~ cbor-diag
-{::include cddl/examples/1.diag}
+{::include-fold cddl/examples/1.diag}
 ~~~
 
 # Acknowledgments
