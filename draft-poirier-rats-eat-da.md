@@ -61,29 +61,30 @@ This document defines an attestation Evidence format for DA as an EAT {{-rats-ea
 
 {::boilerplate bcp14-tagged}
 
+# SPDM Claims
+
+~~~ cddl
+{::include-fold cddl/spdm-claims.cddl}
+~~~
+
+## Measurement Claims
+
+~~~ cddl
+{::include-fold cddl/spdm-measurement.cddl}
+~~~
+
+## Certificate Claims
+
+~~~ cddl
+{::include-fold cddl/spdm-certificates.cddl}
+~~~
+
 # Device Attestation Claims
 
 ~~~ cddl
 {::include-fold cddl/da-token.cddl}
 ~~~
 
-## SPDM Claims
-
-~~~ cddl
-{::include-fold cddl/spdm-claims.cddl}
-~~~
-
-### Measurement Claims
-
-~~~ cddl
-{::include-fold cddl/spdm-measurement.cddl}
-~~~
-
-### Certificate Claims
-
-~~~ cddl
-{::include-fold cddl/spdm-certificates.cddl}
-~~~
 
 # Collated CDDL
 
