@@ -73,6 +73,12 @@ This document defines an attestation Evidence format for DA as an EAT {{-rats-ea
 {::include-fold cddl/spdm-measurement.cddl}
 ~~~
 
+## Measurement Claims Signature
+
+~~~ cddl
+{::include-fold cddl/spdm-measurement-blocks-signature.cddl}
+~~~
+
 ## Certificate Claims
 
 ~~~ cddl
