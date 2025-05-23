@@ -63,11 +63,15 @@ This document defines an attestation Evidence format for DA as an EAT {{-rats-ea
 
 # SPDM Claims
 
+A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.  Each instance consists of measurements and a certificates section.  There can be up to 239 measurements per device with the entire measurement log optionally signed by the certificate populated in one of the 8 certificate slots.  Note that measurements formalized herein follow the DMTF measurement specification.
+
 ~~~ cddl
 {::include-fold cddl/spdm-claims.cddl}
 ~~~
 
 ## Measurement Claims
+
+SPDM measurements start with a component type that reflects one of the 10 category defined by the SPDM specification.  Following is the measurement itself represented by either a raw bitstream or a digest.  The size of the digest value is derived from the measurement hash algorithm conveyed by the SPDM ALGORITHMS message response.
 
 ~~~ cddl
 {::include-fold cddl/spdm-measurement.cddl}
