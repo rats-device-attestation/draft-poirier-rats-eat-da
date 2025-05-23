@@ -5,7 +5,7 @@
 WG Working Group                                              M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 21 November 2025                                    20 May 2025
+Expires: 24 November 2025                                    23 May 2025
 
 
                  An EAT Profile for Device Attestation
@@ -13,7 +13,15 @@ Expires: 21 November 2025                                    20 May 2025
 
 Abstract
 
-   TODO Abstract
+   In confidential computing, device assignment (DA) is the method by
+   which a device (e.g., network adapter, GPU), whether on-chip or
+   behind a PCIe Root Port, is assigned to a Trusted Virtual Machine
+   (TVM).  For the TVM to trust the device, the device must provide the
+   TVM with attestation Evidence confirming its identity and the state
+   of its firmware and configuration.
+
+   This document defines an attestation Evidence format for DA as an EAT
+   (Entity Attestation Token) profile.
 
 About This Document
 
@@ -46,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 November 2025.
+   This Internet-Draft will expire on 24 November 2025.
 
 Copyright Notice
 
@@ -79,7 +87,22 @@ Table of Contents
 
 1.  Introduction
 
-   TODO Introduction
+   In confidential computing, device assignment (DA) is the method by
+   which a device (e.g., network adapter, GPU), whether on-chip or
+   behind a PCIe Root Port, is assigned to a Trusted Virtual Machine
+   (TVM).  Most confidential computing platforms (e.g., Arm CCA, AMD
+   SEV-SNP, Intel TDX) provide DA capabilities.  Such capabilities
+   prevent agents which are untrusted by the TVM (including other TVMs
+   and the host hypervisor) from accessing or controlling a device that
+   has been assigned to the TVM.  This includes, for example, protection
+   of device MMIO interfaces and device caches.  From a trust
+   perspective, DA allows a device to be included in the TVM's Trusted
+   Computing Base (TCB).  For the TVM to trust the device, the device
+   must provide the TVM with attestation Evidence confirming its
+   identity and the state of its firmware and configuration.
+
+   This document defines an attestation Evidence format for DA as an EAT
+   [RFC9711] profile.
 
 2.  Conventions and Definitions
 
@@ -163,13 +186,16 @@ Table of Contents
 
 4.  Collated CDDL
 
+   =============== NOTE: '\' line wrapping per RFC 8792 ================
+
    da-token = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device#1.0.0",
      &(eat_nonce: 10) => bytes .size 64,
      &(eat_submods: 266) => {+ device-name => $device-claims},
    }
    device-name = text .regexp "dev-[A-Za-z0-9]+"
-   $device-claims /= #6.1000000(spdm-claims) / #6.1000001(cxl-claims) / #6.1000002(chi-claims)
+   $device-claims /= #6.1000000(spdm-claims) / #6.1000001(cxl-claims) \
+                                                / #6.1000002(chi-claims)
    spdm-claims = {
      &(measurements: 1) => {
            + block-id => spdm-measurement,
@@ -182,8 +208,13 @@ Table of Contents
      &(component-type: 1) => component-type,
      measurement,
    }
-   measurement //= (&(digest-measurement: 2) => digest-measurement // &(raw-measurement: 3) => raw-measurement)
-   component-type /= &(immutable-rom: 0) / &(mutable-firmware: 1) / &(hardware-config: 2) / &(firmware-config: 3) / &(freeform-measurement-manifest: 4) / &(device-mode: 5) / &(mutable-firmware-version: 6) / &(mutable-firmware-svn: 7) / &(hash-extend-measurement: 8) / &(informational: 9) / &(structured-measurement-manifest: 10)
+   measurement //= (&(digest-measurement: 2) => digest-measurement // &\
+                                (raw-measurement: 3) => raw-measurement)
+   component-type /= &(immutable-rom: 0) / &(mutable-firmware: 1) / &(\
+   hardware-config: 2) / &(firmware-config: 3) / &(freeform-measurement\
+   -manifest: 4) / &(device-mode: 5) / &(mutable-firmware-version: 6) \
+   / &(mutable-firmware-svn: 7) / &(hash-extend-measurement: 8) / &(\
+              informational: 9) / &(structured-measurement-manifest: 10)
    raw-measurement = bytes
    digest-measurement = digest
    digest = [
@@ -197,7 +228,10 @@ Table of Contents
    cert-chain = bytes
    device-cert-slot = 0
    aux-cert-slots = 1 .. 7
-   hash-algorithm-type /= &(tpm_alg_sha_256: 0) / &(tpm_alg_sha_384: 2) / &(tpm_alg_sha_512: 4) / &(tpm_alg_sha3_256: 8) / &(tpm_alg_sha3_384: 16) / &(tpm_alg_sha3_512: 32) / &(tpm_alg_sm3_256: 64)
+   hash-algorithm-type /= &(tpm_alg_sha_256: 0) / &(tpm_alg_sha_384: 2\
+   ) / &(tpm_alg_sha_512: 4) / &(tpm_alg_sha3_256: 8) / &(\
+   tpm_alg_sha3_384: 16) / &(tpm_alg_sha3_512: 32) / &(tpm_alg_sm3_256\
+                                                                   : 64)
    spdm-measurement-blocks-signature = {
      &(slot: 1) => 0 .. 7,
      &(requester-nonce: 2) => bytes .size 32,
@@ -235,11 +269,20 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
+   [RFC9711]  Lundblade, L., Mandyam, G., O'Donoghue, J., and C.
+              Wallace, "The Entity Attestation Token (EAT)", RFC 9711,
+              DOI 10.17487/RFC9711, April 2025,
+              <https://www.rfc-editor.org/rfc/rfc9711>.
+
 Appendix A.  Examples
+
+   =============== NOTE: '\' line wrapping per RFC 8792 ================
 
    {
      / profile / 265: "tag:linaro.org,2025:device#1.0.0",
-     / nonce / 10: h'f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7aa40cd86cd30ebaae746fb19f008c1e6a1f23ad6a178e18dceda918f7f6e',
+     / nonce / 10: h'\
+   f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
+          aa40cd86cd30ebaae746fb19f008c1e6a1f23ad6a178e18dceda918f7f6e',
      / submods / 266: {
        "dev-a": 1000000({
          / measurements / 1: {
@@ -249,7 +292,8 @@ Appendix A.  Examples
            }
          },
          / certificates / 2: {
-           / device certs / 0: h'676f616e6e61747261646974696f6e6d6f6e676572'
+           / device certs / 0: h'\
+                             676f616e6e61747261646974696f6e6d6f6e676572'
            / no aux certs /
          }
        }),

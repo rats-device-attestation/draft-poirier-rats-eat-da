@@ -8,7 +8,9 @@
 <meta content="Mathieu Poirier" name="author">
 <meta content="Thomas Fossati" name="author">
 <meta content="
-       TODO Abstract 
+       In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
+For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration. 
+       This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile. 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="attestation" name="keyword">
@@ -1051,7 +1053,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Poirier &amp; Fossati</td>
-<td class="center">Expires 21 November 2025</td>
+<td class="center">Expires 24 November 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1066,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-poirier-rats-eat-da-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-05-20" class="published">20 May 2025</time>
+<time datetime="2025-05-23" class="published">23 May 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-11-21">21 November 2025</time></dd>
+<dd class="expires"><time datetime="2025-11-24">24 November 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1086,7 +1088,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">An EAT Profile for Device Attestation</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">TODO Abstract<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
+For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1122,7 +1126,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 24 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1208,7 +1212,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">TODO Introduction<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
+Most confidential computing platforms (e.g., Arm CCA, AMD SEV-SNP, Intel TDX) provide DA capabilities.
+Such capabilities prevent agents which are untrusted by the TVM (including other TVMs and the host hypervisor) from accessing or controlling a device that has been assigned to the TVM.
+This includes, for example, protection of device MMIO interfaces and device caches.
+From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
+For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document defines an attestation Evidence format for DA as an EAT <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> profile.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1331,15 +1341,18 @@ aux-cert-slots = 1..7
       <h2 id="name-collated-cddl">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-collated-cddl" class="section-name selfRef">Collated CDDL</a>
       </h2>
-<div class="lang-cddl sourcecode" id="section-4-1">
+<div class="breakable lang-cddl sourcecode" id="section-4-1">
 <pre>
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
 da-token = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device#1.0.0",
   &amp;(eat_nonce: 10) =&gt; bytes .size 64,
   &amp;(eat_submods: 266) =&gt; {+ device-name =&gt; $device-claims},
 }
 device-name = text .regexp "dev-[A-Za-z0-9]+"
-$device-claims /= #6.1000000(spdm-claims) / #6.1000001(cxl-claims) / #6.1000002(chi-claims)
+$device-claims /= #6.1000000(spdm-claims) / #6.1000001(cxl-claims) \
+                                             / #6.1000002(chi-claims)
 spdm-claims = {
   &amp;(measurements: 1) =&gt; {
         + block-id =&gt; spdm-measurement,
@@ -1352,8 +1365,13 @@ spdm-measurement = {
   &amp;(component-type: 1) =&gt; component-type,
   measurement,
 }
-measurement //= (&amp;(digest-measurement: 2) =&gt; digest-measurement // &amp;(raw-measurement: 3) =&gt; raw-measurement)
-component-type /= &amp;(immutable-rom: 0) / &amp;(mutable-firmware: 1) / &amp;(hardware-config: 2) / &amp;(firmware-config: 3) / &amp;(freeform-measurement-manifest: 4) / &amp;(device-mode: 5) / &amp;(mutable-firmware-version: 6) / &amp;(mutable-firmware-svn: 7) / &amp;(hash-extend-measurement: 8) / &amp;(informational: 9) / &amp;(structured-measurement-manifest: 10)
+measurement //= (&amp;(digest-measurement: 2) =&gt; digest-measurement // &amp;\
+                             (raw-measurement: 3) =&gt; raw-measurement)
+component-type /= &amp;(immutable-rom: 0) / &amp;(mutable-firmware: 1) / &amp;(\
+hardware-config: 2) / &amp;(firmware-config: 3) / &amp;(freeform-measurement\
+-manifest: 4) / &amp;(device-mode: 5) / &amp;(mutable-firmware-version: 6) \
+/ &amp;(mutable-firmware-svn: 7) / &amp;(hash-extend-measurement: 8) / &amp;(\
+           informational: 9) / &amp;(structured-measurement-manifest: 10)
 raw-measurement = bytes
 digest-measurement = digest
 digest = [
@@ -1367,7 +1385,10 @@ spdm-certificates = {
 cert-chain = bytes
 device-cert-slot = 0
 aux-cert-slots = 1 .. 7
-hash-algorithm-type /= &amp;(tpm_alg_sha_256: 0) / &amp;(tpm_alg_sha_384: 2) / &amp;(tpm_alg_sha_512: 4) / &amp;(tpm_alg_sha3_256: 8) / &amp;(tpm_alg_sha3_384: 16) / &amp;(tpm_alg_sha3_512: 32) / &amp;(tpm_alg_sm3_256: 64)
+hash-algorithm-type /= &amp;(tpm_alg_sha_256: 0) / &amp;(tpm_alg_sha_384: 2\
+) / &amp;(tpm_alg_sha_512: 4) / &amp;(tpm_alg_sha3_256: 8) / &amp;(\
+tpm_alg_sha3_384: 16) / &amp;(tpm_alg_sha3_512: 32) / &amp;(tpm_alg_sm3_256\
+                                                                : 64)
 spdm-measurement-blocks-signature = {
   &amp;(slot: 1) =&gt; 0 .. 7,
   &amp;(requester-nonce: 2) =&gt; bytes .size 32,
@@ -1425,8 +1446,12 @@ chi-claims = {}
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9711">[RFC9711]</dt>
+    <dd>
+<span class="refAuthor">Lundblade, L.</span>, <span class="refAuthor">Mandyam, G.</span>, <span class="refAuthor">O'Donoghue, J.</span>, and <span class="refAuthor">C. Wallace</span>, <span class="refTitle">"The Entity Attestation Token (EAT)"</span>, <span class="seriesInfo">RFC 9711</span>, <span class="seriesInfo">DOI 10.17487/RFC9711</span>, <time datetime="2025-04" class="refDate">April 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9711">https://www.rfc-editor.org/rfc/rfc9711</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1438,9 +1463,13 @@ chi-claims = {}
       </h2>
 <div class="lang-cbor-diag sourcecode" id="appendix-A-1">
 <pre>
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
 {
   / profile / 265: "tag:linaro.org,2025:device#1.0.0",
-  / nonce / 10: h'f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7aa40cd86cd30ebaae746fb19f008c1e6a1f23ad6a178e18dceda918f7f6e',
+  / nonce / 10: h'\
+f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
+       aa40cd86cd30ebaae746fb19f008c1e6a1f23ad6a178e18dceda918f7f6e',
   / submods / 266: {
     "dev-a": 1000000({
       / measurements / 1: {
@@ -1450,7 +1479,8 @@ chi-claims = {}
         }
       },
       / certificates / 2: {
-        / device certs / 0: h'676f616e6e61747261646974696f6e6d6f6e676572'
+        / device certs / 0: h'\
+                          676f616e6e61747261646974696f6e6d6f6e676572'
         / no aux certs /
       }
     }),
