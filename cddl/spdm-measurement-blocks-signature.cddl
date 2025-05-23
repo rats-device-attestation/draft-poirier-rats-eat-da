@@ -3,8 +3,8 @@
 ;
 
 ;
-; Algorithms currently supported by SPDM.   See "MeasurementHashAlgo", table
-; 21, page 79.
+; Algorithms currently supported by SPDM.
+; See "MeasurementHashAlgo", table 21, page 79.
 ;
 hash-algorithm-type /= &(tpm_alg_sha_256: 0)
 hash-algorithm-type /= &(tpm_alg_sha_384: 2)
@@ -15,16 +15,19 @@ hash-algorithm-type /= &(tpm_alg_sha3_512: 32)
 hash-algorithm-type /= &(tpm_alg_sm3_256: 64)
 
 ;
-; See signature generation and verification algorithms for MEASUREMENTS
-; messages on page 126.
+; See signature generation and verification algorithms for
+; MEASUREMENTS messages on page 126.
 ;
-; L1 = Concatenate(VCA, GET_MEASUREMENTS_REQUEST1, MEASUREMENTS_RESPONSE1, ...,
-;                  GET_MEASUREMENTS_REQUESTn-1, MEASUREMENTS_RESPONSEn-1,
-;                  GET_MEASUREMENTS_REQUESTn, MEASUREMENTS_RESPONSEn)
+; L1 = Concatenate(VCA, GET_MEASUREMENTS_REQUEST1,
+;               MEASUREMENTS_RESPONSE1, ...,
+;               GET_MEASUREMENTS_REQUESTn-1,
+;               MEASUREMENTS_RESPONSEn-1,
+;               GET_MEASUREMENTS_REQUESTn, MEASUREMENTS_RESPONSEn)
 ;
 spdm-measurement-blocks-signature = {
-   &(slot: 1) => 0..7, ; Slot of the certificate chain used to authenticate the
-                       ; measurement. Default should be 0.
+   &(slot: 1) => 0..7, ; Slot of the certificate chain used to
+                       ; authenticate the measurement.  Default
+                       ; should be 0.
    &(requester-nonce: 2) => bytes .size 32,
    &(responder-nonce: 3) => bytes .size 32,
    &(combined-spdm-prefix: 4) => bytes .size 100,
