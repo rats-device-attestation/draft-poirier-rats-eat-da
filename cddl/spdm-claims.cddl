@@ -6,4 +6,4 @@ spdm-claims = {
   &(certificates: 2) => spdm-certificates
 }
 
-block-id = 0..239
+block-id = 1..239
