@@ -79,6 +79,8 @@ SPDM measurements start with a component type that reflects one of the 10 catego
 
 ## Measurement Claims Signature
 
+Devices can optionally support the capability to sign measurements.  Included in the measurement claim signature are all the elements needed by a third party entity to reconstruct the original measurement log signed by the device.  Those elements include L1 (see CDDL below), the combined SPDM prefix, the hash algorithm used to generate a digest of the measurement log and nonces provided by the requester and responder.  The slot number of the leaf certificate used to sign the measurement log is also provided.
+
 ~~~ cddl
 {::include-fold cddl/spdm-measurement-blocks-signature.cddl}
 ~~~
