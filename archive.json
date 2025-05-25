@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-22T01:56:40.484680+00:00",
+  "timestamp": "2025-05-25T02:05:25.933494+00:00",
   "repo": "thomas-fossati/draft-eat-da",
   "labels": [
     {
@@ -50,5 +50,34 @@
     }
   ],
   "issues": [],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOOtRXe86XMpWD",
+      "title": "add abstract and intro",
+      "url": "https://github.com/thomas-fossati/draft-eat-da/pull/1",
+      "state": "MERGED",
+      "author": "thomas-fossati",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-05-22T09:59:21Z",
+      "updatedAt": "2025-05-23T18:15:37Z",
+      "baseRepository": "thomas-fossati/draft-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "11e3f732e62b21201622ac99768060f4122d34c0",
+      "headRepository": "thomas-fossati/draft-eat-da",
+      "headRefName": "intro",
+      "headRefOid": "79c677e52d6f2f741bd89dd14927e86b995341ee",
+      "closedAt": "2025-05-23T17:38:17Z",
+      "mergedAt": "2025-05-23T17:38:17Z",
+      "mergedBy": "mathieupoirier",
+      "mergeCommit": {
+        "oid": "73851fdbb455f635325f70e43dc93fa69e685291"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
