@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-25T02:05:25.933494+00:00",
+  "timestamp": "2025-05-27T01:55:38.389639+00:00",
   "repo": "thomas-fossati/draft-eat-da",
   "labels": [
     {
@@ -78,6 +78,121 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOOtRXe86XjEda",
+      "title": "Some refactoring and content for measurement claims",
+      "url": "https://github.com/thomas-fossati/draft-eat-da/pull/2",
+      "state": "OPEN",
+      "author": "mathieupoirier",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "thomas-fossati"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-05-25T17:40:02Z",
+      "updatedAt": "2025-05-26T18:13:52Z",
+      "baseRepository": "thomas-fossati/draft-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "73851fdbb455f635325f70e43dc93fa69e685291",
+      "headRepository": "thomas-fossati/draft-eat-da",
+      "headRefName": "measurements",
+      "headRefOid": "d70715ca339d215eda150200b1c32bdc47f0f29d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe86q9FHN",
+          "commit": {
+            "abbreviatedOid": "d70715c"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-26T11:38:01Z",
+          "updatedAt": "2025-05-26T11:40:34Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "typographical/editorial note: let\u2019s follow the NSNL convention [1].\r\nIt makes diffs much easier to interpret.\r\n\r\n[1] https://github.com/cabo/kramdown-rfc/wiki/Manuscript-Style",
+              "createdAt": "2025-05-26T11:38:01Z",
+              "updatedAt": "2025-05-26T11:40:56Z"
+            },
+            {
+              "originalPosition": 36,
+              "body": "This is quite a significant change of scope.  What is the reasoning behind this?",
+              "createdAt": "2025-05-26T11:40:29Z",
+              "updatedAt": "2025-05-26T11:40:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe86rALeR",
+          "commit": {
+            "abbreviatedOid": "d70715c"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-26T17:48:19Z",
+          "updatedAt": "2025-05-26T17:48:19Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Ok, I'll fix this",
+              "createdAt": "2025-05-26T17:48:19Z",
+              "updatedAt": "2025-05-26T17:48:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe86rAMR-",
+          "commit": {
+            "abbreviatedOid": "d70715c"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-26T17:51:42Z",
+          "updatedAt": "2025-05-26T17:51:43Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "The DA token CDDL shows how to use the SPDM attestation.  Just like code, I thought it would be best to introduce small parts, i.e the spdm-claims, and then use it in an example.  I am not strongly opinionated on this. ",
+              "createdAt": "2025-05-26T17:51:43Z",
+              "updatedAt": "2025-05-26T17:51:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe86rAR_r",
+          "commit": {
+            "abbreviatedOid": "d70715c"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-26T18:13:52Z",
+          "updatedAt": "2025-05-26T18:13:52Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "I am not opinionated on how the assembly should look in the end.  However, I quite strongly believe we need to provide an outline of that.\r\nI see two core topics at work in this spec:\r\n1. How to expose SPDM in a user-friendly way;\r\n2. How to use the EAT framework to express attesters' composition in a confidential computing platform that implements some form of device assignment.\r\n\r\nThe former is 100% bottom-up; the latter needs continuous zooming in and out to ensure it all fits together.",
+              "createdAt": "2025-05-26T18:13:52Z",
+              "updatedAt": "2025-05-26T18:14:35Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
