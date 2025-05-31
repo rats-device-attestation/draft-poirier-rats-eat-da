@@ -57,6 +57,11 @@ From a trust perspective, DA allows a device to be included in the TVM's Trusted
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
 
 This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
+The format is designed to be generic, extensible and architecture agnostic.
+Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol, but other bus architecture and protocols are expected to be supported as the technology gains wider adoption.
+As such we focus on the formalization of an Evidence format for SPDM compliant devices while leaving room for the definition of other Evidencee format such as CXL and CHI.
+This list is by no means exhaustive and is expected to expand.
+
 
 # Conventions and Definitions
 
