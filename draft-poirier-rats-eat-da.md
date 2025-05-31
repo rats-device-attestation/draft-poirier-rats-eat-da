@@ -81,6 +81,11 @@ As previously mentioned, this draft defines the claims set for SPDM compliant de
 
 ## SPDM Claims
 
+A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
+Each instance consists of measurements and a certificates section.
+There can be up to 239 measurements per device with the entire measurement log optionally signed by the certificate populated in one of the 8 certificate slots.
+It should be noted that measurements formalized herein follow the DMTF measurement specification.
+
 ~~~ cddl
 {::include-fold cddl/spdm-claims.cddl}
 ~~~
