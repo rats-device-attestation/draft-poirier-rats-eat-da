@@ -1,5 +1,5 @@
 spdm-certificates = {
-  device-cert-slot => cert-chain
+  default-cert-slot => cert-chain
   ? aux-cert-slots => cert-chain
 }
 
@@ -7,5 +7,5 @@ spdm-certificates = {
 ; padding.
 cert-chain = bytes
 
-device-cert-slot = 0
+default-cert-slot = 0
 aux-cert-slots = 1..7
