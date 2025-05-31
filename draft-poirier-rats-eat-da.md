@@ -92,6 +92,10 @@ It should be noted that measurements formalized herein follow the DMTF measureme
 
 ### Measurement Claims
 
+SPDM measurements start with a component type that reflects one of the 10 category defined by the SPDM specification.
+Following is the measurement itself represented by either a raw bitstream or a digest.
+The size of the digest value is derived from the measurement hash algorithm conveyed by the SPDM ALGORITHMS message response.
+
 ~~~ cddl
 {::include-fold cddl/spdm-measurement.cddl}
 ~~~
