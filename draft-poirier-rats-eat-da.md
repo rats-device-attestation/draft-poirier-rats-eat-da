@@ -69,6 +69,12 @@ This list is by no means exhaustive and is expected to expand.
 
 # Device Attestation Claims
 
+The Device Attestation claim is the encompassing envelope for the individual device claims to be presented.
+It can be used as a standalone entity but typically enclosed in a wider platform specific attestation token.
+The Device attestation claim consists of an EAT profile number, a nonce and any number of individual device claims.
+Each device claim is a tuple made of the device name and a standard claims format based on the bus or protocol the device supports.
+As previously mentioned, a definition for SPDM compliant devices is presented as part of this draft but we leave room for future expansion.
+
 ~~~ cddl
 {::include-fold cddl/da-token.cddl}
 ~~~
