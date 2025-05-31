@@ -11,3 +11,7 @@ device-name = text .regexp "dev-[A-Za-z0-9]+"
 $device-claims /= #6.1000000(spdm-claims)
 $device-claims /= #6.1000001(cxl-claims)
 $device-claims /= #6.1000002(chi-claims)
+; Thomas, we need to talk about representing legacy devices
+; that may be assigned to a TVM but that are too old to
+; generate evidence claims. 
+$device-claims /= #6.1000003(legacy-claims)
