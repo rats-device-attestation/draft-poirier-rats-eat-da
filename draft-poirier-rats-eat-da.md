@@ -113,6 +113,10 @@ The slot number of the leaf certificate used to sign the measurement log is also
 
 ### Certificate Claims
 
+According to the specification, SPDM compliant devices should support at most 8 slots, with slot 0 populated by default.
+Slot 0 shall contain a certificate chain that follow the Device certificate model or the Alias certificate model.
+Regardless of the certificate model used, a certificate chain is encoded in a ASN.1 DER-encoded X.509 v3 format.
+
 ~~~ cddl
 {::include-fold cddl/spdm-certificates.cddl}
 ~~~
