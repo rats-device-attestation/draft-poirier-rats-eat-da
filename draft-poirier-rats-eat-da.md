@@ -73,7 +73,8 @@ The Device Attestation claim is the encompassing envelope for the individual dev
 It can be used as a standalone entity but typically enclosed in a wider platform specific attestation token.
 The Device attestation claim consists of an EAT profile identifier, a nonce and an EAT submodule ({{Section 4.2.18 of -rats-eat}}) that contains any number of individual device claims.
 Each individual device claim is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
-As previously mentioned, this draft defines the claims set for SPDM compliant devices while allowing room for future expansion.
+As previously mentioned, this draft currently defines the claims set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
+Careful condiseration was also given to the overall design in order to leave room for future expansion.
 
 ~~~ cddl
 {::include-fold cddl/da-token.cddl}
@@ -119,6 +120,16 @@ Regardless of the certificate model used, a certificate chain is encoded in a AS
 
 ~~~ cddl
 {::include-fold cddl/spdm-certificates.cddl}
+~~~
+
+## PCIe Legacy Device Claims
+
+The definition of a device claims format for PCIe legacy devices that do not implement the extensions needed to attest for their provenance and configuration is provided, making it is possible to keep using current assets as secures ones are being provisioned.
+This legacy device claims format simply mirrors the type 0/1 common registers of the PCIe configuration space, mandating only that the vendor and device identification code be provided.
+Other fields of the configuration space header may optionally be included should they add value.
+
+~~~ cddl
+{::include-fold cddl/pcie-legacy-claims.cddl}
 ~~~
 
 # Collated CDDL

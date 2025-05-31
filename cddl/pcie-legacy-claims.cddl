@@ -1,0 +1,17 @@
+pcie-legacy-claims = {
+  &(legacy-header: 1) => pcie-type-0-1-config-space
+  ? $$pcie-legacy-claim-extension
+}
+
+pcie-type-0-1-config-space = {
+  &(vendorID: 1) => bytes .size 2
+  &(deviceID: 2) => bytes .size 2
+  ? &(command: 3) => bytes .size 2
+  ? &(status: 4) => bytes .size 2
+  ? &(revisionID: 5) => bytes .size 1
+  ? &(classCode: 6) => bytes .size 3
+  ? &(cacheLineSize: 7) => bytes .size 1
+  ? &(latencyTimer: 8) => bytes .size 1
+  ? &(headerType: 9) => bytes .size 1
+  ? &(BITS: 10) => bytes .size 1
+}
