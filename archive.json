@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-01T02:21:39.584141+00:00",
+  "timestamp": "2025-06-03T01:59:24.427802+00:00",
   "repo": "thomas-fossati/draft-eat-da",
   "labels": [
     {
@@ -189,6 +189,95 @@
               "body": "I am not opinionated on how the assembly should look in the end.  However, I quite strongly believe we need to provide an outline of that.\r\nI see two core topics at work in this spec:\r\n1. How to expose SPDM in a user-friendly way;\r\n2. How to use the EAT framework to express attesters' composition in a confidential computing platform that implements some form of device assignment.\r\n\r\nThe former is 100% bottom-up; the latter needs continuous zooming in and out to ensure it all fits together.",
               "createdAt": "2025-05-26T18:13:52Z",
               "updatedAt": "2025-05-26T18:14:35Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOOtRXe86YhLqm",
+      "title": "Measurements v2",
+      "url": "https://github.com/thomas-fossati/draft-eat-da/pull/3",
+      "state": "OPEN",
+      "author": "mathieupoirier",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-02T00:27:31Z",
+      "updatedAt": "2025-06-02T07:38:55Z",
+      "baseRepository": "thomas-fossati/draft-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "73851fdbb455f635325f70e43dc93fa69e685291",
+      "headRepository": "thomas-fossati/draft-eat-da",
+      "headRefName": "measurements-v2",
+      "headRefOid": "c9d39e7220255128e9400c44db34a35991225d59",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe86sFPs2",
+          "commit": {
+            "abbreviatedOid": "c9d39e7"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "Really awesome stuff!\r\n\r\nI have inlined a few editorial notes for your consideration.",
+          "createdAt": "2025-06-02T07:11:47Z",
+          "updatedAt": "2025-06-02T07:38:55Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\nAs such we focus on the formalization of an Evidence format for SPDM compliant devices while leaving room for the definition of other Evidence format such as CXL and CHI.\r\n```",
+              "createdAt": "2025-06-02T07:11:47Z",
+              "updatedAt": "2025-06-02T07:38:55Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\r\nThe Device attestation claim consists of an EAT profile identifier, a nonce and any number of individual device claims.\r\n```",
+              "createdAt": "2025-06-02T07:12:50Z",
+              "updatedAt": "2025-06-02T07:38:56Z"
+            },
+            {
+              "originalPosition": 20,
+              "body": "\u201cwe\u201d is usually banned from cold, impersonal, standard documents :-)\r\n\r\n```suggestion\r\nAs previously mentioned, this draft defines the claims set for SPDM-compliant devices, while allowing for future expansion.\r\n```",
+              "createdAt": "2025-06-02T07:14:01Z",
+              "updatedAt": "2025-06-02T07:38:56Z"
+            },
+            {
+              "originalPosition": 19,
+              "body": "\u201cclaims set\u201d is a term of art used extensively in RFC9711.\r\n\r\n```suggestion\r\nAll the device claims are contained within an EAT submodule ({{Section 4.2.18 of -rats-eat}}).\r\nIn the submodule, each device's claims set is identified by a unique name.\r\nThe format of the individual claims sets depends on the bus or protocol supported by the device.\r\n```",
+              "createdAt": "2025-06-02T07:24:04Z",
+              "updatedAt": "2025-06-02T07:38:56Z"
+            },
+            {
+              "originalPosition": 39,
+              "body": "```suggestion\r\nSPDM measurements start with a component type that reflects one of the 10 categories defined by the SPDM specification.\r\n```",
+              "createdAt": "2025-06-02T07:32:41Z",
+              "updatedAt": "2025-06-02T07:38:56Z"
+            },
+            {
+              "originalPosition": 49,
+              "body": "```suggestion\r\nSPDM-compliant devices can optionally support the capability to sign measurements.\r\n```",
+              "createdAt": "2025-06-02T07:33:14Z",
+              "updatedAt": "2025-06-02T07:38:56Z"
+            },
+            {
+              "originalPosition": 61,
+              "body": "ISTM, this is a prime case for normative language.\r\n\r\n```suggestion\r\nSlot 0 SHALL contain a certificate chain that follows the Device certificate model or the Alias certificate model.\r\n```",
+              "createdAt": "2025-06-02T07:34:48Z",
+              "updatedAt": "2025-06-02T07:38:56Z"
+            },
+            {
+              "originalPosition": 62,
+              "body": "IIRC, the certificates are concatenated with no intermediate padding, right?\r\n\r\nIf so, this should be clearly stated because it impacts the parsing function and, as such, is an interoperability criterion.",
+              "createdAt": "2025-06-02T07:37:50Z",
+              "updatedAt": "2025-06-02T07:38:56Z"
             }
           ]
         }
