@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-03T01:59:24.427802+00:00",
+  "timestamp": "2025-06-05T01:58:17.478777+00:00",
   "repo": "thomas-fossati/draft-eat-da",
   "labels": [
     {
@@ -206,7 +206,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-06-02T00:27:31Z",
-      "updatedAt": "2025-06-02T07:38:55Z",
+      "updatedAt": "2025-06-03T17:16:22Z",
       "baseRepository": "thomas-fossati/draft-eat-da",
       "baseRefName": "main",
       "baseRefOid": "73851fdbb455f635325f70e43dc93fa69e685291",
@@ -278,6 +278,46 @@
               "body": "IIRC, the certificates are concatenated with no intermediate padding, right?\r\n\r\nIf so, this should be clearly stated because it impacts the parsing function and, as such, is an interoperability criterion.",
               "createdAt": "2025-06-02T07:37:50Z",
               "updatedAt": "2025-06-02T07:38:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe86sdY5P",
+          "commit": {
+            "abbreviatedOid": "c9d39e7"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-03T17:07:29Z",
+          "updatedAt": "2025-06-03T17:07:29Z",
+          "comments": [
+            {
+              "originalPosition": 49,
+              "body": "There are 4 occurences of \"SPDM compiliant\" in the text, with only one of them carrying an hyphen.  I removed the sole occurence of the hyphenated instance.",
+              "createdAt": "2025-06-03T17:07:29Z",
+              "updatedAt": "2025-06-03T17:07:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe86sdefK",
+          "commit": {
+            "abbreviatedOid": "c9d39e7"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-03T17:16:22Z",
+          "updatedAt": "2025-06-03T17:16:22Z",
+          "comments": [
+            {
+              "originalPosition": 62,
+              "body": "This is not the kind of details that would have jumped at me, though I'm pretty sure I know where in the spec they talk about it.  I will investitage.",
+              "createdAt": "2025-06-03T17:16:22Z",
+              "updatedAt": "2025-06-03T17:16:58Z"
             }
           ]
         }
