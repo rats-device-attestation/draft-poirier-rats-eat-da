@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-08T02:07:59.877906+00:00",
+  "timestamp": "2025-06-10T02:01:12.190245+00:00",
   "repo": "thomas-fossati/draft-eat-da",
   "labels": [
     {
@@ -322,6 +322,40 @@
           ]
         }
       ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOOtRXe86Zmark",
+      "title": "Measurements v3",
+      "url": "https://github.com/thomas-fossati/draft-eat-da/pull/4",
+      "state": "OPEN",
+      "author": "mathieupoirier",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-08T21:25:25Z",
+      "updatedAt": "2025-06-08T21:39:50Z",
+      "baseRepository": "thomas-fossati/draft-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "73851fdbb455f635325f70e43dc93fa69e685291",
+      "headRepository": "thomas-fossati/draft-eat-da",
+      "headRefName": "measurements-v3",
+      "headRefOid": "d411ba386062edff69464142db54b336ced6d2cb",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I did not have the time to look into the certificate padding question you raised in V2 but everything else we talked about has been addressed.\r\n\r\nI'm not sure whey the diagnostic test fails, it works perfectly on my side.  Something else I have to look into.",
+          "createdAt": "2025-06-08T21:39:49Z",
+          "updatedAt": "2025-06-08T21:39:49Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
