@@ -16,7 +16,7 @@
     }),
     "dev-b": 1000000({
       / measurements / 1: {
-        0: {
+        1: {
           / component-type / 1: 1, / mutable firmware /
           / digest-measurement / 2: [
             / alg / 1,
