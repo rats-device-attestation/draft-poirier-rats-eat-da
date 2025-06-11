@@ -10,7 +10,8 @@
 <meta content="
        In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration. 
-       This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile. 
+       Since Evidence claims can be consumed by 3rd party attestation services external to the TVM, there is a need to standardise the representation of Evidence to ensure interoperability.
+This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile. 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="attestation" name="keyword">
@@ -24,12 +25,12 @@ For the TVM to trust the device, the device must provide the TVM with attestatio
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
-    lxml 5.3.0
+    lxml 5.3.1
     platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.3
-    setuptools 70.3.0
+    setuptools 80.9.0
     wcwidth 0.2.13
 -->
 <link href="draft-poirier-rats-eat-da.xml" rel="alternate" type="application/rfc+xml">
@@ -1049,11 +1050,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">EAT DA</td>
-<td class="right">May 2025</td>
+<td class="right">June 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Poirier &amp; Fossati</td>
-<td class="center">Expires 24 November 2025</td>
+<td class="center">Expires 13 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1066,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-poirier-rats-eat-da-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-05-23" class="published">23 May 2025</time>
+<time datetime="2025-06-11" class="published">11 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-11-24">24 November 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-13">13 December 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1090,7 +1091,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">Since Evidence claims can be consumed by 3rd party attestation services external to the TVM, there is a need to standardise the representation of Evidence to ensure interoperability.
+This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1126,7 +1128,7 @@ For the TVM to trust the device, the device must provide the TVM with attestatio
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 24 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1168,9 +1170,15 @@ For the TVM to trust the device, the device must provide the TVM with attestatio
                     <p id="section-toc.1-1.3.2.1.2.1.1" class="keepWithNext"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-measurement-claims" class="internal xref">Measurement Claims</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2">
-                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-certificate-claims" class="internal xref">Certificate Claims</a></p>
+                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-measurement-claims-signatur" class="internal xref">Measurement Claims Signature</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3">
+                    <p id="section-toc.1-1.3.2.1.2.3.1"><a href="#section-3.1.3" class="auto internal xref">3.1.3</a>.  <a href="#name-certificate-claims" class="internal xref">Certificate Claims</a></p>
 </li>
                 </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-pcie-legacy-device-claims" class="internal xref">PCIe Legacy Device Claims</a></p>
 </li>
             </ul>
 </li>
@@ -1218,7 +1226,11 @@ Such capabilities prevent agents which are untrusted by the TVM (including other
 This includes, for example, protection of device MMIO interfaces and device caches.
 From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">This document defines an attestation Evidence format for DA as an EAT <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> profile.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document defines an attestation Evidence format for DA as an EAT <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> profile.
+The format is designed to be generic, extensible and architecture agnostic.
+Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol, but other bus architecture and protocols are expected to be supported as the technology gains wider adoption.
+As such we focus on the formalization of an Evidence format for SPDM compliant devices while leaving room for the definition of other Evidence format such as CXL and CHI.
+This list is by no means exhaustive and is expected to expand.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1237,7 +1249,13 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-device-attestation-claims">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-device-attestation-claims" class="section-name selfRef">Device Attestation Claims</a>
       </h2>
-<div class="lang-cddl sourcecode" id="section-3-1">
+<p id="section-3-1">The Device Attestation claim is the encompassing envelope for the individual device claims to be presented.
+It can be used as a standalone entity but typically enclosed in a wider platform specific attestation token.
+The Device attestation claim consists of an EAT profile identifier, a nonce and an EAT submodule (<span><a href="https://rfc-editor.org/rfc/rfc9711#section-4.2.18" class="relref">Section 4.2.18</a> of [<a href="#RFC9711" class="cite xref">RFC9711</a>]</span>) that contains any number of individual device claims.
+Each individual device claim is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
+As previously mentioned, this draft currently defines the claims set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
+Careful condideration was also given to the overall design in order to leave room for future expansion.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3-2">
 <pre>
 da-token = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device#1.0.0"
@@ -1252,14 +1270,19 @@ device-name = text .regexp "dev-[A-Za-z0-9]+"
 $device-claims /= #6.1000000(spdm-claims)
 $device-claims /= #6.1000001(cxl-claims)
 $device-claims /= #6.1000002(chi-claims)
-</pre><a href="#section-3-1" class="pilcrow">¶</a>
+$device-claims /= #6.1000003(pcie-legacy-claims)
+</pre><a href="#section-3-2" class="pilcrow">¶</a>
 </div>
 <div id="spdm-claims">
 <section id="section-3.1">
         <h3 id="name-spdm-claims">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-spdm-claims" class="section-name selfRef">SPDM Claims</a>
         </h3>
-<div class="lang-cddl sourcecode" id="section-3.1-1">
+<p id="section-3.1-1">A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
+Each instance consists of measurements and a certificates section.
+There can be up to 239 measurements per device with the entire measurement log optionally signed by the certificate populated in one of the 8 certificate slots.
+It should be noted that measurements formalized herein follow the DMTF measurement specification.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1-2">
 <pre>
 spdm-claims = {
   &amp;(measurements: 1) =&gt; {
@@ -1269,15 +1292,18 @@ spdm-claims = {
   &amp;(certificates: 2) =&gt; spdm-certificates
 }
 
-block-id = 0..239
-</pre><a href="#section-3.1-1" class="pilcrow">¶</a>
+block-id = 1..239
+</pre><a href="#section-3.1-2" class="pilcrow">¶</a>
 </div>
 <div id="measurement-claims">
 <section id="section-3.1.1">
           <h4 id="name-measurement-claims">
 <a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-measurement-claims" class="section-name selfRef">Measurement Claims</a>
           </h4>
-<div class="lang-cddl sourcecode" id="section-3.1.1-1">
+<p id="section-3.1.1-1">SPDM measurements start with a component type that reflects one of the 10 categories defined by the SPDM specification.
+Following is the measurement itself represented by either a raw bitstream or a digest.
+The size of the digest value is derived from the measurement hash algorithm conveyed by the SPDM ALGORITHMS message response.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.1-2">
 <pre>
 spdm-measurement = {
   &amp;(component-type: 1) =&gt; component-type
@@ -1306,19 +1332,75 @@ digest = [
   alg: uint / text
   val: bytes
 ]
-</pre><a href="#section-3.1.1-1" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.1-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="measurement-claims-signature">
+<section id="section-3.1.2">
+          <h4 id="name-measurement-claims-signatur">
+<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-measurement-claims-signatur" class="section-name selfRef">Measurement Claims Signature</a>
+          </h4>
+<p id="section-3.1.2-1">SPDM compliant devices can optionally support the capability to sign measurements.
+Included in the measurement claim signature are all the elements needed by a third party entity to reconstruct the original measurement log signed by the device.
+Those elements include L1 (see CDDL below), the combined SPDM prefix, the hash algorithm used to generate a digest of the measurement log and nonces provided by the requester and responder.
+The slot number of the leaf certificate used to sign the measurement log is also provided.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.2-2">
+<pre>
+;
+; What follows is based on SPDM v1.3.2 (DSP0274_1.3.2.pdf)
+;
+
+;
+; Algorithms currently supported by SPDM.
+; See "MeasurementHashAlgo", table 21, page 79.
+;
+hash-algorithm-type /= &amp;(tpm_alg_sha_256: 0)
+hash-algorithm-type /= &amp;(tpm_alg_sha_384: 2)
+hash-algorithm-type /= &amp;(tpm_alg_sha_512: 4)
+hash-algorithm-type /= &amp;(tpm_alg_sha3_256: 8)
+hash-algorithm-type /= &amp;(tpm_alg_sha3_384: 16)
+hash-algorithm-type /= &amp;(tpm_alg_sha3_512: 32)
+hash-algorithm-type /= &amp;(tpm_alg_sm3_256: 64)
+
+;
+; See signature generation and verification algorithms for
+; MEASUREMENTS messages on page 126.
+;
+; L1 = Concatenate(VCA, GET_MEASUREMENTS_REQUEST1,
+;               MEASUREMENTS_RESPONSE1, ...,
+;               GET_MEASUREMENTS_REQUESTn-1,
+;               MEASUREMENTS_RESPONSEn-1,
+;               GET_MEASUREMENTS_REQUESTn, MEASUREMENTS_RESPONSEn)
+;
+spdm-measurement-blocks-signature = {
+   &amp;(slot: 1) =&gt; 0..7, ; Slot of the certificate chain used to
+                       ; authenticate the measurement.  Default
+                       ; should be 0.
+   &amp;(requester-nonce: 2) =&gt; bytes .size 32,
+   &amp;(responder-nonce: 3) =&gt; bytes .size 32,
+   &amp;(combined-spdm-prefix: 4) =&gt; bytes .size 100,
+   &amp;(IL1: 5) =&gt; bytes, ; L1 (see comment above)
+   &amp;(base-hash-algo: 6) =&gt; hash-algorithm-type,
+   &amp;(signature: 7) =&gt; bytes
+}
+</pre><a href="#section-3.1.2-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="certificate-claims">
-<section id="section-3.1.2">
+<section id="section-3.1.3">
           <h4 id="name-certificate-claims">
-<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-certificate-claims" class="section-name selfRef">Certificate Claims</a>
+<a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-certificate-claims" class="section-name selfRef">Certificate Claims</a>
           </h4>
-<div class="lang-cddl sourcecode" id="section-3.1.2-1">
+<p id="section-3.1.3-1">According to the specification, SPDM compliant devices should support at most 8 slots, with slot 0 populated by default.
+Slot 0 <span class="bcp14">SHALL</span> contain a certificate chain that follows the Device certificate model or the Alias certificate model.
+Regardless of the certificate model used, a certificate chain comprises one or more DER-encoded X.509 v3 certificates <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.
+The certificates <span class="bcp14">MUST</span> be concatenated with no intermediate padding.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.3-2">
 <pre>
 spdm-certificates = {
-  device-cert-slot =&gt; cert-chain
+  default-cert-slot =&gt; cert-chain
   ? aux-cert-slots =&gt; cert-chain
 }
 
@@ -1326,11 +1408,42 @@ spdm-certificates = {
 ; padding.
 cert-chain = bytes
 
-device-cert-slot = 0
+default-cert-slot = 0
 aux-cert-slots = 1..7
-</pre><a href="#section-3.1.2-1" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.3-2" class="pilcrow">¶</a>
 </div>
 </section>
+</div>
+</section>
+</div>
+<div id="pcie-legacy-device-claims">
+<section id="section-3.2">
+        <h3 id="name-pcie-legacy-device-claims">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-pcie-legacy-device-claims" class="section-name selfRef">PCIe Legacy Device Claims</a>
+        </h3>
+<p id="section-3.2-1">The definition of a device claims set for PCIe legacy devices that do not implement the extensions needed to attest for their provenance and configuration is provided, making it is possible to keep using current assets as secures ones are being provisioned.
+This legacy device claims set simply mirrors the type 0/1 common registers of the PCIe configuration space, mandating only that the vendor and device identification code be provided.
+Other fields of the configuration space header may optionally be included should they add value.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.2-2">
+<pre>
+pcie-legacy-claims = {
+  &amp;(legacy-header: 1) =&gt; pcie-type-0-1-config-space
+  ? $$pcie-legacy-claim-extension
+}
+
+pcie-type-0-1-config-space = {
+  &amp;(vendorID: 1) =&gt; bytes .size 2
+  &amp;(deviceID: 2) =&gt; bytes .size 2
+  ? &amp;(command: 3) =&gt; bytes .size 2
+  ? &amp;(status: 4) =&gt; bytes .size 2
+  ? &amp;(revisionID: 5) =&gt; bytes .size 1
+  ? &amp;(classCode: 6) =&gt; bytes .size 3
+  ? &amp;(cacheLineSize: 7) =&gt; bytes .size 1
+  ? &amp;(latencyTimer: 8) =&gt; bytes .size 1
+  ? &amp;(headerType: 9) =&gt; bytes .size 1
+  ? &amp;(BITS: 10) =&gt; bytes .size 1
+}
+</pre><a href="#section-3.2-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1352,7 +1465,7 @@ da-token = {
 }
 device-name = text .regexp "dev-[A-Za-z0-9]+"
 $device-claims /= #6.1000000(spdm-claims) / #6.1000001(cxl-claims) \
-                                             / #6.1000002(chi-claims)
+            / #6.1000002(chi-claims) / #6.1000003(pcie-legacy-claims)
 spdm-claims = {
   &amp;(measurements: 1) =&gt; {
         + block-id =&gt; spdm-measurement,
@@ -1360,7 +1473,7 @@ spdm-claims = {
 },
   &amp;(certificates: 2) =&gt; spdm-certificates,
 }
-block-id = 0 .. 239
+block-id = 1 .. 239
 spdm-measurement = {
   &amp;(component-type: 1) =&gt; component-type,
   measurement,
@@ -1379,11 +1492,11 @@ digest = [
   val: bytes,
 ]
 spdm-certificates = {
-  device-cert-slot =&gt; cert-chain,
+  default-cert-slot =&gt; cert-chain,
   ? aux-cert-slots =&gt; cert-chain,
 }
 cert-chain = bytes
-device-cert-slot = 0
+default-cert-slot = 0
 aux-cert-slots = 1 .. 7
 hash-algorithm-type /= &amp;(tpm_alg_sha_256: 0) / &amp;(tpm_alg_sha_384: 2\
 ) / &amp;(tpm_alg_sha_512: 4) / &amp;(tpm_alg_sha3_256: 8) / &amp;(\
@@ -1400,6 +1513,22 @@ spdm-measurement-blocks-signature = {
 }
 cxl-claims = {}
 chi-claims = {}
+pcie-legacy-claims = {
+  &amp;(legacy-header: 1) =&gt; pcie-type-0-1-config-space,
+  ? $$pcie-legacy-claim-extension,
+}
+pcie-type-0-1-config-space = {
+  &amp;(vendorID: 1) =&gt; bytes .size 2,
+  &amp;(deviceID: 2) =&gt; bytes .size 2,
+  ? &amp;(command: 3) =&gt; bytes .size 2,
+  ? &amp;(status: 4) =&gt; bytes .size 2,
+  ? &amp;(revisionID: 5) =&gt; bytes .size 1,
+  ? &amp;(classCode: 6) =&gt; bytes .size 3,
+  ? &amp;(cacheLineSize: 7) =&gt; bytes .size 1,
+  ? &amp;(latencyTimer: 8) =&gt; bytes .size 1,
+  ? &amp;(headerType: 9) =&gt; bytes .size 1,
+  ? &amp;(BITS: 10) =&gt; bytes .size 1,
+}
 </pre><a href="#section-4-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1445,6 +1574,10 @@ chi-claims = {}
       <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC5280">[RFC5280]</dt>
+      <dd>
+<span class="refAuthor">Cooper, D.</span>, <span class="refAuthor">Santesson, S.</span>, <span class="refAuthor">Farrell, S.</span>, <span class="refAuthor">Boeyen, S.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">W. Polk</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"</span>, <span class="seriesInfo">RFC 5280</span>, <span class="seriesInfo">DOI 10.17487/RFC5280</span>, <time datetime="2008-05" class="refDate">May 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5280">https://www.rfc-editor.org/rfc/rfc5280</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
       <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
@@ -1486,7 +1619,7 @@ f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
     }),
     "dev-b": 1000000({
       / measurements / 1: {
-        0: {
+        1: {
           / component-type / 1: 1, / mutable firmware /
           / digest-measurement / 2: [
             / alg / 1,
