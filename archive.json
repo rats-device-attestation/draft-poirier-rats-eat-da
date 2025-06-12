@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-10T02:01:12.190245+00:00",
+  "timestamp": "2025-06-12T01:58:48.936985+00:00",
   "repo": "thomas-fossati/draft-eat-da",
   "labels": [
     {
@@ -335,7 +335,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-06-08T21:25:25Z",
-      "updatedAt": "2025-06-08T21:39:50Z",
+      "updatedAt": "2025-06-11T15:15:37Z",
       "baseRepository": "thomas-fossati/draft-eat-da",
       "baseRefName": "main",
       "baseRefOid": "73851fdbb455f635325f70e43dc93fa69e685291",
@@ -353,9 +353,106 @@
           "body": "I did not have the time to look into the certificate padding question you raised in V2 but everything else we talked about has been addressed.\r\n\r\nI'm not sure whey the diagnostic test fails, it works perfectly on my side.  Something else I have to look into.",
           "createdAt": "2025-06-08T21:39:49Z",
           "updatedAt": "2025-06-08T21:39:49Z"
+        },
+        {
+          "author": "thomas-fossati",
+          "authorAssociation": "OWNER",
+          "body": "To un-break the CI pipeline, please add the following two lines to the `Gemfile`:\r\n\r\n```ruby\r\ngem 'base64'\r\ngem 'pstore'\r\n```",
+          "createdAt": "2025-06-10T13:45:05Z",
+          "updatedAt": "2025-06-10T13:45:05Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe86tq1dT",
+          "commit": {
+            "abbreviatedOid": "d411ba3"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "LGMT, thanks!\r\n\r\nI have left a comment inline regarding the encoding of the cert chain.  We can discuss this further, but it shouldn\u2019t block merging.",
+          "createdAt": "2025-06-10T13:51:44Z",
+          "updatedAt": "2025-06-10T13:53:21Z",
+          "comments": [
+            {
+              "originalPosition": 71,
+              "body": "I believe this must be expressed more clearly.\r\n\r\nSince we are repackaging the information, this is the perfect place to remove variability and define one single transport format that the receiver will have to deal with.\r\n\r\nSince each X.509 certificate is self-delimiting, we can just drop any padding and concatenate the certs in a single binary blob.",
+              "createdAt": "2025-06-10T13:51:44Z",
+              "updatedAt": "2025-06-10T13:53:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe86t6CpN",
+          "commit": {
+            "abbreviatedOid": "d411ba3"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-11T15:15:36Z",
+          "updatedAt": "2025-06-11T15:15:37Z",
+          "comments": [
+            {
+              "originalPosition": 71,
+              "body": "Editorial suggestion:\r\n\r\n> _\"[\u2026] a certificate chain comprises one or more DER-encoded X.509 v3 certificates {{!RFC5280}}. The certificates MUST be concatenated with no intermediate padding.\u201d_",
+              "createdAt": "2025-06-11T15:15:37Z",
+              "updatedAt": "2025-06-11T15:16:56Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOOtRXe86aEorh",
+      "title": "Measurements v4",
+      "url": "https://github.com/thomas-fossati/draft-eat-da/pull/5",
+      "state": "MERGED",
+      "author": "mathieupoirier",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-11T17:08:55Z",
+      "updatedAt": "2025-06-11T17:50:00Z",
+      "baseRepository": "thomas-fossati/draft-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "73851fdbb455f635325f70e43dc93fa69e685291",
+      "headRepository": "thomas-fossati/draft-eat-da",
+      "headRefName": "measurements-v4",
+      "headRefOid": "ae13e062577ec4adacb29184b92935960f136c1a",
+      "closedAt": "2025-06-11T17:50:00Z",
+      "mergedAt": "2025-06-11T17:50:00Z",
+      "mergedBy": "mathieupoirier",
+      "mergeCommit": {
+        "oid": "ca9d87e77039722e0a11b07262e10502356591ab"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe86t7ufW",
+          "commit": {
+            "abbreviatedOid": "50c18b3"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "LGTM thanks!\r\n\r\nI have also done an end-to-end read and left one \u201ceditorial consistency\u201d comment.  You are free to ignore it and merge.  I can address that in a subsequent PR.",
+          "createdAt": "2025-06-11T17:27:28Z",
+          "updatedAt": "2025-06-11T17:28:52Z",
+          "comments": [
+            {
+              "originalPosition": 88,
+              "body": "In the introduction, we call this a \u201cclaims set\u201d, following EAT conventions.  I reckon we should stick to that and `s/claims format/claims set/g`",
+              "createdAt": "2025-06-11T17:27:28Z",
+              "updatedAt": "2025-06-11T17:28:52Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
