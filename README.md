@@ -4,16 +4,16 @@
 
 This is the working area for the individual Internet-Draft, "EAT Profile for Device Attestation".
 
-* [Editor's Copy](https://thomas-fossati.github.io/draft-eat-da/#go.draft-poirier-rats-eat-da.html)
+* [Editor's Copy](https://rats-device-attestation.github.io/draft-poirier-rats-eat-da/#go.draft-poirier-rats-eat-da.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-poirier-rats-eat-da)
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-poirier-rats-eat-da)
-* [Compare Editor's Copy to Individual Draft](https://thomas-fossati.github.io/draft-eat-da/#go.draft-poirier-rats-eat-da.diff)
+* [Compare Editor's Copy to Individual Draft](https://rats-device-attestation.github.io/draft-poirier-rats-eat-da/#go.draft-poirier-rats-eat-da.diff)
 
 
 ## Contributing
 
 See the
-[guidelines for contributions](https://github.com/thomas-fossati/draft-eat-da/blob/main/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/blob/main/CONTRIBUTING.md).
 
 Contributions can be made by creating pull requests.
 The GitHub interface supports creating pull requests using the Edit (✏) button.
