@@ -2,10 +2,10 @@
 
 
 
-WG Working Group                                              M. Poirier
+Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 13 December 2025                                   11 June 2025
+Expires: 14 December 2025                                   12 June 2025
 
 
                  An EAT Profile for Device Attestation
@@ -30,17 +30,18 @@ About This Document
 
    This note is to be removed before publishing as an RFC.
 
-   The latest revision of this draft can be found at
-   https://example.com/LATEST.  Status information for this document may
-   be found at https://datatracker.ietf.org/doc/draft-poirier-rats-eat-
-   da/.
+   The latest revision of this draft can be found at https://rats-
+   device-attestation.github.io/draft-poirier-rats-eat-da/draft-poirier-
+   rats-eat-da.html.  Status information for this document may be found
+   at https://datatracker.ietf.org/doc/draft-poirier-rats-eat-da/.
 
-   Discussion of this document takes place on the WG Working Group
-   mailing list (mailto:WG@example.com), which is archived at
-   https://example.com/WG.
+   Discussion of this document takes place on the Remote ATtestation
+   ProcedureS Working Group mailing list (mailto:rats@ietf.org), which
+   is archived at https://mailarchive.ietf.org/arch/browse/rats/.
+   Subscribe at https://www.ietf.org/mailman/listinfo/rats/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/USER/REPO.
+   https://github.com/rats-device-attestation/draft-poirier-rats-eat-da.
 
 Status of This Memo
 
@@ -57,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 December 2025.
+   This Internet-Draft will expire on 14 December 2025.
 
 Copyright Notice
 
