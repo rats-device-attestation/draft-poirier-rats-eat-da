@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-19T02:00:31.548997+00:00",
+  "timestamp": "2025-06-29T02:11:37.247515+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -79,6 +79,22 @@
       "body": "As mentioned in a few discussions, we need to explain how we expect the claims set defined in this document to be composed with evidence from the platform and workload.\n\nThis is heavily dependent on the use case and HW architecture; therefore, it would be non-normative. (This is why it makes sense to relegate it to an appendix.)\n\nNow, a fairly obvious use case is the integration with the Arm CCA token.\nWe should probably start with that.\n\nOther use cases could be added in the future.",
       "createdAt": "2025-06-18T16:26:24Z",
       "updatedAt": "2025-06-18T16:26:49Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOOtRXe869fRHb",
+      "title": "Cert chains redundancy",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/issues/8",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Suggestion from @simonfrost-arm:\n\n> Given that some devices can present many PDEVs, that implies there will be redundancy in the cert chains. I was musing on whether an (optional) 'cert store' in the token would be useful, with cert entries either being the raw cert or a ref into that store.",
+      "createdAt": "2025-06-26T13:11:28Z",
+      "updatedAt": "2025-06-26T13:11:28Z",
       "closedAt": null,
       "comments": []
     }
