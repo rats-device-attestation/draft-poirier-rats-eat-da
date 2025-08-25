@@ -13,14 +13,14 @@ For the TVM to trust the device, the device must provide the TVM with attestatio
        Since Evidence claims can be consumed by 3rd party attestation services external to the TVM, there is a need to standardise the representation of Evidence to ensure interoperability.
 This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile. 
     " name="description">
-<meta content="xml2rfc 3.28.1" name="generator">
+<meta content="xml2rfc 3.30.0" name="generator">
 <meta content="attestation" name="keyword">
 <meta content="device assignment" name="keyword">
 <meta content="EAT" name="keyword">
 <meta content="draft-poirier-rats-eat-da-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.28.1
-    Python 3.12.10
+  xml2rfc 3.30.0
+    Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
@@ -29,7 +29,7 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
     platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.3
+    requests 2.32.4
     setuptools 80.9.0
     wcwidth 0.2.13
 -->
@@ -1050,11 +1050,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">EAT DA</td>
-<td class="right">June 2025</td>
+<td class="right">August 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Poirier &amp; Fossati</td>
-<td class="center">Expires 14 December 2025</td>
+<td class="center">Expires 26 February 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-poirier-rats-eat-da-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-12" class="published">12 June 2025</time>
+<time datetime="2025-08-25" class="published">25 August 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-14">14 December 2025</time></dd>
+<dd class="expires"><time datetime="2026-02-26">26 February 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 26 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1262,16 +1262,16 @@ da-token = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device#1.0.0"
   &amp;(eat_nonce: 10) =&gt; bytes .size 64 ; same as realm nonce
   &amp;(eat_submods: 266) =&gt; {
-    + device-name =&gt; $device-claims
+    + device-name =&gt; $device-claims-set
   }
 }
 
 device-name = text .regexp "dev-[A-Za-z0-9]+"
 
-$device-claims /= #6.1000000(spdm-claims)
-$device-claims /= #6.1000001(cxl-claims)
-$device-claims /= #6.1000002(chi-claims)
-$device-claims /= #6.1000003(pcie-legacy-claims)
+$device-claims-set /= spdm-claims
+$device-claims-set /= cxl-claims
+$device-claims-set /= chi-claims
+$device-claims-set /= pcie-legacy-claims
 </pre><a href="#section-3-2" class="pilcrow">¶</a>
 </div>
 <div id="spdm-claims">
@@ -1286,6 +1286,7 @@ It should be noted that measurements formalized herein follow the DMTF measureme
 <div class="lang-cddl sourcecode" id="section-3.1-2">
 <pre>
 spdm-claims = {
+  &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-spdm#1.0.0"
   &amp;(measurements: 1) =&gt; {
     + block-id =&gt; spdm-measurement
     ? "signature" =&gt; spdm-measurement-blocks-signature
@@ -1427,7 +1428,11 @@ This legacy device claims set simply mirrors the type 0/1 common registers of th
 Other fields of the configuration space header may optionally be included should they add value.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.2-2">
 <pre>
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
 pcie-legacy-claims = {
+  &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-pcie-legacy#1.0\
+                                                                  .0"
   &amp;(legacy-header: 1) =&gt; pcie-type-0-1-config-space
   ? $$pcie-legacy-claim-extension
 }
@@ -1462,12 +1467,13 @@ pcie-type-0-1-config-space = {
 da-token = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device#1.0.0",
   &amp;(eat_nonce: 10) =&gt; bytes .size 64,
-  &amp;(eat_submods: 266) =&gt; {+ device-name =&gt; $device-claims},
+  &amp;(eat_submods: 266) =&gt; {+ device-name =&gt; $device-claims-set},
 }
 device-name = text .regexp "dev-[A-Za-z0-9]+"
-$device-claims /= #6.1000000(spdm-claims) / #6.1000001(cxl-claims) \
-            / #6.1000002(chi-claims) / #6.1000003(pcie-legacy-claims)
+$device-claims-set /= spdm-claims / cxl-claims / chi-claims / pcie-\
+                                                        legacy-claims
 spdm-claims = {
+  &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-spdm#1.0.0",
   &amp;(measurements: 1) =&gt; {
         + block-id =&gt; spdm-measurement,
         ? "signature" =&gt; spdm-measurement-blocks-signature,
@@ -1512,9 +1518,13 @@ spdm-measurement-blocks-signature = {
   &amp;(base-hash-algo: 6) =&gt; hash-algorithm-type,
   &amp;(signature: 7) =&gt; bytes,
 }
-cxl-claims = {}
-chi-claims = {}
+cxl-claims = {&amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-cxl\
+                                                             #1.0.0"}
+chi-claims = {&amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-chi\
+                                                             #1.0.0"}
 pcie-legacy-claims = {
+  &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-pcie-legacy#1.0\
+                                                                 .0",
   &amp;(legacy-header: 1) =&gt; pcie-type-0-1-config-space,
   ? $$pcie-legacy-claim-extension,
 }
@@ -1605,7 +1615,8 @@ pcie-type-0-1-config-space = {
 f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
        aa40cd86cd30ebaae746fb19f008c1e6a1f23ad6a178e18dceda918f7f6e',
   / submods / 266: {
-    "dev-a": 1000000({
+    "dev-a": {
+      / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
       / measurements / 1: {
         1: {
           / component-type /  1: 2, / hardware config /
@@ -1617,8 +1628,9 @@ f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
                           676f616e6e61747261646974696f6e6d6f6e676572'
         / no aux certs /
       }
-    }),
-    "dev-b": 1000000({
+    },
+    "dev-b": {
+      / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
       / measurements / 1: {
         1: {
           / component-type / 1: 1, / mutable firmware /
@@ -1639,7 +1651,7 @@ f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
         / device certs / 0: h'61746865697A656178696C6C6172',
         / aux certs (slot=2) / 2: h'23451576923AE99106783948598A'
       }
-    })
+    }
   }
 }
 </pre><a href="#appendix-A-1" class="pilcrow">¶</a>
