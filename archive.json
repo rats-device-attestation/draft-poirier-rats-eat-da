@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-29T02:11:37.247515+00:00",
+  "timestamp": "2025-08-26T01:54:44.639203+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -502,6 +502,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOOtRXe86lP7w2",
+      "title": "use EAT profiles rather than CBOR tags",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/9",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Use EAT profiles instead of CBOR tags to express the type information associated with the device claims.\r\n\r\nThis is needed to satisfy the EAT grammar for submods:\r\n```\r\nSubmodule = Claims-Set / CBOR-Nested-Token / Detached-Submodule-Digest\r\n            ^^^^^^^^^^\r\n\r\nClaims-Set = {\r\n    * $$Claims-Set-Claims\r\n    * Claim-Label .feature \"extended-claims-label\" => any\r\n}\r\n```\r\nwhich doesn't allow CBOR tags around a claims-set.",
+      "createdAt": "2025-08-25T16:40:50Z",
+      "updatedAt": "2025-08-25T16:40:56Z",
+      "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "f5083e49b17258f5f79960ff97996c59c8d0f235",
+      "headRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "headRefName": "revamp",
+      "headRefOid": "14a54c95725001af26ec9721d40092598e1885a3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
