@@ -45,7 +45,7 @@ informative:
     author:
     - org: DMTF
     title: "Security Protocol and Data Model (SPDM) Specification Version: 1.3.2"
-    date: 2025-05-15
+    date: 2024-08-21
 
 entity:
   SELF: "RFCthis"
