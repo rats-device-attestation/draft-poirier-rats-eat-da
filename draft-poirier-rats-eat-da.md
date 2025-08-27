@@ -36,8 +36,19 @@ author:
 normative:
   RFC9711: rats-eat
   RFC5280: pkix
+  IANA.cwt:
 
 informative:
+  SPDM:
+    -: spdm
+    target: https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.4.0.pdf
+    author:
+    - org: DMTF
+    title: "Security Protocol and Data Model (SPDM) Specification Version: 1.4.0"
+    date: 2025-05-15
+
+entity:
+  SELF: "RFCthis"
 
 --- abstract
 
@@ -60,7 +71,7 @@ For the TVM to trust the device, the device must provide the TVM with attestatio
 
 This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
 The format is designed to be generic, extensible and architecture agnostic.
-Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol, but other bus architecture and protocols are expected to be supported as the technology gains wider adoption.
+Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}, but other bus architecture and protocols are expected to be supported as the technology gains wider adoption.
 As such we focus on the formalization of an Evidence format for SPDM compliant devices while leaving room for the definition of other Evidence format such as CXL and CHI.
 This list is by no means exhaustive and is expected to expand.
 
@@ -86,14 +97,21 @@ Careful condideration was also given to the overall design in order to leave roo
 
 A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
 Each instance consists of measurements and a certificates section.
-There can be up to 239 measurements per device with the entire measurement log optionally signed by the certificate populated in one of the 8 certificate slots.
-It should be noted that measurements formalized herein follow the DMTF measurement specification.
 
 ~~~ cddl
 {::include-fold cddl/spdm-claims.cddl}
 ~~~
 
-### Measurement Claims
+### Measurements Claim {#spdm-measurements}
+
+There can be up to 239 measurements per device with the entire measurement log optionally signed by the certificate populated in one of the 8 certificate slots.
+It should be noted that measurements formalized herein follow the DMTF measurement specification.
+
+~~~ cddl
+{::include-fold cddl/spdm-measurements.cddl}
+~~~
+
+#### Measurement
 
 SPDM measurements start with a component type that reflects one of the 10 categories defined by the SPDM specification.
 Following is the measurement itself represented by either a raw bitstream or a digest.
@@ -103,7 +121,7 @@ The size of the digest value is derived from the measurement hash algorithm conv
 {::include-fold cddl/spdm-measurement.cddl}
 ~~~
 
-### Measurement Claims Signature
+#### Measurements Signature
 
 SPDM compliant devices can optionally support the capability to sign measurements.
 Included in the measurement claim signature are all the elements needed by a third party entity to reconstruct the original measurement log signed by the device.
@@ -114,7 +132,7 @@ The slot number of the leaf certificate used to sign the measurement log is also
 {::include-fold cddl/spdm-measurement-blocks-signature.cddl}
 ~~~
 
-### Certificate Claims
+### Certificate Claims {#spdm-certificates}
 
 According to the specification, SPDM compliant devices should support at most 8 slots, with slot 0 populated by default.
 Slot 0 SHALL contain a certificate chain that follows the Device certificate model or the Alias certificate model.
@@ -125,7 +143,7 @@ The certificates MUST be concatenated with no intermediate padding.
 {::include-fold cddl/spdm-certificates.cddl}
 ~~~
 
-## PCIe Legacy Device Claims
+## PCIe Legacy Device Claims {#pcie-legacy-device}
 
 The definition of a device claims set for PCIe legacy devices that do not implement the extensions needed to attest for their provenance and configuration is provided, making it is possible to keep using current assets as secures ones are being provisioned.
 This legacy device claims set simply mirrors the type 0/1 common registers of the PCIe configuration space, mandating only that the vendor and device identification code be provided.
@@ -149,11 +167,37 @@ TODO Security
 
 ## New CWT Claims Registrations
 
-TODO IANA CWT allocations
+IANA is requested to register the following claims in the "CBOR Web Token (CWT) Claims" registry {{IANA.cwt}}.
 
-## New CBOR Tags Registrations
+### SPDM Measurements Claim
 
-TODO IANA CBOR Tag allocations
+* Claim Name: spdm-measurements
+* Claim Description: SPDM Measurements
+* JWT Claim Name: N/A
+* Claim Key: 3802
+* Claim Value Type(s): map
+* Change Controller: IETF
+* Specification Document(s): {{spdm-measurements}} of {{&SELF}}
+
+### SPDM Certificates Claim
+
+* Claim Name: spdm-certificates
+* Claim Description: SPDM Certificates
+* JWT Claim Name: N/A
+* Claim Key: 3803
+* Claim Value Type(s): map
+* Change Controller: IETF
+* Specification Document(s): {{spdm-certificates}} of {{&SELF}}
+
+### PCIe Legacy Device Claim
+
+* Claim Name: pcie-legacy-device
+* Claim Description: PCIe Legacy Device
+* JWT Claim Name: N/A
+* Claim Key: 3804
+* Claim Value Type(s): map
+* Change Controller: IETF
+* Specification Document(s): {{pcie-legacy-device}} of {{&SELF}}
 
 --- back
 
