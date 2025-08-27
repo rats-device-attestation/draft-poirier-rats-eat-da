@@ -496,9 +496,9 @@ Table of Contents
 7.2.  Informative References
 
    [SPDM]     DMTF, "Security Protocol and Data Model (SPDM)
-              Specification Version: 1.4.0", 15 May 2025,
+              Specification Version: 1.3.2", 15 May 2025,
               <https://www.dmtf.org/sites/default/files/standards/
-              documents/DSP0274_1.4.0.pdf>.
+              documents/DSP0274_1.3.2.pdf>.
 
 Appendix A.  Examples
 
