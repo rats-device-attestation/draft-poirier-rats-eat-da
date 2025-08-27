@@ -41,10 +41,10 @@ normative:
 informative:
   SPDM:
     -: spdm
-    target: https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.4.0.pdf
+    target: https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.3.2.pdf
     author:
     - org: DMTF
-    title: "Security Protocol and Data Model (SPDM) Specification Version: 1.4.0"
+    title: "Security Protocol and Data Model (SPDM) Specification Version: 1.3.2"
     date: 2025-05-15
 
 entity:
