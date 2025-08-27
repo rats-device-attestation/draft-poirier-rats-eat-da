@@ -1,0 +1,6 @@
+spdm-measurements = {
+  + block-id => spdm-measurement
+  ? "signature" => spdm-measurement-blocks-signature
+}
+
+block-id = 1..239

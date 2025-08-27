@@ -1,9 +1,5 @@
 spdm-claims = {
-  &(measurements: 1) => {
-    + block-id => spdm-measurement
-    ? "signature" => spdm-measurement-blocks-signature
-  }
-  &(certificates: 2) => spdm-certificates
+  &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0"
+  &(measurements: 3802) => spdm-measurements
+  &(certificates: 3803) => spdm-certificates
 }
-
-block-id = 1..239
