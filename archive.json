@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-26T01:54:44.639203+00:00",
+  "timestamp": "2025-08-28T01:50:15.484634+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -55,16 +55,24 @@
       "id": "I_kwDOOtRXe868M0WW",
       "title": "codepoints!",
       "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "thomas-fossati",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "We need IANA section for requsting codepoints from:\n* the CBOR Tags registry\n* the CWT Claims registry",
       "createdAt": "2025-06-18T16:15:47Z",
-      "updatedAt": "2025-06-18T16:15:47Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-08-27T16:04:07Z",
+      "closedAt": "2025-08-27T16:04:06Z",
+      "comments": [
+        {
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Done in #9 ",
+          "createdAt": "2025-08-27T16:04:06Z",
+          "updatedAt": "2025-08-27T16:04:06Z"
+        }
+      ]
     },
     {
       "number": 7,
@@ -506,28 +514,44 @@
     {
       "number": 9,
       "id": "PR_kwDOOtRXe86lP7w2",
-      "title": "use EAT profiles rather than CBOR tags",
+      "title": "Multiple updates",
       "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/9",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "thomas-fossati",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "Use EAT profiles instead of CBOR tags to express the type information associated with the device claims.\r\n\r\nThis is needed to satisfy the EAT grammar for submods:\r\n```\r\nSubmodule = Claims-Set / CBOR-Nested-Token / Detached-Submodule-Digest\r\n            ^^^^^^^^^^\r\n\r\nClaims-Set = {\r\n    * $$Claims-Set-Claims\r\n    * Claim-Label .feature \"extended-claims-label\" => any\r\n}\r\n```\r\nwhich doesn't allow CBOR tags around a claims-set.",
+      "body": "Multiple updates.  See commit message for the details.",
       "createdAt": "2025-08-25T16:40:50Z",
-      "updatedAt": "2025-08-25T16:40:56Z",
+      "updatedAt": "2025-08-27T15:39:27Z",
       "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
       "baseRefName": "main",
       "baseRefOid": "f5083e49b17258f5f79960ff97996c59c8d0f235",
       "headRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
       "headRefName": "revamp",
-      "headRefOid": "14a54c95725001af26ec9721d40092598e1885a3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "534a01e19fed62fd042129a2827509ae3db1d092",
+      "closedAt": "2025-08-27T15:39:27Z",
+      "mergedAt": "2025-08-27T15:39:27Z",
+      "mergedBy": "mathieupoirier",
+      "mergeCommit": {
+        "oid": "7d624222b818ca7752315597f285a4001107846b"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe868YGPb",
+          "commit": {
+            "abbreviatedOid": "534a01e"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-27T15:39:04Z",
+          "updatedAt": "2025-08-27T15:39:04Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
