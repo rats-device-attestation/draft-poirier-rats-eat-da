@@ -121,7 +121,7 @@ The size of the digest value is derived from the measurement hash algorithm conv
 {::include-fold cddl/spdm-measurement.cddl}
 ~~~
 
-#### Measurements Signature
+#### Measurements Raw Data
 
 SPDM compliant devices can optionally support the capability to sign measurements.
 Included in the measurement claim signature are all the elements needed by a third party entity to reconstruct the original measurement log signed by the device.
@@ -129,8 +129,10 @@ Those elements include L1 (see CDDL below), the combined SPDM prefix, the hash a
 The slot number of the leaf certificate used to sign the measurement log is also provided.
 
 ~~~ cddl
-{::include-fold cddl/spdm-measurement-blocks-signature.cddl}
+{::include-fold cddl/spdm-measurements-raw-data.cddl}
 ~~~
+
+The unsigned transcript (L1) is also available separately from the associated signature data, if desired.
 
 ### Certificate Claims {#spdm-certificates}
 
