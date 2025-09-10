@@ -24,14 +24,23 @@ hash-algorithm-type /= &(tpm_alg_sm3_256: 64)
 ;               MEASUREMENTS_RESPONSEn-1,
 ;               GET_MEASUREMENTS_REQUESTn, MEASUREMENTS_RESPONSEn)
 ;
-spdm-measurement-blocks-signature = {
+
+spdm-measurements-raw-data = {
+   spdm-measurements-transcript
+   ? spdm-measurements-signature
+}
+
+spdm-measurements-transcript = (
+   &(IL1: 0) => bytes, ; L1 (see comment above)
+)
+
+spdm-measurements-signature = (
    &(slot: 1) => 0..7, ; Slot of the certificate chain used to
                        ; authenticate the measurement.  Default
                        ; should be 0.
    &(requester-nonce: 2) => bytes .size 32,
    &(responder-nonce: 3) => bytes .size 32,
    &(combined-spdm-prefix: 4) => bytes .size 100,
-   &(IL1: 5) => bytes, ; L1 (see comment above)
-   &(base-hash-algo: 6) => hash-algorithm-type,
-   &(signature: 7) => bytes
-}
+   &(base-hash-algo: 5) => hash-algorithm-type,
+   &(signature: 6) => bytes
+)
