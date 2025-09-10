@@ -97,6 +97,7 @@ Careful condideration was also given to the overall design in order to leave roo
 
 A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
 Each instance consists of measurements and a certificates section.
+Optionally, the VCA (version, capabilities and algorithms) bytes can be included to present the full negotiated state between the SPDM requester and responder.
 
 ~~~ cddl
 {::include-fold cddl/spdm-claims.cddl}
@@ -142,6 +143,10 @@ The certificates MUST be concatenated with no intermediate padding.
 ~~~ cddl
 {::include-fold cddl/spdm-certificates.cddl}
 ~~~
+
+### Version, Capabilities and Algorithms {#spdm-vca}
+
+The `vca` claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.
 
 ## PCIe Legacy Device Claims {#pcie-legacy-device}
 
@@ -189,12 +194,22 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Change Controller: IETF
 * Specification Document(s): {{spdm-certificates}} of {{&SELF}}
 
+### SPDM VCA Claim
+
+* Claim Name: spdm-vca
+* Claim Description: SPDM Version, Capabilities and Algorithms
+* JWT Claim Name: N/A
+* Claim Key: 3804
+* Claim Value Type(s): bytes
+* Change Controller: IETF
+* Specification Document(s): {{spdm-vca}} of {{&SELF}}
+
 ### PCIe Legacy Device Claim
 
 * Claim Name: pcie-legacy-device
 * Claim Description: PCIe Legacy Device
 * JWT Claim Name: N/A
-* Claim Key: 3804
+* Claim Key: 3805
 * Claim Value Type(s): map
 * Change Controller: IETF
 * Specification Document(s): {{pcie-legacy-device}} of {{&SELF}}
