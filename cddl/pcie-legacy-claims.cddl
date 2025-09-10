@@ -1,6 +1,6 @@
 pcie-legacy-claims = {
   &(eat_profile: 265) => "tag:linaro.org,2025:device-pcie-legacy#1.0.0"
-  &(legacy-header: 3804) => pcie-type-0-1-config-space
+  &(legacy-header: 3805) => pcie-type-0-1-config-space
   ? $$pcie-legacy-claim-extension
 }
 
