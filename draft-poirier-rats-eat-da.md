@@ -144,7 +144,7 @@ The certificates MUST be concatenated with no intermediate padding.
 {::include-fold cddl/spdm-certificates.cddl}
 ~~~
 
-### Version, Capabilities and Algorithms {#spdm-vca}
+### Negotiated State Preamble (Version, Capabilities and Algorithms) {#spdm-vca}
 
 The `vca` claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.
 
