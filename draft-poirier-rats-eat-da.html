@@ -1299,16 +1299,28 @@ $device-claims-set /= pcie-legacy-claims
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-spdm-claims" class="section-name selfRef">SPDM Claims</a>
         </h3>
 <p id="section-3.1-1">A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
-Each instance consists of measurements and a certificates section.
+Each instance consists of either a measurements section or a certificates section, or both.
 Optionally, the Negotiated State preamble (version, capabilities and algorithms) bytes can be included to present the full negotiated state between the SPDM requester and responder.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1-2">
 <pre>
 spdm-claims = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-spdm#1.0.0"
-  &amp;(measurements: 3802) =&gt; spdm-measurements
-  &amp;(certificates: 3803) =&gt; spdm-certificates
+  spdm-artefacts
   ? &amp;(vca: 3804) =&gt; bytes
 }
+
+spdm-artefacts //= (
+  &amp;(measurements: 3802) =&gt; spdm-measurements
+  &amp;(certificates: 3803) =&gt; spdm-certificates
+)
+
+spdm-artefacts //= (
+  &amp;(measurements: 3802) =&gt; spdm-measurements
+)
+
+spdm-artefacts //= (
+  &amp;(certificates: 3803) =&gt; spdm-certificates
+)
 </pre><a href="#section-3.1-2" class="pilcrow">¶</a>
 </div>
 <div id="spdm-measurements">
@@ -1515,10 +1527,14 @@ $device-claims-set /= spdm-claims / cxl-claims / chi-claims / pcie-\
                                                         legacy-claims
 spdm-claims = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-spdm#1.0.0",
-  &amp;(measurements: 3802) =&gt; spdm-measurements,
-  &amp;(certificates: 3803) =&gt; spdm-certificates,
+  spdm-artefacts,
   ? &amp;(vca: 3804) =&gt; bytes,
 }
+spdm-artefacts //= ((
+        &amp;(measurements: 3802) =&gt; spdm-measurements,
+        &amp;(certificates: 3803) =&gt; spdm-certificates,
+      ) // &amp;(measurements: 3802) =&gt; spdm-measurements // &amp;(\
+                            certificates: 3803) =&gt; spdm-certificates)
 spdm-measurement = {
   &amp;(component-type: 1) =&gt; component-type,
   measurement,

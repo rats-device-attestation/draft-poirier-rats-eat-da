@@ -165,18 +165,30 @@ Table of Contents
 3.1.  SPDM Claims
 
    A SPDM claim instance is expected to be present for each SPDM
-   compatible device to be attested.  Each instance consists of
-   measurements and a certificates section.  Optionally, the Negotiated
-   State preamble (version, capabilities and algorithms) bytes can be
-   included to present the full negotiated state between the SPDM
-   requester and responder.
+   compatible device to be attested.  Each instance consists of either a
+   measurements section or a certificates section, or both.  Optionally,
+   the Negotiated State preamble (version, capabilities and algorithms)
+   bytes can be included to present the full negotiated state between
+   the SPDM requester and responder.
 
    spdm-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0"
-     &(measurements: 3802) => spdm-measurements
-     &(certificates: 3803) => spdm-certificates
+     spdm-artefacts
      ? &(vca: 3804) => bytes
    }
+
+   spdm-artefacts //= (
+     &(measurements: 3802) => spdm-measurements
+     &(certificates: 3803) => spdm-certificates
+   )
+
+   spdm-artefacts //= (
+     &(measurements: 3802) => spdm-measurements
+   )
+
+   spdm-artefacts //= (
+     &(certificates: 3803) => spdm-certificates
+   )
 
 3.1.1.  Measurements Claim
 
@@ -353,10 +365,14 @@ Table of Contents
                                                            legacy-claims
    spdm-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0",
-     &(measurements: 3802) => spdm-measurements,
-     &(certificates: 3803) => spdm-certificates,
+     spdm-artefacts,
      ? &(vca: 3804) => bytes,
    }
+   spdm-artefacts //= ((
+           &(measurements: 3802) => spdm-measurements,
+           &(certificates: 3803) => spdm-certificates,
+         ) // &(measurements: 3802) => spdm-measurements // &(\
+                               certificates: 3803) => spdm-certificates)
    spdm-measurement = {
      &(component-type: 1) => component-type,
      measurement,
