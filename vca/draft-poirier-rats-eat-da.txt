@@ -79,7 +79,8 @@ Table of Contents
      3.1.  SPDM Claims
        3.1.1.  Measurements Claim
        3.1.2.  Certificate Claims
-       3.1.3.  Version, Capabilities and Algorithms
+       3.1.3.  Negotiated State Preamble (Version, Capabilities and
+               Algorithms)
      3.2.  PCIe Legacy Device Claims
    4.  Collated CDDL
    5.  Security Considerations
@@ -298,7 +299,7 @@ Table of Contents
    default-cert-slot = 0
    aux-cert-slots = 1..7
 
-3.1.3.  Version, Capabilities and Algorithms
+3.1.3.  Negotiated State Preamble (Version, Capabilities and Algorithms)
 
    The vca claim contains the concatenation of messages GET_VERSION,
    VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and
