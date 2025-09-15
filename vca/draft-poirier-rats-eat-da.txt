@@ -301,9 +301,10 @@ Table of Contents
 
 3.1.3.  Negotiated State Preamble (Version, Capabilities and Algorithms)
 
-   The vca claim contains the concatenation of messages GET_VERSION,
-   VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and
-   ALGORITHMS last exchanged between the SPDM Requester and Responder.
+   The Negotiated State Preamble, i.e vca, claim contains the
+   concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES,
+   CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged
+   between the SPDM Requester and Responder.
 
 3.2.  PCIe Legacy Device Claims
 
