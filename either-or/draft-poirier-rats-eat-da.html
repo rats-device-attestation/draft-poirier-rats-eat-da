@@ -1318,7 +1318,7 @@ spdm-artefacts //= (
   &amp;(measurements: 3802) =&gt; spdm-measurements
 )
 
-measurements-certificates //= (
+spdm-artefacts //= (
   &amp;(certificates: 3803) =&gt; spdm-certificates
 )
 </pre><a href="#section-3.1-2" class="pilcrow">¶</a>
@@ -1533,9 +1533,8 @@ spdm-claims = {
 spdm-artefacts //= ((
         &amp;(measurements: 3802) =&gt; spdm-measurements,
         &amp;(certificates: 3803) =&gt; spdm-certificates,
-      ) // &amp;(measurements: 3802) =&gt; spdm-measurements)
-measurements-certificates //= (&amp;(certificates: 3803) =&gt; spdm-\
-                                                        certificates)
+      ) // &amp;(measurements: 3802) =&gt; spdm-measurements // &amp;(\
+                            certificates: 3803) =&gt; spdm-certificates)
 spdm-measurement = {
   &amp;(component-type: 1) =&gt; component-type,
   measurement,

@@ -186,7 +186,7 @@ Table of Contents
      &(measurements: 3802) => spdm-measurements
    )
 
-   measurements-certificates //= (
+   spdm-artefacts //= (
      &(certificates: 3803) => spdm-certificates
    )
 
@@ -371,9 +371,8 @@ Table of Contents
    spdm-artefacts //= ((
            &(measurements: 3802) => spdm-measurements,
            &(certificates: 3803) => spdm-certificates,
-         ) // &(measurements: 3802) => spdm-measurements)
-   measurements-certificates //= (&(certificates: 3803) => spdm-\
-                                                           certificates)
+         ) // &(measurements: 3802) => spdm-measurements // &(\
+                               certificates: 3803) => spdm-certificates)
    spdm-measurement = {
      &(component-type: 1) => component-type,
      measurement,
