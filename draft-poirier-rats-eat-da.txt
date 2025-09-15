@@ -5,7 +5,7 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 28 February 2026                                 27 August 2025
+Expires: 19 March 2026                                 15 September 2025
 
 
                  An EAT Profile for Device Attestation
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 February 2026.
+   This Internet-Draft will expire on 19 March 2026.
 
 Copyright Notice
 
@@ -79,6 +79,8 @@ Table of Contents
      3.1.  SPDM Claims
        3.1.1.  Measurements Claim
        3.1.2.  Certificate Claims
+       3.1.3.  Negotiated State Preamble (Version, Capabilities and
+               Algorithms)
      3.2.  PCIe Legacy Device Claims
    4.  Collated CDDL
    5.  Security Considerations
@@ -86,7 +88,8 @@ Table of Contents
      6.1.  New CWT Claims Registrations
        6.1.1.   SPDM Measurements Claim
        6.1.2.   SPDM Certificates Claim
-       6.1.3.   PCIe Legacy Device Claim
+       6.1.3.   SPDM VCA Claim
+       6.1.4.   PCIe Legacy Device Claim
    7.  References
      7.1.  Normative References
      7.2.  Informative References
@@ -163,12 +166,16 @@ Table of Contents
 
    A SPDM claim instance is expected to be present for each SPDM
    compatible device to be attested.  Each instance consists of
-   measurements and a certificates section.
+   measurements and a certificates section.  Optionally, the Negotiated
+   State preamble (version, capabilities and algorithms) bytes can be
+   included to present the full negotiated state between the SPDM
+   requester and responder.
 
    spdm-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0"
      &(measurements: 3802) => spdm-measurements
      &(certificates: 3803) => spdm-certificates
+     ? &(vca: 3804) => bytes
    }
 
 3.1.1.  Measurements Claim
@@ -292,6 +299,13 @@ Table of Contents
    default-cert-slot = 0
    aux-cert-slots = 1..7
 
+3.1.3.  Negotiated State Preamble (Version, Capabilities and Algorithms)
+
+   The Negotiated State Preamble (i.e., vca) claim contains the
+   concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES,
+   CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged
+   between the SPDM Requester and Responder.
+
 3.2.  PCIe Legacy Device Claims
 
    The definition of a device claims set for PCIe legacy devices that do
@@ -308,7 +322,7 @@ Table of Contents
    pcie-legacy-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-pcie-legacy#1.0\
                                                                      .0"
-     &(legacy-header: 3804) => pcie-type-0-1-config-space
+     &(legacy-header: 3805) => pcie-type-0-1-config-space
      ? $$pcie-legacy-claim-extension
    }
 
@@ -341,6 +355,7 @@ Table of Contents
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0",
      &(measurements: 3802) => spdm-measurements,
      &(certificates: 3803) => spdm-certificates,
+     ? &(vca: 3804) => bytes,
    }
    spdm-measurement = {
      &(component-type: 1) => component-type,
@@ -391,7 +406,7 @@ Table of Contents
    pcie-legacy-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-pcie-legacy#1.0\
                                                                     .0",
-     &(legacy-header: 3804) => pcie-type-0-1-config-space,
+     &(legacy-header: 3805) => pcie-type-0-1-config-space,
      ? $$pcie-legacy-claim-extension,
    }
    pcie-type-0-1-config-space = {
@@ -450,7 +465,23 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.2 of RFCthis
 
-6.1.3.   PCIe Legacy Device Claim
+6.1.3.   SPDM VCA Claim
+
+   *  Claim Name: spdm-vca
+
+   *  Claim Description: SPDM Version, Capabilities and Algorithms
+
+   *  JWT Claim Name: N/A
+
+   *  Claim Key: 3804
+
+   *  Claim Value Type(s): bytes
+
+   *  Change Controller: IETF
+
+   *  Specification Document(s): Section 3.1.3 of RFCthis
+
+6.1.4.   PCIe Legacy Device Claim
 
    *  Claim Name: pcie-legacy-device
 
@@ -458,7 +489,7 @@ Table of Contents
 
    *  JWT Claim Name: N/A
 
-   *  Claim Key: 3804
+   *  Claim Key: 3805
 
    *  Claim Value Type(s): map
 
