@@ -1305,11 +1305,11 @@ Optionally, the Negotiated State preamble (version, capabilities and algorithms)
 <pre>
 spdm-claims = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-spdm#1.0.0"
-  measurements-certificates
+  spdm-artefacts
   ? &amp;(vca: 3804) =&gt; bytes
 }
 
-measurements-certificates //= (
+spdm-artefacts //= (
   &amp;(measurements: 3802) =&gt; spdm-measurements
   &amp;(certificates: 3803) =&gt; spdm-certificates
 )
@@ -1527,14 +1527,15 @@ $device-claims-set /= spdm-claims / cxl-claims / chi-claims / pcie-\
                                                         legacy-claims
 spdm-claims = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-spdm#1.0.0",
-  measurements-certificates,
+  spdm-artefacts,
   ? &amp;(vca: 3804) =&gt; bytes,
 }
-measurements-certificates //= ((
+spdm-artefacts //= ((
         &amp;(measurements: 3802) =&gt; spdm-measurements,
         &amp;(certificates: 3803) =&gt; spdm-certificates,
-      ) // &amp;(measurements: 3802) =&gt; spdm-measurements // &amp;(\
-                            certificates: 3803) =&gt; spdm-certificates)
+      ))
+measurements-certificates //= (&amp;(measurements: 3802) =&gt; spdm-\
+          measurements // &amp;(certificates: 3803) =&gt; spdm-certificates)
 spdm-measurement = {
   &amp;(component-type: 1) =&gt; component-type,
   measurement,

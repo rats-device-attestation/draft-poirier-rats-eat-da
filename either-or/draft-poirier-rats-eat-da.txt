@@ -173,11 +173,11 @@ Table of Contents
 
    spdm-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0"
-     measurements-certificates
+     spdm-artefacts
      ? &(vca: 3804) => bytes
    }
 
-   measurements-certificates //= (
+   spdm-artefacts //= (
      &(measurements: 3802) => spdm-measurements
      &(certificates: 3803) => spdm-certificates
    )
@@ -365,14 +365,15 @@ Table of Contents
                                                            legacy-claims
    spdm-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0",
-     measurements-certificates,
+     spdm-artefacts,
      ? &(vca: 3804) => bytes,
    }
-   measurements-certificates //= ((
+   spdm-artefacts //= ((
            &(measurements: 3802) => spdm-measurements,
            &(certificates: 3803) => spdm-certificates,
-         ) // &(measurements: 3802) => spdm-measurements // &(\
-                               certificates: 3803) => spdm-certificates)
+         ))
+   measurements-certificates //= (&(measurements: 3802) => spdm-\
+             measurements // &(certificates: 3803) => spdm-certificates)
    spdm-measurement = {
      &(component-type: 1) => component-type,
      measurement,
