@@ -1,6 +1,18 @@
 spdm-claims = {
   &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0"
-  &(measurements: 3802) => spdm-measurements
-  &(certificates: 3803) => spdm-certificates
+  spdm-artefacts
   ? &(vca: 3804) => bytes
 }
+
+spdm-artefacts //= (
+  &(measurements: 3802) => spdm-measurements
+  &(certificates: 3803) => spdm-certificates
+)
+
+spdm-artefacts //= (
+  &(measurements: 3802) => spdm-measurements
+)
+
+spdm-artefacts //= (
+  &(certificates: 3803) => spdm-certificates
+)

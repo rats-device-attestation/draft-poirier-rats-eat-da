@@ -96,7 +96,7 @@ Careful condideration was also given to the overall design in order to leave roo
 ## SPDM Claims
 
 A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
-Each instance consists of measurements and a certificates section.
+Each instance consists of either a measurements section or a certificates section, or both.
 Optionally, the Negotiated State preamble (version, capabilities and algorithms) bytes can be included to present the full negotiated state between the SPDM requester and responder.
 
 ~~~ cddl
