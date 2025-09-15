@@ -146,7 +146,7 @@ The certificates MUST be concatenated with no intermediate padding.
 
 ### Negotiated State Preamble (Version, Capabilities and Algorithms) {#spdm-vca}
 
-The Negotiated State Preamble, i.e `vca`, claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.
+The Negotiated State Preamble (i.e., `vca`) claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.
 
 ## PCIe Legacy Device Claims {#pcie-legacy-device}
 
