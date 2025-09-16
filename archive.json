@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-11T01:48:32.656767+00:00",
+  "timestamp": "2025-09-16T01:45:36.563886+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -103,6 +103,54 @@
       "body": "Suggestion from @simonfrost-arm:\n\n> Given that some devices can present many PDEVs, that implies there will be redundancy in the cert chains. I was musing on whether an (optional) 'cert store' in the token would be useful, with cert entries either being the raw cert or a ref into that store.",
       "createdAt": "2025-06-26T13:11:28Z",
       "updatedAt": "2025-06-26T13:11:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOOtRXe87LwTaM",
+      "title": "Properly Represent CXL device claims",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/issues/12",
+      "state": "OPEN",
+      "author": "mathieupoirier",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The current specification represents claims for devices using the SPDM protocol on PCIe busses.  Other bus technologies such as CXL may also be used and need their own representation.  This will likely be added as a new \"device-claims-set\" in da-token.cddl, alongside \"spdm-claims\" and \"pcie-legacy-claims\".",
+      "createdAt": "2025-09-15T15:20:10Z",
+      "updatedAt": "2025-09-15T15:20:10Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOOtRXe87LwUQz",
+      "title": "Properly Represent CHI device dlaims",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/issues/13",
+      "state": "OPEN",
+      "author": "mathieupoirier",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The current specification represents claims for devices using the SPDM protocol on PCIe busses.  Other bus technologies such as CHI may also be used and need their own representation.  This will likely be added as a new \"device-claims-set\" in da-token.cddl, alongside \"spdm-claims\" and \"pcie-legacy-claims\".",
+      "createdAt": "2025-09-15T15:21:15Z",
+      "updatedAt": "2025-09-15T15:21:15Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOOtRXe87Lwawp",
+      "title": "Add Support for SPDM Challenge Representation",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/issues/14",
+      "state": "OPEN",
+      "author": "mathieupoirier",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The SPDM Challenge request/reponse can be used to authenticate a device in a CMA (Component Measurement and Authentication) scenario.  This specifiation should include support for that by adding  new \"spdm-challenge\" to \"spdm-claims\" in spdm-claims.cddl.",
+      "createdAt": "2025-09-15T15:27:50Z",
+      "updatedAt": "2025-09-15T15:27:50Z",
       "closedAt": null,
       "comments": []
     }
@@ -558,25 +606,33 @@
       "id": "PR_kwDOOtRXe86ny3Um",
       "title": "SPDM signature refactoring",
       "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "thomas-fossati",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "In order to support certain CXL flows, the MEASUREMENTS transcript (i.e. IL1) is made available separately from the signature-related data.\r\nAlso, make the signature-related data optional.",
       "createdAt": "2025-09-10T11:14:02Z",
-      "updatedAt": "2025-09-10T11:14:02Z",
+      "updatedAt": "2025-09-15T15:29:16Z",
       "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
       "baseRefName": "main",
       "baseRefOid": "7d624222b818ca7752315597f285a4001107846b",
       "headRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
       "headRefName": "cxl-spdm-refactor",
       "headRefOid": "94153ec6540467e05cacd57341d2f132b619d162",
-      "closedAt": null,
+      "closedAt": "2025-09-15T15:29:16Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Handled differently in PR#11.",
+          "createdAt": "2025-09-15T15:29:16Z",
+          "updatedAt": "2025-09-15T15:29:16Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -584,26 +640,288 @@
       "id": "PR_kwDOOtRXe86n2dMt",
       "title": "Add an optional VCA claim to the SPDM claims set",
       "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/11",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "thomas-fossati",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Add an explicit (optional) VCA claim to the SPDM claims-set.",
       "createdAt": "2025-09-10T16:24:33Z",
-      "updatedAt": "2025-09-10T16:25:41Z",
+      "updatedAt": "2025-09-15T17:39:54Z",
       "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
       "baseRefName": "main",
       "baseRefOid": "7d624222b818ca7752315597f285a4001107846b",
       "headRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
       "headRefName": "vca",
-      "headRefOid": "837914d7ecea61f1cd82c5d6ec2194870830356e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "42637aa29011bad9e23632ce50a18d1258df9509",
+      "closedAt": "2025-09-15T14:49:12Z",
+      "mergedAt": "2025-09-15T14:49:12Z",
+      "mergedBy": "mathieupoirier",
+      "mergeCommit": {
+        "oid": "179462011c8755eb187eb9b0ed4f6725cddbf72f"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe87AOVQr",
+          "commit": {
+            "abbreviatedOid": "837914d"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T14:36:58Z",
+          "updatedAt": "2025-09-15T14:36:58Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "Optionally, the Negotiated state preamble (version, capabilities and algorithms) ... ",
+              "createdAt": "2025-09-15T14:36:58Z",
+              "updatedAt": "2025-09-15T14:36:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87AOWzQ",
+          "commit": {
+            "abbreviatedOid": "837914d"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T14:38:21Z",
+          "updatedAt": "2025-09-15T14:38:22Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\nOptionally, the Negotiated State preamble (version, capabilities and algorithms) bytes can be included to present the full negotiated state between the SPDM requester and responder.\r\n```",
+              "createdAt": "2025-09-15T14:38:21Z",
+              "updatedAt": "2025-09-15T14:38:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87AOZLI",
+          "commit": {
+            "abbreviatedOid": "837914d"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T14:40:29Z",
+          "updatedAt": "2025-09-15T14:40:30Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\n### Negotiated State Preamble (Version, Capabilities and Algorithms) {#spdm-vca}\r\n```",
+              "createdAt": "2025-09-15T14:40:29Z",
+              "updatedAt": "2025-09-15T14:40:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87AOa23",
+          "commit": {
+            "abbreviatedOid": "8cc883c"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T14:42:14Z",
+          "updatedAt": "2025-09-15T14:42:15Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\nThe Negotiated State Preamble, i.e `vca`, claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.\r\n```",
+              "createdAt": "2025-09-15T14:42:14Z",
+              "updatedAt": "2025-09-15T14:42:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87AOhgp",
+          "commit": {
+            "abbreviatedOid": "66a85fe"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T14:46:36Z",
+          "updatedAt": "2025-09-15T14:46:37Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\nThe Negotiated State Preamble (i.e., `vca`) claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.\r\n```",
+              "createdAt": "2025-09-15T14:46:37Z",
+              "updatedAt": "2025-09-15T14:46:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87AOjnf",
+          "commit": {
+            "abbreviatedOid": "42637aa"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-09-15T14:48:37Z",
+          "updatedAt": "2025-09-15T14:48:37Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOtRXe87APGPD",
+          "commit": {
+            "abbreviatedOid": "837914d"
+          },
+          "author": "tomoveu",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T15:20:24Z",
+          "updatedAt": "2025-09-15T15:20:24Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "@thomas-fossati I am behind on this latest spec evolution so forgive me if the question is off - Attesting SPDM version makes sense to me but how can a node prove the SPDM negotiated state? ",
+              "createdAt": "2025-09-15T15:20:24Z",
+              "updatedAt": "2025-09-15T15:20:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87AP3pE",
+          "commit": {
+            "abbreviatedOid": "837914d"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T16:13:01Z",
+          "updatedAt": "2025-09-15T16:13:01Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "Hey Dimi!\r\n\r\nVCA is the negotiated state _\u201cpreamble\u201d_, as defined in [\u00a710.1.1 of SPDM v1.4](https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.4.0.pdf#page=56).\r\n\r\nEssentially, it is the raw capture of the sequence of messages exchanged between the SPDM requester and responder at the beginning of their conversation.\r\n\r\nAt the request of two vendors, we are exploring the possibility of conveying the value as-is.\r\n\r\nThis may change in the future.",
+              "createdAt": "2025-09-15T16:13:01Z",
+              "updatedAt": "2025-09-15T16:13:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87AQ7ec",
+          "commit": {
+            "abbreviatedOid": "837914d"
+          },
+          "author": "tomoveu",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T17:39:54Z",
+          "updatedAt": "2025-09-15T17:39:54Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "thank you Thomas for this info",
+              "createdAt": "2025-09-15T17:39:54Z",
+              "updatedAt": "2025-09-15T17:39:54Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOOtRXe86oq4OA",
+      "title": "refactoring `spdm-claims`",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/15",
+      "state": "MERGED",
+      "author": "thomas-fossati",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "An SPDM claims-set contains either a measurements section or a certificates section, or both.",
+      "createdAt": "2025-09-15T16:00:44Z",
+      "updatedAt": "2025-09-15T22:02:18Z",
+      "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "179462011c8755eb187eb9b0ed4f6725cddbf72f",
+      "headRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "headRefName": "either-or",
+      "headRefOid": "660d3ac1ea22a880f6379ef0305efea2cde96634",
+      "closedAt": "2025-09-15T22:02:07Z",
+      "mergedAt": "2025-09-15T22:02:07Z",
+      "mergedBy": "mathieupoirier",
+      "mergeCommit": {
+        "oid": "3c2eb0e0bc515e94763514f596503c2562f3f932"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe87ARA6O",
+          "commit": {
+            "abbreviatedOid": "fcbb813"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-15T17:45:54Z",
+          "updatedAt": "2025-09-15T17:51:22Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n  spdm-artefacts\r\n```",
+              "createdAt": "2025-09-15T17:45:54Z",
+              "updatedAt": "2025-09-15T17:51:22Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\nspdm-artefacts //= (\r\n```",
+              "createdAt": "2025-09-15T17:46:17Z",
+              "updatedAt": "2025-09-15T17:51:22Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "```suggestion\r\nspdm-artefacts //= (\r\n```",
+              "createdAt": "2025-09-15T17:46:37Z",
+              "updatedAt": "2025-09-15T17:51:22Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\r\nspdm-artefacts //= (\r\n```",
+              "createdAt": "2025-09-15T17:47:02Z",
+              "updatedAt": "2025-09-15T17:51:22Z"
+            },
+            {
+              "originalPosition": 1,
+              "body": "I like how you are imposing the combinations of measurements and certificates. ",
+              "createdAt": "2025-09-15T17:50:42Z",
+              "updatedAt": "2025-09-15T17:51:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87AT9Go",
+          "commit": {
+            "abbreviatedOid": "660d3ac"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-09-15T22:01:48Z",
+          "updatedAt": "2025-09-15T22:01:48Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
