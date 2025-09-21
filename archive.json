@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-16T01:45:36.563886+00:00",
+  "timestamp": "2025-09-21T01:55:55.850890+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -150,9 +150,24 @@
       "labels": [],
       "body": "The SPDM Challenge request/reponse can be used to authenticate a device in a CMA (Component Measurement and Authentication) scenario.  This specifiation should include support for that by adding  new \"spdm-challenge\" to \"spdm-claims\" in spdm-claims.cddl.",
       "createdAt": "2025-09-15T15:27:50Z",
-      "updatedAt": "2025-09-15T15:27:50Z",
+      "updatedAt": "2025-09-19T14:25:29Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "steven-bellock",
+          "authorAssociation": "NONE",
+          "body": "The PCIe (6.4) specification is vague on whether a CMA device should support `CHAL_CAP`. We know that it must support asymmetric cryptography and measurements, via the DMTF measurement specification format. As such, for SPDM 1.2+, since the L1/L2 transcript contains `VCA`, then `GET_MEASUREMENTS / MEASUREMENTS` is sufficient to authenticate the Responder. In particular, at NVIDIA we do not implement `CHAL_CAP` on most of our Responders.",
+          "createdAt": "2025-09-18T23:35:52Z",
+          "updatedAt": "2025-09-18T23:35:52Z"
+        },
+        {
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The motivation behind adding support for CHAL_CAP stems from [this implementation](https://lore.kernel.org/all/cover.1719771133.git.lukas@wunner.de/) from Lukas Wunner.  The goal is for people with that kind of usecase to use same claims representation.",
+          "createdAt": "2025-09-19T14:25:29Z",
+          "updatedAt": "2025-09-19T14:25:29Z"
+        }
+      ]
     }
   ],
   "pulls": [
