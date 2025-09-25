@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-21T01:55:55.850890+00:00",
+  "timestamp": "2025-09-25T01:48:17.426059+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -168,6 +168,22 @@
           "updatedAt": "2025-09-19T14:25:29Z"
         }
       ]
+    },
+    {
+      "number": 16,
+      "id": "I_kwDOOtRXe87Njiqw",
+      "title": "EAT profile chores: Lock down any optional behaviour",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/issues/16",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "EAT profiles must clearly define any optional behaviour.\n\nSee [Section 6 or RFC9711](https://www.rfc-editor.org/rfc/rfc9711.html#section-6.3) for the list of options to address.\n\nSee [Section 5.2 of RFC9783](https://www.rfc-editor.org/rfc/rfc9783.html#section-5.2) for an example of an existing profile.",
+      "createdAt": "2025-09-24T09:57:38Z",
+      "updatedAt": "2025-09-24T09:57:38Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
