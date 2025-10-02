@@ -154,7 +154,7 @@ The Negotiated State Preamble (i.e., `vca`) claim contains the concatenation of 
 
 ### Submodule Naming {#spdm-submod-name}
 
-The namespace used for SPDM submodules is "spdm:".
+The namespace used for SPDM submodules is "spdm".
 
 The name associated with an SPDM submodule is extracted from the leaf certificate of the relevant device.
 
@@ -175,7 +175,7 @@ Other fields of the configuration space header may optionally be included should
 
 ### Submodule Naming {#pcie-legacy-submod-name}
 
-The namespace used for legacy PCIe submodules is "legacy-pcie:".
+The namespace used for legacy PCIe submodules is "legacy-pcie".
 
 The name is any arbitrary string chosen by the implementation.
 For example, "legacy-pcie:0000:00/0000:00:01.0" where "0000:00" is the PCI bus id and "0000:00:01.0" is the device id.
