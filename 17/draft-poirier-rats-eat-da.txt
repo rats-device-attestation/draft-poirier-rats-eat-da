@@ -377,8 +377,9 @@ Table of Contents
    The namespace used for legacy PCIe submodules is "legacy-pcie".
 
    The name is any arbitrary string chosen by the implementation.  For
-   example, "legacy-pcie:0000:00/0000:00:01.0" where "0000:00" is the
-   PCI bus id and "0000:00:01.0" is the device id.
+   example, "legacy-pcie:0000:01:02.0" where "0000" is the domain, "01"
+   the PCI bus id, "02" the device on the bus and "0" the device
+   function.
 
 4.  Collated CDDL
 
