@@ -2,7 +2,7 @@
   / profile / 265: "tag:linaro.org,2025:device#1.0.0",
   / nonce / 10: h'f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7aa40cd86cd30ebaae746fb19f008c1e6a1f23ad6a178e18dceda918f7f6e',
   / submods / 266: {
-    "ACME:WIDGET-A:0123456789": {
+    "spdm:ACME:WIDGET-A:0123456789": {
       / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
       / measurements / 0x0eda: {
         1: {
@@ -15,7 +15,7 @@
         / no aux certs /
       }
     },
-    "C=CA,O=ACME,OU=Widget-B,CN=9876543210": {
+    "spdm:C=CA,O=ACME,OU=Widget-B,CN=9876543210": {
       / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
       / measurements / 0x0eda: {
         1: {

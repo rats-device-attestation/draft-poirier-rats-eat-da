@@ -6,7 +6,7 @@ da-token = {
   }
 }
 
-device-name = text
+device-name = text .regexp "(legacy-pcie|spdm):.+"
 
 $device-claims-set /= spdm-claims
 $device-claims-set /= cxl-claims
