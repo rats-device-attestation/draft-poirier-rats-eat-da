@@ -36,6 +36,7 @@ author:
 normative:
   RFC9711: rats-eat
   RFC5280: pkix
+  RFC4514: dn-string-rep
   IANA.cwt:
 
 informative:
@@ -86,6 +87,9 @@ The Device Attestation claim is the encompassing envelope for the individual dev
 It can be used as a standalone entity but typically enclosed in a wider platform specific attestation token.
 The Device attestation claim consists of an EAT profile identifier, a nonce and an EAT submodule ({{Section 4.2.18 of -rats-eat}}) that contains any number of individual device claims.
 Each individual device claim is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
+The syntax of the device name depends on the type of bus or protocol used.
+Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
+See {{spdm-submod-name}} for SPDM devices, and {{pcie-legacy-submod-name}} for legacy PCIe devices.
 As previously mentioned, this draft currently defines the claims set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
 Careful condideration was also given to the overall design in order to leave room for future expansion.
 
@@ -148,6 +152,17 @@ The certificates MUST be concatenated with no intermediate padding.
 
 The Negotiated State Preamble (i.e., `vca`) claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.
 
+### Submodule Naming {#spdm-submod-name}
+
+The namespace used for SPDM submodules is "spdm".
+
+The name associated with an SPDM submodule is extracted from the leaf certificate of the relevant device.
+
+* If the leaf certificate contains a Subject Alternative Name of type DMTFOtherName, the submodule name is the value contained in `ub-DMTF-device-info`.
+For example: "spdm:ACME:WIDGET:0123456789".
+* Otherwise, the submod name is the string representation of the certificate Subject, as described in {{-dn-string-rep}}.
+For example: "spdm:C=CA,O=ACME,OU=Widget,CN=0123456789".
+
 ## PCIe Legacy Device Claims {#pcie-legacy-device}
 
 The definition of a device claims set for PCIe legacy devices that do not implement the extensions needed to attest for their provenance and configuration is provided, making it is possible to keep using current assets as secures ones are being provisioned.
@@ -157,6 +172,14 @@ Other fields of the configuration space header may optionally be included should
 ~~~ cddl
 {::include-fold cddl/pcie-legacy-claims.cddl}
 ~~~
+
+### Submodule Naming {#pcie-legacy-submod-name}
+
+The namespace used for legacy PCIe submodules is "legacy-pcie".
+
+The name is any arbitrary string chosen by the implementation.
+For example, "legacy-pcie:0000:01:02.0" where "0000" is the domain, "01" the PCI bus id, "02" the device on the bus and "0" the device function.
+
 
 # Collated CDDL
 
