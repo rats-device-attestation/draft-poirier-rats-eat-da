@@ -326,7 +326,7 @@ Table of Contents
 
 3.1.4.  Submodule Naming
 
-   The namespace used for SPDM submodules is "spdm:".
+   The namespace used for SPDM submodules is "spdm".
 
    The name associated with an SPDM submodule is extracted from the leaf
    certificate of the relevant device.
@@ -374,7 +374,7 @@ Table of Contents
 
 3.2.1.  Submodule Naming
 
-   The namespace used for legacy PCIe submodules is "legacy-pcie:".
+   The namespace used for legacy PCIe submodules is "legacy-pcie".
 
    The name is any arbitrary string chosen by the implementation.  For
    example, "legacy-pcie:0000:00/0000:00:01.0" where "0000:00" is the
