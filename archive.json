@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-25T01:48:17.426059+00:00",
+  "timestamp": "2025-10-02T01:45:40.574542+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -182,6 +182,24 @@
       "body": "EAT profiles must clearly define any optional behaviour.\n\nSee [Section 6 or RFC9711](https://www.rfc-editor.org/rfc/rfc9711.html#section-6.3) for the list of options to address.\n\nSee [Section 5.2 of RFC9783](https://www.rfc-editor.org/rfc/rfc9783.html#section-5.2) for an example of an existing profile.",
       "createdAt": "2025-09-24T09:57:38Z",
       "updatedAt": "2025-09-24T09:57:38Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOOtRXe87PE_Vq",
+      "title": "specify naming conventions for SPDM submods",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/issues/17",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "thomas-fossati"
+      ],
+      "labels": [],
+      "body": "This should match the serialised `ub-DMTF-device-info` specified in [Clause 425](https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.4.0.pdf#page=113) of SPDM 1.4.",
+      "createdAt": "2025-10-01T15:59:32Z",
+      "updatedAt": "2025-10-01T15:59:35Z",
       "closedAt": null,
       "comments": []
     }
