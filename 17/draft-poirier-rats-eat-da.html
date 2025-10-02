@@ -1282,6 +1282,8 @@ It can be used as a standalone entity but typically enclosed in a wider platform
 The Device attestation claim consists of an EAT profile identifier, a nonce and an EAT submodule (<span><a href="https://rfc-editor.org/rfc/rfc9711#section-4.2.18" class="relref">Section 4.2.18</a> of [<a href="#RFC9711" class="cite xref">RFC9711</a>]</span>) that contains any number of individual device claims.
 Each individual device claim is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
 The syntax of the device name depends on the type of bus or protocol used.
+Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
+See <a href="#spdm-submod-name" class="auto internal xref">Section 3.1.4</a> for SPDM devices, and <a href="#pcie-legacy-submod-name" class="auto internal xref">Section 3.2.1</a> for legacy PCIe devices.
 As previously mentioned, this draft currently defines the claims set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
 Careful condideration was also given to the overall design in order to leave room for future expansion.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3-2">
@@ -1294,7 +1296,7 @@ da-token = {
   }
 }
 
-device-name = text
+device-name = text .regexp "(legacy-pcie|spdm):.+"
 
 $device-claims-set /= spdm-claims
 $device-claims-set /= cxl-claims
@@ -1483,15 +1485,16 @@ aux-cert-slots = 1..7
           <h4 id="name-submodule-naming">
 <a href="#section-3.1.4" class="section-number selfRef">3.1.4. </a><a href="#name-submodule-naming" class="section-name selfRef">Submodule Naming</a>
           </h4>
-<p id="section-3.1.4-1">The name associated with an SPDM submodule is extracted from the leaf certificate of the relevant device.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.4-1">The namespace used for SPDM submodules is "spdm:".<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.4-2">The name associated with an SPDM submodule is extracted from the leaf certificate of the relevant device.<a href="#section-3.1.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.1.4-2.1">
-              <p id="section-3.1.4-2.1.1">If the leaf certificate contains a Subject Alternative Name of type DMTFOtherName, the submodule name is the value contained in <code>ub-DMTF-device-info</code>.
-For example: "ACME:WIDGET:0123456789".<a href="#section-3.1.4-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.1.4-3.1">
+              <p id="section-3.1.4-3.1.1">If the leaf certificate contains a Subject Alternative Name of type DMTFOtherName, the submodule name is the value contained in <code>ub-DMTF-device-info</code>.
+For example: "spdm:ACME:WIDGET:0123456789".<a href="#section-3.1.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.1.4-2.2">
-              <p id="section-3.1.4-2.2.1">Otherwise, the submod name is the string representation of the certificate Subject, as described in <span>[<a href="#RFC4514" class="cite xref">RFC4514</a>]</span>.
-For example: "C=CA,O=ACME,OU=Widget,CN=0123456789".<a href="#section-3.1.4-2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-3.1.4-3.2">
+              <p id="section-3.1.4-3.2.1">Otherwise, the submod name is the string representation of the certificate Subject, as described in <span>[<a href="#RFC4514" class="cite xref">RFC4514</a>]</span>.
+For example: "spdm:C=CA,O=ACME,OU=Widget,CN=0123456789".<a href="#section-3.1.4-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1536,7 +1539,9 @@ pcie-type-0-1-config-space = {
           <h4 id="name-submodule-naming-2">
 <a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-submodule-naming-2" class="section-name selfRef">Submodule Naming</a>
           </h4>
-<p id="section-3.2.1-1">TODO<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-1">The namespace used for legacy PCIe submodules is "legacy-pcie:".<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-2">The name is any arbitrary string chosen by the implementation.
+For example, "legacy-pcie:0000:00/0000:00:01.0" where "0000:00" is the PCI bus id and "0000:00:01.0" is the device id.<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1557,7 +1562,7 @@ da-token = {
   &amp;(eat_nonce: 10) =&gt; bytes .size 64,
   &amp;(eat_submods: 266) =&gt; {+ device-name =&gt; $device-claims-set},
 }
-device-name = text
+device-name = text .regexp "(legacy-pcie|spdm):.+"
 $device-claims-set /= spdm-claims / cxl-claims / chi-claims / pcie-\
                                                         legacy-claims
 spdm-claims = {
@@ -1849,7 +1854,7 @@ pcie-type-0-1-config-space = {
 f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
        aa40cd86cd30ebaae746fb19f008c1e6a1f23ad6a178e18dceda918f7f6e',
   / submods / 266: {
-    "ACME:WIDGET-A:0123456789": {
+    "spdm:ACME:WIDGET-A:0123456789": {
       / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
       / measurements / 0x0eda: {
         1: {
@@ -1863,7 +1868,7 @@ f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
         / no aux certs /
       }
     },
-    "C=CA,O=ACME,OU=Widget-B,CN=9876543210": {
+    "spdm:C=CA,O=ACME,OU=Widget-B,CN=9876543210": {
       / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
       / measurements / 0x0eda: {
         1: {
