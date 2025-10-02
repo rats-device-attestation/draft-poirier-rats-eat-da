@@ -5,7 +5,7 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 28 February 2026                                 27 August 2025
+Expires: 5 April 2026                                     2 October 2025
 
 
                  An EAT Profile for Device Attestation
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 February 2026.
+   This Internet-Draft will expire on 5 April 2026.
 
 Copyright Notice
 
@@ -79,14 +79,19 @@ Table of Contents
      3.1.  SPDM Claims
        3.1.1.  Measurements Claim
        3.1.2.  Certificate Claims
+       3.1.3.  Negotiated State Preamble (Version, Capabilities and
+               Algorithms)
+       3.1.4.  Submod Naming
      3.2.  PCIe Legacy Device Claims
+       3.2.1.  Submod Naming
    4.  Collated CDDL
    5.  Security Considerations
    6.  IANA Considerations
      6.1.  New CWT Claims Registrations
        6.1.1.   SPDM Measurements Claim
        6.1.2.   SPDM Certificates Claim
-       6.1.3.   PCIe Legacy Device Claim
+       6.1.3.   SPDM VCA Claim
+       6.1.4.   PCIe Legacy Device Claim
    7.  References
      7.1.  Normative References
      7.2.  Informative References
@@ -139,10 +144,12 @@ Table of Contents
    [RFC9711]) that contains any number of individual device claims.
    Each individual device claim is the combination of a device name and
    a standard claims format based on the bus or protocol the device
-   supports.  As previously mentioned, this draft currently defines the
-   claims set for SPDM compliant devices and PCIe legacy devices that do
-   not support the SPDM protocol.  Careful condideration was also given
-   to the overall design in order to leave room for future expansion.
+   supports.  The syntax of the device name depends on the type of bus
+   or protocol used.  As previously mentioned, this draft currently
+   defines the claims set for SPDM compliant devices and PCIe legacy
+   devices that do not support the SPDM protocol.  Careful condideration
+   was also given to the overall design in order to leave room for
+   future expansion.
 
    da-token = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device#1.0.0"
@@ -152,7 +159,7 @@ Table of Contents
      }
    }
 
-   device-name = text .regexp "dev-[A-Za-z0-9]+"
+   device-name = text
 
    $device-claims-set /= spdm-claims
    $device-claims-set /= cxl-claims
@@ -162,14 +169,30 @@ Table of Contents
 3.1.  SPDM Claims
 
    A SPDM claim instance is expected to be present for each SPDM
-   compatible device to be attested.  Each instance consists of
-   measurements and a certificates section.
+   compatible device to be attested.  Each instance consists of either a
+   measurements section or a certificates section, or both.  Optionally,
+   the Negotiated State preamble (version, capabilities and algorithms)
+   bytes can be included to present the full negotiated state between
+   the SPDM requester and responder.
 
    spdm-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0"
+     spdm-artefacts
+     ? &(vca: 3804) => bytes
+   }
+
+   spdm-artefacts //= (
      &(measurements: 3802) => spdm-measurements
      &(certificates: 3803) => spdm-certificates
-   }
+   )
+
+   spdm-artefacts //= (
+     &(measurements: 3802) => spdm-measurements
+   )
+
+   spdm-artefacts //= (
+     &(certificates: 3803) => spdm-certificates
+   )
 
 3.1.1.  Measurements Claim
 
@@ -292,6 +315,26 @@ Table of Contents
    default-cert-slot = 0
    aux-cert-slots = 1..7
 
+3.1.3.  Negotiated State Preamble (Version, Capabilities and Algorithms)
+
+   The Negotiated State Preamble (i.e., vca) claim contains the
+   concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES,
+   CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged
+   between the SPDM Requester and Responder.
+
+3.1.4.  Submod Naming
+
+   The name associated with an SPDM submod is extracted from the leaf
+   certificate of the relevant device.
+
+   *  If the leaf certificate contains a Subject Alternative Name of
+      type DMTFOtherName, the submod name is the value contained in ub-
+      DMTF-device-info.  For example: "ACME:WIDGET:0123456789".
+
+   *  Otherwise, the submod name is the string representation of the
+      certificate Subject, as described in [RFC4514].  For example:
+      "C=CA,O=ACME,OU=Widget,CN=0123456789".
+
 3.2.  PCIe Legacy Device Claims
 
    The definition of a device claims set for PCIe legacy devices that do
@@ -308,7 +351,7 @@ Table of Contents
    pcie-legacy-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-pcie-legacy#1.0\
                                                                      .0"
-     &(legacy-header: 3804) => pcie-type-0-1-config-space
+     &(legacy-header: 3805) => pcie-type-0-1-config-space
      ? $$pcie-legacy-claim-extension
    }
 
@@ -325,6 +368,10 @@ Table of Contents
      ? &(BITS: 10) => bytes .size 1
    }
 
+3.2.1.  Submod Naming
+
+   TODO
+
 4.  Collated CDDL
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -334,14 +381,19 @@ Table of Contents
      &(eat_nonce: 10) => bytes .size 64,
      &(eat_submods: 266) => {+ device-name => $device-claims-set},
    }
-   device-name = text .regexp "dev-[A-Za-z0-9]+"
+   device-name = text
    $device-claims-set /= spdm-claims / cxl-claims / chi-claims / pcie-\
                                                            legacy-claims
    spdm-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0",
-     &(measurements: 3802) => spdm-measurements,
-     &(certificates: 3803) => spdm-certificates,
+     spdm-artefacts,
+     ? &(vca: 3804) => bytes,
    }
+   spdm-artefacts //= ((
+           &(measurements: 3802) => spdm-measurements,
+           &(certificates: 3803) => spdm-certificates,
+         ) // &(measurements: 3802) => spdm-measurements // &(\
+                               certificates: 3803) => spdm-certificates)
    spdm-measurement = {
      &(component-type: 1) => component-type,
      measurement,
@@ -391,7 +443,7 @@ Table of Contents
    pcie-legacy-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-pcie-legacy#1.0\
                                                                     .0",
-     &(legacy-header: 3804) => pcie-type-0-1-config-space,
+     &(legacy-header: 3805) => pcie-type-0-1-config-space,
      ? $$pcie-legacy-claim-extension,
    }
    pcie-type-0-1-config-space = {
@@ -450,7 +502,23 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.2 of RFCthis
 
-6.1.3.   PCIe Legacy Device Claim
+6.1.3.   SPDM VCA Claim
+
+   *  Claim Name: spdm-vca
+
+   *  Claim Description: SPDM Version, Capabilities and Algorithms
+
+   *  JWT Claim Name: N/A
+
+   *  Claim Key: 3804
+
+   *  Claim Value Type(s): bytes
+
+   *  Change Controller: IETF
+
+   *  Specification Document(s): Section 3.1.3 of RFCthis
+
+6.1.4.   PCIe Legacy Device Claim
 
    *  Claim Name: pcie-legacy-device
 
@@ -458,7 +526,7 @@ Table of Contents
 
    *  JWT Claim Name: N/A
 
-   *  Claim Key: 3804
+   *  Claim Key: 3805
 
    *  Claim Value Type(s): map
 
@@ -477,6 +545,11 @@ Table of Contents
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC4514]  Zeilenga, K., Ed., "Lightweight Directory Access Protocol
+              (LDAP): String Representation of Distinguished Names",
+              RFC 4514, DOI 10.17487/RFC4514, June 2006,
+              <https://www.rfc-editor.org/rfc/rfc4514>.
 
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
@@ -510,7 +583,7 @@ Appendix A.  Examples
    f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
           aa40cd86cd30ebaae746fb19f008c1e6a1f23ad6a178e18dceda918f7f6e',
      / submods / 266: {
-       "dev-a": {
+       "ACME:WIDGET-A:0123456789": {
          / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
          / measurements / 0x0eda: {
            1: {
@@ -524,7 +597,7 @@ Appendix A.  Examples
            / no aux certs /
          }
        },
-       "dev-b": {
+       "C=CA,O=ACME,OU=Widget-B,CN=9876543210": {
          / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
          / measurements / 0x0eda: {
            1: {
