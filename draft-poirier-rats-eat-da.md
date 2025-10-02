@@ -150,11 +150,11 @@ The certificates MUST be concatenated with no intermediate padding.
 
 The Negotiated State Preamble (i.e., `vca`) claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.
 
-### Submod Naming {#spdm-submod-name}
+### Submodule Naming {#spdm-submod-name}
 
-The name associated with an SPDM submod is extracted from the leaf certificate of the relevant device.
+The name associated with an SPDM submodule is extracted from the leaf certificate of the relevant device.
 
-* If the leaf certificate contains a Subject Alternative Name of type DMTFOtherName, the submod name is the value contained in `ub-DMTF-device-info`.
+* If the leaf certificate contains a Subject Alternative Name of type DMTFOtherName, the submodule name is the value contained in `ub-DMTF-device-info`.
 For example: "ACME:WIDGET:0123456789".
 * Otherwise, the submod name is the string representation of the certificate Subject, as described in {{-dn-string-rep}}.
 For example: "C=CA,O=ACME,OU=Widget,CN=0123456789".
@@ -169,7 +169,7 @@ Other fields of the configuration space header may optionally be included should
 {::include-fold cddl/pcie-legacy-claims.cddl}
 ~~~
 
-### Submod Naming {#pcie-legacy-submod-name}
+### Submodule Naming {#pcie-legacy-submod-name}
 
 TODO
 
