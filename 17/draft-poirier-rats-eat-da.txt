@@ -81,9 +81,9 @@ Table of Contents
        3.1.2.  Certificate Claims
        3.1.3.  Negotiated State Preamble (Version, Capabilities and
                Algorithms)
-       3.1.4.  Submod Naming
+       3.1.4.  Submodule Naming
      3.2.  PCIe Legacy Device Claims
-       3.2.1.  Submod Naming
+       3.2.1.  Submodule Naming
    4.  Collated CDDL
    5.  Security Considerations
    6.  IANA Considerations
@@ -322,14 +322,14 @@ Table of Contents
    CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged
    between the SPDM Requester and Responder.
 
-3.1.4.  Submod Naming
+3.1.4.  Submodule Naming
 
-   The name associated with an SPDM submod is extracted from the leaf
+   The name associated with an SPDM submodule is extracted from the leaf
    certificate of the relevant device.
 
    *  If the leaf certificate contains a Subject Alternative Name of
-      type DMTFOtherName, the submod name is the value contained in ub-
-      DMTF-device-info.  For example: "ACME:WIDGET:0123456789".
+      type DMTFOtherName, the submodule name is the value contained in
+      ub-DMTF-device-info.  For example: "ACME:WIDGET:0123456789".
 
    *  Otherwise, the submod name is the string representation of the
       certificate Subject, as described in [RFC4514].  For example:
@@ -368,7 +368,7 @@ Table of Contents
      ? &(BITS: 10) => bytes .size 1
    }
 
-3.2.1.  Submod Naming
+3.2.1.  Submodule Naming
 
    TODO
 
