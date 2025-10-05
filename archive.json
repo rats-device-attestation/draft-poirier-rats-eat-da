@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-02T01:45:40.574542+00:00",
+  "timestamp": "2025-10-05T01:56:03.332493+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -190,7 +190,7 @@
       "id": "I_kwDOOtRXe87PE_Vq",
       "title": "specify naming conventions for SPDM submods",
       "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/issues/17",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "thomas-fossati",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -199,8 +199,8 @@
       "labels": [],
       "body": "This should match the serialised `ub-DMTF-device-info` specified in [Clause 425](https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.4.0.pdf#page=113) of SPDM 1.4.",
       "createdAt": "2025-10-01T15:59:32Z",
-      "updatedAt": "2025-10-01T15:59:35Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-02T15:54:19Z",
+      "closedAt": "2025-10-02T15:54:19Z",
       "comments": []
     }
   ],
@@ -968,6 +968,421 @@
           "body": "",
           "createdAt": "2025-09-15T22:01:48Z",
           "updatedAt": "2025-09-15T22:01:48Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOOtRXe86rue-z",
+      "title": "first stab at defining the submod naming scheme",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/18",
+      "state": "MERGED",
+      "author": "thomas-fossati",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "For SPDM, use the `ub-DMTF-device-info` field if it is available in the SAN of the leaf certificate; otherwise, use the RFC4514 encoding of the certificate Subject.\r\n\r\nFor the time being, I have left this as TODO for legacy PCIe.\r\n\r\nI am wondering whether we need to use a namespace for the labels to avoid any possible conflicts.  For example, we could prepend `spdm:` or `pcie:` and similar, i.e. `\"spdm:ACME:Widget:1234567890\"` instead of just `\"ACME:Widget:1234567890\u201d`\r\n\r\nFix #17\r\n",
+      "createdAt": "2025-10-02T09:16:27Z",
+      "updatedAt": "2025-10-02T15:54:18Z",
+      "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "3c2eb0e0bc515e94763514f596503c2562f3f932",
+      "headRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "headRefName": "17",
+      "headRefOid": "cc542187952d680601875de499c4093e33e33ef5",
+      "closedAt": "2025-10-02T15:54:18Z",
+      "mergedAt": "2025-10-02T15:54:17Z",
+      "mergedBy": "mathieupoirier",
+      "mergeCommit": {
+        "oid": "a25fc314a4c0983fa9a27a659068f933626abc85"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe87EZNKu",
+          "commit": {
+            "abbreviatedOid": "55df754"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:31:51Z",
+          "updatedAt": "2025-10-02T14:31:51Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "I really like this enhancement.",
+              "createdAt": "2025-10-02T14:31:51Z",
+              "updatedAt": "2025-10-02T14:31:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZTVv",
+          "commit": {
+            "abbreviatedOid": "55df754"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:38:13Z",
+          "updatedAt": "2025-10-02T14:38:14Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "I'm not sure this addition adds any kind of clarification.  It seems like something is missing to complete the sentence.",
+              "createdAt": "2025-10-02T14:38:13Z",
+              "updatedAt": "2025-10-02T14:38:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZUfh",
+          "commit": {
+            "abbreviatedOid": "55df754"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:39:30Z",
+          "updatedAt": "2025-10-02T14:39:30Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "Is it called an \"SPDM submod\" or \"SPDM submodule\"? ",
+              "createdAt": "2025-10-02T14:39:30Z",
+              "updatedAt": "2025-10-02T14:39:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZXpC",
+          "commit": {
+            "abbreviatedOid": "55df754"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:42:31Z",
+          "updatedAt": "2025-10-02T14:42:31Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "Maybe that's where we mandate something like \"legacy-pcie:anykindofname\".  I'm adding the \"pcie\" part because there might be legacy devices on CHI and CXL as well.  All this is highly speculative - that's what happens when your cristal ball is broken.",
+              "createdAt": "2025-10-02T14:42:31Z",
+              "updatedAt": "2025-10-02T14:42:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZYDg",
+          "commit": {
+            "abbreviatedOid": "55df754"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:42:54Z",
+          "updatedAt": "2025-10-02T14:42:54Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "Both submod and Submodule are acceptable, but the latter is better.",
+              "createdAt": "2025-10-02T14:42:54Z",
+              "updatedAt": "2025-10-02T14:42:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZYpQ",
+          "commit": {
+            "abbreviatedOid": "55df754"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:43:25Z",
+          "updatedAt": "2025-10-02T14:43:25Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "```suggestion\r\n### Submodule Naming {#spdm-submod-name}\r\n```",
+              "createdAt": "2025-10-02T14:43:25Z",
+              "updatedAt": "2025-10-02T14:43:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZY8H",
+          "commit": {
+            "abbreviatedOid": "55df754"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:43:42Z",
+          "updatedAt": "2025-10-02T14:43:43Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "```suggestion\r\n### Submodule Naming {#pcie-legacy-submod-name}\r\n```",
+              "createdAt": "2025-10-02T14:43:42Z",
+              "updatedAt": "2025-10-02T14:43:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZZeh",
+          "commit": {
+            "abbreviatedOid": "55df754"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:44:15Z",
+          "updatedAt": "2025-10-02T14:44:15Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\r\nThe name associated with an SPDM submodule is extracted from the leaf certificate of the relevant device.\r\n```",
+              "createdAt": "2025-10-02T14:44:15Z",
+              "updatedAt": "2025-10-02T14:44:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZZ1O",
+          "commit": {
+            "abbreviatedOid": "55df754"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:44:30Z",
+          "updatedAt": "2025-10-02T14:44:30Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "```suggestion\r\n* If the leaf certificate contains a Subject Alternative Name of type DMTFOtherName, the submodule name is the value contained in `ub-DMTF-device-info`.\r\n```",
+              "createdAt": "2025-10-02T14:44:30Z",
+              "updatedAt": "2025-10-02T14:44:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZdrr",
+          "commit": {
+            "abbreviatedOid": "5f12ecc"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:47:48Z",
+          "updatedAt": "2025-10-02T14:47:49Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "Should we add forward references to the defined \"Submodule Naming\u201d subsections (SPDM and legacy)?",
+              "createdAt": "2025-10-02T14:47:48Z",
+              "updatedAt": "2025-10-02T14:47:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZfeY",
+          "commit": {
+            "abbreviatedOid": "5f12ecc"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:49:47Z",
+          "updatedAt": "2025-10-02T14:49:48Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "I agree with your (broken) crystal ball.  I would extend the explicit namespace indication to SPDM as well and, in principle, to any other bus technology that we want to cover.",
+              "createdAt": "2025-10-02T14:49:48Z",
+              "updatedAt": "2025-10-02T14:49:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZhS3",
+          "commit": {
+            "abbreviatedOid": "5f12ecc"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:51:56Z",
+          "updatedAt": "2025-10-02T14:51:56Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "I.e., something like:\r\n\r\n> _\"The syntax of the device name depends on the type of bus or protocol used.  See Section x.y.z for SPDM, and Section a.b.c for legacy PCIe.\"_",
+              "createdAt": "2025-10-02T14:51:56Z",
+              "updatedAt": "2025-10-02T14:51:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZjKA",
+          "commit": {
+            "abbreviatedOid": "5f12ecc"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:53:45Z",
+          "updatedAt": "2025-10-02T14:53:45Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "Yes, that would provide a concrete example.",
+              "createdAt": "2025-10-02T14:53:45Z",
+              "updatedAt": "2025-10-02T14:53:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZlX6",
+          "commit": {
+            "abbreviatedOid": "5f12ecc"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T14:55:20Z",
+          "updatedAt": "2025-10-02T14:55:20Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "Ok for the explicit namespace indication.  Better to have more information than not enough.  The worse thing that can happen is people asking to remove or change it.",
+              "createdAt": "2025-10-02T14:55:20Z",
+              "updatedAt": "2025-10-02T14:55:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EZ7l_",
+          "commit": {
+            "abbreviatedOid": "55df754"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T15:11:32Z",
+          "updatedAt": "2025-10-02T15:11:32Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "I have addressed this in [5f12ecc](https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/18/commits/5f12ecc4270c194fdd200d8cedddf63cf2784dbb)",
+              "createdAt": "2025-10-02T15:11:32Z",
+              "updatedAt": "2025-10-02T15:11:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EaQTw",
+          "commit": {
+            "abbreviatedOid": "5f12ecc"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-02T15:33:44Z",
+          "updatedAt": "2025-10-02T15:33:44Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EadBZ",
+          "commit": {
+            "abbreviatedOid": "f96fbb3"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T15:47:51Z",
+          "updatedAt": "2025-10-02T15:47:52Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "```suggestion\r\nThe namespace used for legacy PCIe submodules is \"legacy-pcie\".\r\n```",
+              "createdAt": "2025-10-02T15:47:51Z",
+              "updatedAt": "2025-10-02T15:47:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EadJg",
+          "commit": {
+            "abbreviatedOid": "f96fbb3"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T15:47:59Z",
+          "updatedAt": "2025-10-02T15:48:00Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "```suggestion\r\nThe namespace used for SPDM submodules is \"spdm\".\r\n```",
+              "createdAt": "2025-10-02T15:47:59Z",
+              "updatedAt": "2025-10-02T15:48:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87EahJM",
+          "commit": {
+            "abbreviatedOid": "f96fbb3"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-02T15:51:25Z",
+          "updatedAt": "2025-10-02T15:51:25Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "```suggestion\nFor example, \"legacy-pcie:0000:01:02.0\" where \"0000\" is the domain, \"01\" the PCI bus id, \"02\" the device on the bus and \"0\" the device function.\n```",
+              "createdAt": "2025-10-02T15:51:25Z",
+              "updatedAt": "2025-10-02T15:51:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOtRXe87Eakp7",
+          "commit": {
+            "abbreviatedOid": "cc54218"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-02T15:53:59Z",
+          "updatedAt": "2025-10-02T15:53:59Z",
           "comments": []
         }
       ]
