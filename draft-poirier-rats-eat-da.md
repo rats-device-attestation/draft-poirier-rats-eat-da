@@ -168,6 +168,8 @@ For example: "spdm:C=CA,O=ACME,OU=Widget,CN=0123456789".
 The definition of a device claims set for PCIe legacy devices that do not implement the extensions needed to attest for their provenance and configuration is provided, making it is possible to keep using current assets as secures ones are being provisioned.
 This legacy device claims set simply mirrors the type 0/1 common registers of the PCIe configuration space, mandating only that the vendor and device identification code be provided.
 Other fields of the configuration space header may optionally be included should they add value.
+A binary format of the PCIe configuration space is made available for processing by existing PCIe configuration space tools.
+Implementers may optionally choose to include both text and binary versions should there be a use case to support this representation.
 
 ~~~ cddl
 {::include-fold cddl/pcie-legacy-claims.cddl}
