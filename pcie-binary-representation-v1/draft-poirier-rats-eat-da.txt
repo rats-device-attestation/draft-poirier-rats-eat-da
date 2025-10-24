@@ -5,7 +5,7 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 20 March 2026                                 16 September 2025
+Expires: 27 April 2026                                   24 October 2025
 
 
                  An EAT Profile for Device Attestation
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 March 2026.
+   This Internet-Draft will expire on 27 April 2026.
 
 Copyright Notice
 
@@ -81,7 +81,9 @@ Table of Contents
        3.1.2.  Certificate Claims
        3.1.3.  Negotiated State Preamble (Version, Capabilities and
                Algorithms)
+       3.1.4.  Submodule Naming
      3.2.  PCIe Legacy Device Claims
+       3.2.1.  Submodule Naming
    4.  Collated CDDL
    5.  Security Considerations
    6.  IANA Considerations
@@ -142,10 +144,14 @@ Table of Contents
    [RFC9711]) that contains any number of individual device claims.
    Each individual device claim is the combination of a device name and
    a standard claims format based on the bus or protocol the device
-   supports.  As previously mentioned, this draft currently defines the
-   claims set for SPDM compliant devices and PCIe legacy devices that do
-   not support the SPDM protocol.  Careful condideration was also given
-   to the overall design in order to leave room for future expansion.
+   supports.  The syntax of the device name depends on the type of bus
+   or protocol used.  Each name consists of two parts joined by a
+   semicolon: a namespace and a bus-specific name.  See Section 3.1.4
+   for SPDM devices, and Section 3.2.1 for legacy PCIe devices.  As
+   previously mentioned, this draft currently defines the claims set for
+   SPDM compliant devices and PCIe legacy devices that do not support
+   the SPDM protocol.  Careful condideration was also given to the
+   overall design in order to leave room for future expansion.
 
    da-token = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device#1.0.0"
@@ -155,7 +161,7 @@ Table of Contents
      }
    }
 
-   device-name = text .regexp "dev-[A-Za-z0-9]+"
+   device-name = text .regexp "(legacy-pcie|spdm):.+"
 
    $device-claims-set /= spdm-claims
    $device-claims-set /= cxl-claims
@@ -318,6 +324,21 @@ Table of Contents
    CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged
    between the SPDM Requester and Responder.
 
+3.1.4.  Submodule Naming
+
+   The namespace used for SPDM submodules is "spdm".
+
+   The name associated with an SPDM submodule is extracted from the leaf
+   certificate of the relevant device.
+
+   *  If the leaf certificate contains a Subject Alternative Name of
+      type DMTFOtherName, the submodule name is the value contained in
+      ub-DMTF-device-info.  For example: "spdm:ACME:WIDGET:0123456789".
+
+   *  Otherwise, the submod name is the string representation of the
+      certificate Subject, as described in [RFC4514].  For example:
+      "spdm:C=CA,O=ACME,OU=Widget,CN=0123456789".
+
 3.2.  PCIe Legacy Device Claims
 
    The definition of a device claims set for PCIe legacy devices that do
@@ -327,18 +348,38 @@ Table of Contents
    device claims set simply mirrors the type 0/1 common registers of the
    PCIe configuration space, mandating only that the vendor and device
    identification code be provided.  Other fields of the configuration
-   space header may optionally be included should they add value.
+   space header may optionally be included should they add value.  A
+   binary format of the PCIe configuration space is made available for
+   processing by existing PCIe configuration space tools.  Implementers
+   may optionally choose to include both text and binary versions should
+   there be a use case to support this representation.
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
    pcie-legacy-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-pcie-legacy#1.0\
                                                                      .0"
-     &(legacy-header: 3805) => pcie-type-0-1-config-space
+     pcie-legacy-artefacts
      ? $$pcie-legacy-claim-extension
    }
 
-   pcie-type-0-1-config-space = {
+
+   pcie-legacy-artefacts //= (
+     &(artefacts-text: 3806) => pcie-type-0-1-config-space-text
+     &(artefacts-bytes: 3807) => pcie-type-0-1-config-space-bytes
+   )
+
+   pcie-legacy-artefacts //= (
+     &(artefacts-text: 3806) => pcie-type-0-1-config-space-text
+   )
+
+   pcie-legacy-artefacts //= (
+     &(artefacts-bytes: 3807) => pcie-type-0-1-config-space-bytes
+   )
+
+   pcie-type-0-1-config-space-bytes = bytes .size 256
+
+   pcie-type-0-1-config-space-text = {
      &(vendorID: 1) => bytes .size 2
      &(deviceID: 2) => bytes .size 2
      ? &(command: 3) => bytes .size 2
@@ -351,6 +392,15 @@ Table of Contents
      ? &(BITS: 10) => bytes .size 1
    }
 
+3.2.1.  Submodule Naming
+
+   The namespace used for legacy PCIe submodules is "legacy-pcie".
+
+   The name is any arbitrary string chosen by the implementation.  For
+   example, "legacy-pcie:0000:01:02.0" where "0000" is the domain, "01"
+   the PCI bus id, "02" the device on the bus and "0" the device
+   function.
+
 4.  Collated CDDL
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -360,7 +410,7 @@ Table of Contents
      &(eat_nonce: 10) => bytes .size 64,
      &(eat_submods: 266) => {+ device-name => $device-claims-set},
    }
-   device-name = text .regexp "dev-[A-Za-z0-9]+"
+   device-name = text .regexp "(legacy-pcie|spdm):.+"
    $device-claims-set /= spdm-claims / cxl-claims / chi-claims / pcie-\
                                                            legacy-claims
    spdm-claims = {
@@ -422,10 +472,16 @@ Table of Contents
    pcie-legacy-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-pcie-legacy#1.0\
                                                                     .0",
-     &(legacy-header: 3805) => pcie-type-0-1-config-space,
+     pcie-legacy-artefacts,
      ? $$pcie-legacy-claim-extension,
    }
-   pcie-type-0-1-config-space = {
+   pcie-legacy-artefacts //= ((
+           &(artefacts-text: 3806) => pcie-type-0-1-config-space-text,
+           &(artefacts-bytes: 3807) => pcie-type-0-1-config-space-bytes,
+         ) // &(artefacts-text: 3806) => pcie-type-0-1-config-space-\
+   text // &(artefacts-bytes: 3807) => pcie-type-0-1-config-space-bytes)
+   pcie-type-0-1-config-space-bytes = bytes .size 256
+   pcie-type-0-1-config-space-text = {
      &(vendorID: 1) => bytes .size 2,
      &(deviceID: 2) => bytes .size 2,
      ? &(command: 3) => bytes .size 2,
@@ -525,6 +581,11 @@ Table of Contents
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC4514]  Zeilenga, K., Ed., "Lightweight Directory Access Protocol
+              (LDAP): String Representation of Distinguished Names",
+              RFC 4514, DOI 10.17487/RFC4514, June 2006,
+              <https://www.rfc-editor.org/rfc/rfc4514>.
+
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
               Infrastructure Certificate and Certificate Revocation List
@@ -557,7 +618,7 @@ Appendix A.  Examples
    f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
           aa40cd86cd30ebaae746fb19f008c1e6a1f23ad6a178e18dceda918f7f6e',
      / submods / 266: {
-       "dev-a": {
+       "spdm:ACME:WIDGET-A:0123456789": {
          / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
          / measurements / 0x0eda: {
            1: {
@@ -571,7 +632,7 @@ Appendix A.  Examples
            / no aux certs /
          }
        },
-       "dev-b": {
+       "spdm:C=CA,O=ACME,OU=Widget-B,CN=9876543210": {
          / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
          / measurements / 0x0eda: {
            1: {
