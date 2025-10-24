@@ -1,10 +1,26 @@
 pcie-legacy-claims = {
   &(eat_profile: 265) => "tag:linaro.org,2025:device-pcie-legacy#1.0.0"
-  &(legacy-header: 3805) => pcie-type-0-1-config-space
+  pcie-legacy-artefacts
   ? $$pcie-legacy-claim-extension
 }
 
-pcie-type-0-1-config-space = {
+
+pcie-legacy-artefacts //= (
+  &(artefacts-text: 3805) => pcie-type-0-1-config-space-text
+  &(artefacts-bytes: 3806) => pcie-type-0-1-config-space-bytes
+)
+
+pcie-legacy-artefacts //= (
+  &(artefacts-text: 3805) => pcie-type-0-1-config-space-text
+)
+
+pcie-legacy-artefacts //= (
+  &(artefacts-bytes: 3806) => pcie-type-0-1-config-space-bytes
+)
+
+pcie-type-0-1-config-space-bytes = bytes .size 256
+
+pcie-type-0-1-config-space-text = {
   &(vendorID: 1) => bytes .size 2
   &(deviceID: 2) => bytes .size 2
   ? &(command: 3) => bytes .size 2
