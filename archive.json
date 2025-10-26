@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-05T01:56:03.332493+00:00",
+  "timestamp": "2025-10-26T01:57:23.992942+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -1386,6 +1386,34 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOOtRXe86vj0XB",
+      "title": "Add binary representation to PCIe legacy claims",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/19",
+      "state": "OPEN",
+      "author": "mathieupoirier",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "thomas-fossati"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-24T16:55:31Z",
+      "updatedAt": "2025-10-24T16:55:32Z",
+      "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "a25fc314a4c0983fa9a27a659068f933626abc85",
+      "headRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "headRefName": "pcie-binary-representation-v1",
+      "headRefOid": "c56ca72b81f56bfb4339d63dc5dfa66d9c96144e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
