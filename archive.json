@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-26T01:57:23.992942+00:00",
+  "timestamp": "2025-10-30T01:57:15.334860+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -1401,7 +1401,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-10-24T16:55:31Z",
-      "updatedAt": "2025-10-24T16:55:32Z",
+      "updatedAt": "2025-10-28T17:21:25Z",
       "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
       "baseRefName": "main",
       "baseRefOid": "a25fc314a4c0983fa9a27a659068f933626abc85",
@@ -1413,7 +1413,28 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe87KDpI5",
+          "commit": {
+            "abbreviatedOid": "c56ca72"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-28T17:21:25Z",
+          "updatedAt": "2025-10-28T17:21:25Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "I think we can reuse 3805 for `pcie-type-0-1-config-space-text` and add 3806 for `-bytes`.\r\n\r\nWe also need to modify the \"PCIe Legacy Device Claim\u201d entry in the IANA considerations section accordingly.",
+              "createdAt": "2025-10-28T17:21:25Z",
+              "updatedAt": "2025-10-28T17:21:25Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
