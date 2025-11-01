@@ -5,7 +5,7 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 5 April 2026                                     2 October 2025
+Expires: 5 May 2026                                      1 November 2025
 
 
                  An EAT Profile for Device Attestation
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 April 2026.
+   This Internet-Draft will expire on 5 May 2026.
 
 Copyright Notice
 
@@ -91,7 +91,8 @@ Table of Contents
        6.1.1.   SPDM Measurements Claim
        6.1.2.   SPDM Certificates Claim
        6.1.3.   SPDM VCA Claim
-       6.1.4.   PCIe Legacy Device Claim
+       6.1.4.   PCIe Legacy Device Text Claim
+       6.1.5.   PCIe Legacy Device Binary Claim
    7.  References
      7.1.  Normative References
      7.2.  Informative References
@@ -348,18 +349,38 @@ Table of Contents
    device claims set simply mirrors the type 0/1 common registers of the
    PCIe configuration space, mandating only that the vendor and device
    identification code be provided.  Other fields of the configuration
-   space header may optionally be included should they add value.
+   space header may optionally be included should they add value.  A
+   binary format of the PCIe configuration space is made available for
+   processing by existing PCIe configuration space tools.  Implementers
+   may optionally choose to include both text and binary versions should
+   there be a use case to support this representation.
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
    pcie-legacy-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-pcie-legacy#1.0\
                                                                      .0"
-     &(legacy-header: 3805) => pcie-type-0-1-config-space
+     pcie-legacy-artefacts
      ? $$pcie-legacy-claim-extension
    }
 
-   pcie-type-0-1-config-space = {
+
+   pcie-legacy-artefacts //= (
+     &(artefacts-text: 3805) => pcie-type-0-1-config-space-text
+     &(artefacts-bytes: 3806) => pcie-type-0-1-config-space-bytes
+   )
+
+   pcie-legacy-artefacts //= (
+     &(artefacts-text: 3805) => pcie-type-0-1-config-space-text
+   )
+
+   pcie-legacy-artefacts //= (
+     &(artefacts-bytes: 3806) => pcie-type-0-1-config-space-bytes
+   )
+
+   pcie-type-0-1-config-space-bytes = bytes .size 256
+
+   pcie-type-0-1-config-space-text = {
      &(vendorID: 1) => bytes .size 2
      &(deviceID: 2) => bytes .size 2
      ? &(command: 3) => bytes .size 2
@@ -452,10 +473,16 @@ Table of Contents
    pcie-legacy-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-pcie-legacy#1.0\
                                                                     .0",
-     &(legacy-header: 3805) => pcie-type-0-1-config-space,
+     pcie-legacy-artefacts,
      ? $$pcie-legacy-claim-extension,
    }
-   pcie-type-0-1-config-space = {
+   pcie-legacy-artefacts //= ((
+           &(artefacts-text: 3805) => pcie-type-0-1-config-space-text,
+           &(artefacts-bytes: 3806) => pcie-type-0-1-config-space-bytes,
+         ) // &(artefacts-text: 3805) => pcie-type-0-1-config-space-\
+   text // &(artefacts-bytes: 3806) => pcie-type-0-1-config-space-bytes)
+   pcie-type-0-1-config-space-bytes = bytes .size 256
+   pcie-type-0-1-config-space-text = {
      &(vendorID: 1) => bytes .size 2,
      &(deviceID: 2) => bytes .size 2,
      ? &(command: 3) => bytes .size 2,
@@ -527,17 +554,33 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.3 of RFCthis
 
-6.1.4.   PCIe Legacy Device Claim
+6.1.4.   PCIe Legacy Device Text Claim
 
-   *  Claim Name: pcie-legacy-device
+   *  Claim Name: pcie-legacy-device-text
 
-   *  Claim Description: PCIe Legacy Device
+   *  Claim Description: PCIe Legacy Device Textual Representation
 
    *  JWT Claim Name: N/A
 
    *  Claim Key: 3805
 
    *  Claim Value Type(s): map
+
+   *  Change Controller: IETF
+
+   *  Specification Document(s): Section 3.2 of RFCthis
+
+6.1.5.   PCIe Legacy Device Binary Claim
+
+   *  Claim Name: pcie-legacy-device-binary
+
+   *  Claim Description: PCIe Legacy Device Binary Representation
+
+   *  JWT Claim Name: N/A
+
+   *  Claim Key: 3806
+
+   *  Claim Value Type(s): bytes
 
    *  Change Controller: IETF
 
