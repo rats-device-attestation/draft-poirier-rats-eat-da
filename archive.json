@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-30T01:57:15.334860+00:00",
+  "timestamp": "2025-11-02T02:00:15.368439+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -1392,7 +1392,7 @@
       "id": "PR_kwDOOtRXe86vj0XB",
       "title": "Add binary representation to PCIe legacy claims",
       "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/19",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mathieupoirier",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1401,14 +1401,14 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-10-24T16:55:31Z",
-      "updatedAt": "2025-10-28T17:21:25Z",
+      "updatedAt": "2025-10-31T20:18:15Z",
       "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
       "baseRefName": "main",
       "baseRefOid": "a25fc314a4c0983fa9a27a659068f933626abc85",
       "headRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
       "headRefName": "pcie-binary-representation-v1",
       "headRefOid": "c56ca72b81f56bfb4339d63dc5dfa66d9c96144e",
-      "closedAt": null,
+      "closedAt": "2025-10-31T20:18:15Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -1433,6 +1433,50 @@
               "updatedAt": "2025-10-28T17:21:25Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOOtRXe86w5-TL",
+      "title": "Add binary representation to PCIe legacy claims",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/20",
+      "state": "MERGED",
+      "author": "mathieupoirier",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "thomas-fossati"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-31T20:17:39Z",
+      "updatedAt": "2025-11-01T14:31:58Z",
+      "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "a25fc314a4c0983fa9a27a659068f933626abc85",
+      "headRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "headRefName": "pcie-binary-representation-v2",
+      "headRefOid": "c4541570e8ed591bee0d37e9d2fbf1b9288c0ea2",
+      "closedAt": "2025-11-01T14:31:58Z",
+      "mergedAt": "2025-11-01T14:31:58Z",
+      "mergedBy": "thomas-fossati",
+      "mergeCommit": {
+        "oid": "3d40c307c1ef8bbc3d4c8bac0f81ad5e1162179d"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe87LGy3H",
+          "commit": {
+            "abbreviatedOid": "c454157"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "perfect, thansk!",
+          "createdAt": "2025-11-01T14:31:27Z",
+          "updatedAt": "2025-11-01T14:31:27Z",
+          "comments": []
         }
       ]
     }
