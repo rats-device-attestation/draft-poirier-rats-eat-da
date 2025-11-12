@@ -5,7 +5,7 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 5 May 2026                                      1 November 2025
+Expires: 16 May 2026                                    12 November 2025
 
 
                  An EAT Profile for Device Attestation
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 May 2026.
+   This Internet-Draft will expire on 16 May 2026.
 
 Copyright Notice
 
@@ -677,7 +677,8 @@ Appendix A.  Examples
 
 Acknowledgments
 
-   TODO acknowledge.
+   Thank you Basma El Gaabouri, James Bottomley, Lukas Wunner, Simon
+   Frost and Yousuf Sait for your comments and suggestions.
 
 Authors' Addresses
 
