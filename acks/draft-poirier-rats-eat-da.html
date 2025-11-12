@@ -13,25 +13,24 @@ For the TVM to trust the device, the device must provide the TVM with attestatio
        Since Evidence claims can be consumed by 3rd party attestation services external to the TVM, there is a need to standardise the representation of Evidence to ensure interoperability.
 This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile. 
     " name="description">
-<meta content="xml2rfc 3.30.2" name="generator">
+<meta content="xml2rfc 3.31.0" name="generator">
 <meta content="attestation" name="keyword">
 <meta content="device assignment" name="keyword">
 <meta content="EAT" name="keyword">
 <meta content="draft-poirier-rats-eat-da-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.30.2
-    Python 3.12.11
+  xml2rfc 3.31.0
+    Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.1
-    platformdirs 4.4.0
+    platformdirs 4.5.0
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.5
-    setuptools 80.9.0
-    wcwidth 0.2.13
+    wcwidth 0.2.14
 -->
 <link href="draft-poirier-rats-eat-da.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1050,11 +1049,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">EAT DA</td>
-<td class="right">October 2025</td>
+<td class="right">November 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Poirier &amp; Fossati</td>
-<td class="center">Expires 5 April 2026</td>
+<td class="center">Expires 16 May 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1066,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-poirier-rats-eat-da-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-02" class="published">2 October 2025</time>
+<time datetime="2025-11-12" class="published">12 November 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-04-05">5 April 2026</time></dd>
+<dd class="expires"><time datetime="2026-05-16">16 May 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1128,7 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1213,7 +1212,10 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
                     <p id="section-toc.1-1.6.2.1.2.3.1"><a href="#section-6.1.3" class="auto internal xref">6.1.3</a>.  <a href="#name-spdm-vca-claim" class="internal xref">SPDM VCA Claim</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.4">
-                    <p id="section-toc.1-1.6.2.1.2.4.1"><a href="#section-6.1.4" class="auto internal xref">6.1.4</a>.  <a href="#name-pcie-legacy-device-claim" class="internal xref">PCIe Legacy Device Claim</a></p>
+                    <p id="section-toc.1-1.6.2.1.2.4.1"><a href="#section-6.1.4" class="auto internal xref">6.1.4</a>.  <a href="#name-pcie-legacy-device-text-cla" class="internal xref">PCIe Legacy Device Text Claim</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.5">
+                    <p id="section-toc.1-1.6.2.1.2.5.1"><a href="#section-6.1.5" class="auto internal xref">6.1.5</a>.  <a href="#name-pcie-legacy-device-binary-c" class="internal xref">PCIe Legacy Device Binary Claim</a></p>
 </li>
                 </ul>
 </li>
@@ -1508,7 +1510,9 @@ For example: "spdm:C=CA,O=ACME,OU=Widget,CN=0123456789".<a href="#section-3.1.4-
         </h3>
 <p id="section-3.2-1">The definition of a device claims set for PCIe legacy devices that do not implement the extensions needed to attest for their provenance and configuration is provided, making it is possible to keep using current assets as secures ones are being provisioned.
 This legacy device claims set simply mirrors the type 0/1 common registers of the PCIe configuration space, mandating only that the vendor and device identification code be provided.
-Other fields of the configuration space header may optionally be included should they add value.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+Other fields of the configuration space header may optionally be included should they add value.
+A binary format of the PCIe configuration space is made available for processing by existing PCIe configuration space tools.
+Implementers may optionally choose to include both text and binary versions should there be a use case to support this representation.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.2-2">
 <pre>
 =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -1516,11 +1520,27 @@ Other fields of the configuration space header may optionally be included should
 pcie-legacy-claims = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-pcie-legacy#1.0\
                                                                   .0"
-  &amp;(legacy-header: 3805) =&gt; pcie-type-0-1-config-space
+  pcie-legacy-artefacts
   ? $$pcie-legacy-claim-extension
 }
 
-pcie-type-0-1-config-space = {
+
+pcie-legacy-artefacts //= (
+  &amp;(artefacts-text: 3805) =&gt; pcie-type-0-1-config-space-text
+  &amp;(artefacts-bytes: 3806) =&gt; pcie-type-0-1-config-space-bytes
+)
+
+pcie-legacy-artefacts //= (
+  &amp;(artefacts-text: 3805) =&gt; pcie-type-0-1-config-space-text
+)
+
+pcie-legacy-artefacts //= (
+  &amp;(artefacts-bytes: 3806) =&gt; pcie-type-0-1-config-space-bytes
+)
+
+pcie-type-0-1-config-space-bytes = bytes .size 256
+
+pcie-type-0-1-config-space-text = {
   &amp;(vendorID: 1) =&gt; bytes .size 2
   &amp;(deviceID: 2) =&gt; bytes .size 2
   ? &amp;(command: 3) =&gt; bytes .size 2
@@ -1624,10 +1644,16 @@ chi-claims = {&amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-chi\
 pcie-legacy-claims = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-pcie-legacy#1.0\
                                                                  .0",
-  &amp;(legacy-header: 3805) =&gt; pcie-type-0-1-config-space,
+  pcie-legacy-artefacts,
   ? $$pcie-legacy-claim-extension,
 }
-pcie-type-0-1-config-space = {
+pcie-legacy-artefacts //= ((
+        &amp;(artefacts-text: 3805) =&gt; pcie-type-0-1-config-space-text,
+        &amp;(artefacts-bytes: 3806) =&gt; pcie-type-0-1-config-space-bytes,
+      ) // &amp;(artefacts-text: 3805) =&gt; pcie-type-0-1-config-space-\
+text // &amp;(artefacts-bytes: 3806) =&gt; pcie-type-0-1-config-space-bytes)
+pcie-type-0-1-config-space-bytes = bytes .size 256
+pcie-type-0-1-config-space-text = {
   &amp;(vendorID: 1) =&gt; bytes .size 2,
   &amp;(deviceID: 2) =&gt; bytes .size 2,
   ? &amp;(command: 3) =&gt; bytes .size 2,
@@ -1752,17 +1778,17 @@ pcie-type-0-1-config-space = {
           </ul>
 </section>
 </div>
-<div id="pcie-legacy-device-claim">
+<div id="pcie-legacy-device-text-claim">
 <section id="section-6.1.4">
-          <h4 id="name-pcie-legacy-device-claim">
-<a href="#section-6.1.4" class="section-number selfRef">6.1.4. </a><a href="#name-pcie-legacy-device-claim" class="section-name selfRef">PCIe Legacy Device Claim</a>
+          <h4 id="name-pcie-legacy-device-text-cla">
+<a href="#section-6.1.4" class="section-number selfRef">6.1.4. </a><a href="#name-pcie-legacy-device-text-cla" class="section-name selfRef">PCIe Legacy Device Text Claim</a>
           </h4>
 <ul class="normal">
 <li class="normal" id="section-6.1.4-1.1">
-              <p id="section-6.1.4-1.1.1">Claim Name: pcie-legacy-device<a href="#section-6.1.4-1.1.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.4-1.1.1">Claim Name: pcie-legacy-device-text<a href="#section-6.1.4-1.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.4-1.2">
-              <p id="section-6.1.4-1.2.1">Claim Description: PCIe Legacy Device<a href="#section-6.1.4-1.2.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.4-1.2.1">Claim Description: PCIe Legacy Device Textual Representation<a href="#section-6.1.4-1.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.4-1.3">
               <p id="section-6.1.4-1.3.1">JWT Claim Name: N/A<a href="#section-6.1.4-1.3.1" class="pilcrow">¶</a></p>
@@ -1778,6 +1804,36 @@ pcie-type-0-1-config-space = {
 </li>
             <li class="normal" id="section-6.1.4-1.7">
               <p id="section-6.1.4-1.7.1">Specification Document(s): <a href="#pcie-legacy-device" class="auto internal xref">Section 3.2</a> of RFCthis<a href="#section-6.1.4-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="pcie-legacy-device-binary-claim">
+<section id="section-6.1.5">
+          <h4 id="name-pcie-legacy-device-binary-c">
+<a href="#section-6.1.5" class="section-number selfRef">6.1.5. </a><a href="#name-pcie-legacy-device-binary-c" class="section-name selfRef">PCIe Legacy Device Binary Claim</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-6.1.5-1.1">
+              <p id="section-6.1.5-1.1.1">Claim Name: pcie-legacy-device-binary<a href="#section-6.1.5-1.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.5-1.2">
+              <p id="section-6.1.5-1.2.1">Claim Description: PCIe Legacy Device Binary Representation<a href="#section-6.1.5-1.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.5-1.3">
+              <p id="section-6.1.5-1.3.1">JWT Claim Name: N/A<a href="#section-6.1.5-1.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.5-1.4">
+              <p id="section-6.1.5-1.4.1">Claim Key: 3806<a href="#section-6.1.5-1.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.5-1.5">
+              <p id="section-6.1.5-1.5.1">Claim Value Type(s): bytes<a href="#section-6.1.5-1.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.5-1.6">
+              <p id="section-6.1.5-1.6.1">Change Controller: IETF<a href="#section-6.1.5-1.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.5-1.7">
+              <p id="section-6.1.5-1.7.1">Specification Document(s): <a href="#pcie-legacy-device" class="auto internal xref">Section 3.2</a> of RFCthis<a href="#section-6.1.5-1.7.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1902,7 +1958,14 @@ f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-B-1">TODO acknowledge.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-1">Thank you
+Basma El Gaabouri,
+James Bottomley,
+Lukas Wunner,
+Simon Frost
+and
+Yousuf Sait
+for your comments and suggestions.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
