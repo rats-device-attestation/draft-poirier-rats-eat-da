@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-02T02:00:15.368439+00:00",
+  "timestamp": "2025-11-13T01:57:38.674746+00:00",
   "repo": "rats-device-attestation/draft-poirier-rats-eat-da",
   "labels": [
     {
@@ -1476,6 +1476,48 @@
           "body": "perfect, thansk!",
           "createdAt": "2025-11-01T14:31:27Z",
           "updatedAt": "2025-11-01T14:31:27Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOOtRXe86zBLfd",
+      "title": "Add acknowledgments section with contributor names",
+      "url": "https://github.com/rats-device-attestation/draft-poirier-rats-eat-da/pull/21",
+      "state": "MERGED",
+      "author": "thomas-fossati",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Added acknowledgments for contributors.",
+      "createdAt": "2025-11-12T16:15:11Z",
+      "updatedAt": "2025-11-12T16:22:18Z",
+      "baseRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "baseRefName": "main",
+      "baseRefOid": "3d40c307c1ef8bbc3d4c8bac0f81ad5e1162179d",
+      "headRepository": "rats-device-attestation/draft-poirier-rats-eat-da",
+      "headRefName": "acks",
+      "headRefOid": "f56284050dc9820942335324f48f712f9018c466",
+      "closedAt": "2025-11-12T16:22:18Z",
+      "mergedAt": "2025-11-12T16:22:18Z",
+      "mergedBy": "mathieupoirier",
+      "mergeCommit": {
+        "oid": "53b72a2d8f6d80ad2296969cb283f24ab12b0919"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOtRXe87N5Mwh",
+          "commit": {
+            "abbreviatedOid": "f562840"
+          },
+          "author": "mathieupoirier",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-12T16:22:02Z",
+          "updatedAt": "2025-11-12T16:22:02Z",
           "comments": []
         }
       ]
