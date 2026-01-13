@@ -1,5 +1,5 @@
 ---
-title: "An EAT Profile for Device Attestation"
+title: "An EAT Profile for Trustworthy Device Assignment"
 abbrev: "EAT DA"
 category: info
 
@@ -53,39 +53,39 @@ entity:
 
 --- abstract
 
-In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
-For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
+In confidential computing, device assignment (DA) is the method by which physical devices (components, such as NICs or GPUs), whether on-chip or behind a PCIe Root Port, are assigned to a Trusted Virtual Machine (TVM).
+For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity, the state of its firmware and configuration -- thereby demonstrating its trustworthiness.
 
-Since Evidence claims can be consumed by 3rd party attestation services external to the TVM, there is a need to standardise the representation of Evidence to ensure interoperability.
-This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile.
+Since Evidence claims can be appraised by 3rd party Verifiers external to the TVM, there is a need to standardize the representation of DA representation in Evidence to ensure interoperability.
+To represent trustworthy DA in Evidence, this document defines uses the EAT (Entity Attestation Token) framework to define a DA Token and specifies a corresponding EAT profile to express technology-specific device claims sets in corresponding sub-modules.
 
 --- middle
 
 # Introduction
 
-In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
+In confidential computing, device assignment (DA) is the method by which physical devices (components, such as NICs or GPUs), whether on-chip or behind a PCIe Root Port, are assigned to a Trusted Virtual Machine (TVM).
 Most confidential computing platforms (e.g., Arm CCA, AMD SEV-SNP, Intel TDX) provide DA capabilities.
-Such capabilities prevent agents which are untrusted by the TVM (including other TVMs and the host hypervisor) from accessing or controlling a device that has been assigned to the TVM.
+Such capabilities prevent execution environments or software components that are untrusted by the TVM (including other TVMs and the host hypervisor) from accessing or controlling a device that has been assigned to the TVM.
 This includes, for example, protection of device MMIO interfaces and device caches.
 From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
-For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
+For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity, the state of its firmware and configuration -- thereby demonstrating its trustworthiness.
 
-This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
-The format is designed to be generic, extensible and architecture agnostic.
-Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}, but other bus architecture and protocols are expected to be supported as the technology gains wider adoption.
-As such we focus on the formalization of an Evidence format for SPDM compliant devices while leaving room for the definition of other Evidence format such as CXL and CHI.
-This list is by no means exhaustive and is expected to expand.
+To represent trustworthy DA in Evidence, this document uses the EAT framework {{-rats-eat}} to define a DA Token and specifies a corresponding EAT profile to express technology-specific device claims sets in corresponding sub-modules.
+The EAT framwork is designed to be generic, extensible, and architecture agnostic.
+Ongoing work on DA focuses on PCIe devices that support the SPDM protocol {{-spdm}}, but other bus architectures and protocols are expected to be supported as the technology gains wider adoption.
+As such, this document focuses on the formalization of a device claims set for SPDM compliant devices while leaving room for the definition of further sub-modules for other DA contexts, such as the Compute Express Link (CXL) or the Coherent Hub Interface (CHI).
+The device claims specified in this document are not intended to be exhaustive and expected to expand.
 
 
 # Conventions and Definitions
-
+--
 {::boilerplate bcp14-tagged}
 
-# Device Attestation Claims
+# Device Assignment Token and Device Claims
 
-The Device Attestation claim is the encompassing envelope for the individual device claims to be presented.
-It can be used as a standalone entity but typically enclosed in a wider platform specific attestation token.
-The Device attestation claim consists of an EAT profile identifier, a nonce and an EAT submodule ({{Section 4.2.18 of -rats-eat}}) that contains any number of individual device claims.
+The Device Assignment Token (DAT) is an EAT that acts as the encompassing envelope for the individual device claims set to be presented.
+A DAT can be used as a standalone entity but can also be embedded in a larger, platform-specific EAT.
+A DAT consists of an EAT profile identifier, a nonce and an EAT submodule ({{Section 4.2.18 of -rats-eat}}) that contains any number of individual device claims.
 Each individual device claim is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
 The syntax of the device name depends on the type of bus or protocol used.
 Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
