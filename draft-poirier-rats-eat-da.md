@@ -56,7 +56,7 @@ entity:
 In confidential computing, device assignment (DA) is the method by which physical devices (components, such as NICs or GPUs), whether on-chip or behind a PCIe Root Port, are assigned to a Trusted Virtual Machine (TVM).
 For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity, the state of its firmware and configuration -- thereby demonstrating its trustworthiness.
 
-Since Evidence claims can be appraised by 3rd party Verifiers external to the TVM, there is a need to standardize the representation of DA representation in Evidence to ensure interoperability.
+Since Evidence claims can be appraised by 3rd party Verifiers external to the TVM, there is a need to standardize the representation of DA in Evidence to ensure interoperability.
 To represent trustworthy DA in Evidence, this document uses the EAT (Entity Attestation Token) framework to define a DA Token and specifies an EAT profile to express technology-specific device claims sets in corresponding sub-modules.
 
 --- middle
@@ -78,7 +78,7 @@ The device claims specified in this document are not intended to be exhaustive a
 
 
 # Conventions and Definitions
---
+
 {::boilerplate bcp14-tagged}
 
 # Device Assignment Token and Device Claims
