@@ -1290,7 +1290,7 @@ As previously mentioned, this draft currently defines the claims set for SPDM co
 Careful condideration was also given to the overall design in order to leave room for future expansion.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3-2">
 <pre>
-da-token = {
+dat = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device#1.0.0"
   &amp;(eat_nonce: 10) =&gt; bytes .size 64 ; same as realm nonce
   &amp;(eat_submods: 266) =&gt; {
@@ -1577,7 +1577,7 @@ For example, "legacy-pcie:0000:01:02.0" where "0000" is the domain, "01" the PCI
 <pre>
 =============== NOTE: '\' line wrapping per RFC 8792 ================
 
-da-token = {
+dat = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device#1.0.0",
   &amp;(eat_nonce: 10) =&gt; bytes .size 64,
   &amp;(eat_submods: 266) =&gt; {+ device-name =&gt; $device-claims-set},

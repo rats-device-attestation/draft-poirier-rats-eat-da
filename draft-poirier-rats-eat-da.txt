@@ -155,7 +155,7 @@ Table of Contents
    the SPDM protocol.  Careful condideration was also given to the
    overall design in order to leave room for future expansion.
 
-   da-token = {
+   dat = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device#1.0.0"
      &(eat_nonce: 10) => bytes .size 64 ; same as realm nonce
      &(eat_submods: 266) => {
@@ -407,7 +407,7 @@ Table of Contents
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
-   da-token = {
+   dat = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device#1.0.0",
      &(eat_nonce: 10) => bytes .size 64,
      &(eat_submods: 266) => {+ device-name => $device-claims-set},
