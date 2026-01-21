@@ -68,7 +68,7 @@ Most confidential computing platforms (e.g., Arm CCA, AMD SEV-SNP, Intel TDX) pr
 Such capabilities prevent execution environments or software components that are untrusted by the TVM (including other TVMs and the host hypervisor) from accessing or controlling a device that has been assigned to the TVM.
 This includes, for example, protection of device MMIO interfaces and device caches.
 From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
-For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity, the state of its firmware and configuration -- thereby demonstrating its trustworthiness.
+For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
 
 To represent trustworthy DA in Evidence, this document uses the EAT framework {{-rats-eat}} to define a DA Token and specifies an EAT profile to express technology-specific device claims sets in corresponding sub-modules.
 The EAT framwork is designed to be generic, extensible, and architecture agnostic.
