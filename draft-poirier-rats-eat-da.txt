@@ -678,8 +678,9 @@ Appendix A.  Examples
 
 Acknowledgments
 
-   Thank you Basma El Gaabouri, James Bottomley, Lukas Wunner, Simon
-   Frost and Yousuf Sait for your comments and suggestions.
+   Thank you Basma El Gaabouri, Henk Birkholz, James Bottomley, Lukas
+   Wunner, Simon Frost and Yousuf Sait for your comments and
+   suggestions.
 
 Authors' Addresses
 
