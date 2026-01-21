@@ -81,7 +81,7 @@ This list is by no means exhaustive and is expected to expand.
 
 {::boilerplate bcp14-tagged}
 
-# Device Assignment Token and Device Claims
+# Device Assignment Token (DAT) Claims
 
 The Device Assignment Token (DAT) is an EAT that acts as the encompassing envelope for the individual device claims set to be presented.
 A DAT can be used as a standalone entity but can also be embedded in a larger, platform-specific EAT using the `da-token` claim.
