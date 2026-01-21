@@ -57,7 +57,7 @@ entity:
 For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
 
 Since Evidence claims can be processed by 3rd party entities (e.g., Verifiers, Relying Parties) external to the TVM, there is a need to standardize the representation of DA-related information in Evidence to ensure interoperability.
-To represent trustworthy DA in Evidence, this document uses the EAT (Entity Attestation Token) framework to define a DA Token and specifies an EAT profile to express technology-specific device claims sets in corresponding sub-modules.
+This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile.
 
 --- middle
 
