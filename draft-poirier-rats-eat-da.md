@@ -1,5 +1,5 @@
 ---
-title: "An EAT Profile for Device Attestation"
+title: "An EAT Profile for Trustworthy Device Assignment"
 abbrev: "EAT DA"
 category: info
 
@@ -54,9 +54,9 @@ entity:
 --- abstract
 
 In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
-For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
+For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
 
-Since Evidence claims can be consumed by 3rd party attestation services external to the TVM, there is a need to standardise the representation of Evidence to ensure interoperability.
+Since Evidence claims can be processed by 3rd party entities (e.g., Verifiers, Relying Parties) external to the TVM, there is a need to standardize the representation of DA-related information in Evidence to ensure interoperability.
 This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile.
 
 --- middle
@@ -65,15 +65,15 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
 
 In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
 Most confidential computing platforms (e.g., Arm CCA, AMD SEV-SNP, Intel TDX) provide DA capabilities.
-Such capabilities prevent agents which are untrusted by the TVM (including other TVMs and the host hypervisor) from accessing or controlling a device that has been assigned to the TVM.
+Such capabilities prevent execution environments or software components that are untrusted by the TVM (including other TVMs and the host hypervisor) from accessing or controlling a device that has been assigned to the TVM.
 This includes, for example, protection of device MMIO interfaces and device caches.
 From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
 
 This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
-The format is designed to be generic, extensible and architecture agnostic.
-Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}, but other bus architecture and protocols are expected to be supported as the technology gains wider adoption.
-As such we focus on the formalization of an Evidence format for SPDM compliant devices while leaving room for the definition of other Evidence format such as CXL and CHI.
+The format is designed to be generic, extensible and architecture-agnostic.
+Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}, but other bus architectures and protocols are expected to be supported as the technology gains wider adoption.
+As such, this document focuses on the formalization of an Evidence format for SPDM-compliant devices while leaving room for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
 This list is by no means exhaustive and is expected to expand.
 
 
@@ -81,11 +81,11 @@ This list is by no means exhaustive and is expected to expand.
 
 {::boilerplate bcp14-tagged}
 
-# Device Attestation Claims
+# Device Assignment Token (DAT) Claims
 
-The Device Attestation claim is the encompassing envelope for the individual device claims to be presented.
-It can be used as a standalone entity but typically enclosed in a wider platform specific attestation token.
-The Device attestation claim consists of an EAT profile identifier, a nonce and an EAT submodule ({{Section 4.2.18 of -rats-eat}}) that contains any number of individual device claims.
+The Device Assignment Token (DAT) is the encompassing envelope for the individual device claims to be presented.
+A DAT can be used as a standalone entity but can also be embedded in a larger, platform-specific attestation token.
+A DAT consists of an EAT profile identifier, a nonce and an EAT submodule ({{Section 4.2.18 of -rats-eat}}) that contains any number of individual device claims.
 Each individual device claim is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
 The syntax of the device name depends on the type of bus or protocol used.
 Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
