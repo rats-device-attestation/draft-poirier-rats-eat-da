@@ -70,11 +70,11 @@ This includes, for example, protection of device MMIO interfaces and device cach
 From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
 
-To represent trustworthy DA in Evidence, this document uses the EAT framework {{-rats-eat}} to define a DA Token and specifies an EAT profile to express technology-specific device claims sets in corresponding sub-modules.
-The EAT framwork is designed to be generic, extensible, and architecture agnostic.
-Ongoing work on DA focuses on PCIe devices that support the SPDM protocol {{-spdm}}, but other bus architectures and protocols are expected to be supported as the technology gains wider adoption.
-As such, this document focuses on the formalization of a device claims set for SPDM compliant devices while leaving room for the definition of further sub-modules for other DA contexts, such as the Compute Express Link (CXL) or the Coherent Hub Interface (CHI).
-The device claims specified in this document are not intended to be exhaustive and expected to expand.
+This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
+The format is designed to be generic, extensible and architecture-agnostic.
+Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}, but other bus architectures and protocols are expected to be supported as the technology gains wider adoption.
+As such, this document focuses on the formalization of an Evidence format for SPDM-compliant devices while leaving room for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
+This list is by no means exhaustive and is expected to expand.
 
 
 # Conventions and Definitions
