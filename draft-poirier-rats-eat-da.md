@@ -262,6 +262,7 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 
 Thank you
 Basma El Gaabouri,
+Henk Birkholz,
 James Bottomley,
 Lukas Wunner,
 Simon Frost
