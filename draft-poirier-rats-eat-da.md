@@ -63,7 +63,7 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
 
 # Introduction
 
-In confidential computing, device assignment (DA) is the method by which physical devices (components, such as NICs or GPUs), whether on-chip or behind a PCIe Root Port, are assigned to a Trusted Virtual Machine (TVM).
+In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
 Most confidential computing platforms (e.g., Arm CCA, AMD SEV-SNP, Intel TDX) provide DA capabilities.
 Such capabilities prevent execution environments or software components that are untrusted by the TVM (including other TVMs and the host hypervisor) from accessing or controlling a device that has been assigned to the TVM.
 This includes, for example, protection of device MMIO interfaces and device caches.
