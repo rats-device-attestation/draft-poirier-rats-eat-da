@@ -1,6 +1,12 @@
 spdm-certificates = {
   default-cert-slot => cert-chain
-  ? aux-cert-slots => cert-chain
+  ? aux-cert-slot-1 => cert-chain
+  ? aux-cert-slot-2 => cert-chain
+  ? aux-cert-slot-3 => cert-chain
+  ? aux-cert-slot-4 => cert-chain
+  ? aux-cert-slot-5 => cert-chain
+  ? aux-cert-slot-6 => cert-chain
+  ? aux-cert-slot-7 => cert-chain
 }
 
 ; ASN.1 DER-encoded certificates concatenated with no intermediate
@@ -8,4 +14,11 @@ spdm-certificates = {
 cert-chain = bytes
 
 default-cert-slot = 0
-aux-cert-slots = 1..7
+
+aux-cert-slot-1 = 1
+aux-cert-slot-2 = 2
+aux-cert-slot-3 = 3
+aux-cert-slot-4 = 4
+aux-cert-slot-5 = 5
+aux-cert-slot-6 = 6
+aux-cert-slot-7 = 7
