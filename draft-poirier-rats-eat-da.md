@@ -100,7 +100,9 @@ Careful condideration was also given to the overall design in order to leave roo
 ## SPDM Claims
 
 A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
-Each instance consists of either a measurements section or a certificates section, or both.
+Each instance consists of a measurements section, a certificates section, or both.
+These can be supplemented with an additional section that contains information from the TEE Device Information Security Protocol (TDISP) Device Interface Report.
+TDISP messages are embedded in the VENDOR_DEFINED_REQUEST and VENDOR_DEFINED_RESPONSE messages of the SPDM protocol.
 Optionally, the Negotiated State preamble (version, capabilities and algorithms) bytes can be included to present the full negotiated state between the SPDM requester and responder.
 
 ~~~ cddl
@@ -146,6 +148,18 @@ The certificates MUST be concatenated with no intermediate padding.
 
 ~~~ cddl
 {::include-fold cddl/spdm-certificates.cddl}
+~~~
+
+### TDISP Device Interface Report {#interface-report}
+
+A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
+Next are 3 register fields pertaining to MSI-X (Message Signalled Interrupts), LNR (Lightweight Notification Requester) and TPH (TLP Processing Hints) capabilities.
+MMIO ranges are assigned from PCIe BAR(s) and provide information about the memory areas a device is working with.
+More information on the MMIO range bitfields and the ones defined as part of the device interface field (above) can be found in the TDISP section of the PCI Express specification.
+The last field is device-specific and optionally included to convey additional configuration information about the device.
+
+~~~ cddl
+{::include-fold cddl/tdisp-device-interface-report.cddl}
 ~~~
 
 ### Negotiated State Preamble (Version, Capabilities and Algorithms) {#spdm-vca}
@@ -248,6 +262,16 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Claim Value Type(s): bytes
 * Change Controller: IETF
 * Specification Document(s): {{pcie-legacy-device}} of {{&SELF}}
+
+### TDISP Device Interface Report
+
+* Claim Name: tdisp-device-interface-report
+* Claim Description: TDISP Device Interface Report
+* JWT Claim Name: N/A
+* Claim Key: 3807
+* Claim Value Type(s): bytes
+* Change Controller: IETF
+* Specification Document(s): {{interface-report}} of {{&SELF}}
 
 --- back
 
