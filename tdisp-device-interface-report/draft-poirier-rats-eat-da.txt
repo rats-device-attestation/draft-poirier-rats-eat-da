@@ -5,7 +5,7 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 25 September 2026                                 24 March 2026
+Expires: 26 September 2026                                 25 March 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 September 2026.
+   This Internet-Draft will expire on 26 September 2026.
 
 Copyright Notice
 
@@ -80,7 +80,6 @@ Table of Contents
        3.1.1.  Measurements Claim
        3.1.2.  Certificate Claims
        3.1.3.  TDISP Device Interface Report
-               #{tdisp-device-interface-report}
        3.1.4.  Negotiated State Preamble (Version, Capabilities and
                Algorithms)
        3.1.5.  Submodule Naming
@@ -182,11 +181,9 @@ Table of Contents
    from the TEE Device Information Security Protocol (TDISP) Device
    Interface Report.  TDISP messages are embedded in the
    VENDOR_DEFINED_REQUEST and VENDOR_DEFINED_RESPONSE messages of the
-   SPDM protocol, making it impractical to have a TDISP Device Interface
-   Report without SPDM certificates or measurements.  Optionally, the
-   Negotiated State preamble (version, capabilities and algorithms)
-   bytes can be included to present the full negotiated state between
-   the SPDM requester and responder.
+   SPDM protocol.  Optionally, the Negotiated State preamble (version,
+   capabilities and algorithms) bytes can be included to present the
+   full negotiated state between the SPDM requester and responder.
 
    spdm-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0"
@@ -197,30 +194,17 @@ Table of Contents
    spdm-artefacts //= (
      &(measurements: 3802) => spdm-measurements
      &(certificates: 3803) => spdm-certificates
-     &(device-interface-report: 3807) => tdisp-device-interface-report
+     ? &(device-interface-report: 3807) => tdisp-device-interface-report
    )
 
    spdm-artefacts //= (
      &(measurements: 3802) => spdm-measurements
-     &(certificates: 3803) => spdm-certificates
-   )
-
-   spdm-artefacts //= (
-     &(measurements: 3802) => spdm-measurements
-     &(device-interface-report: 3807) => tdisp-device-interface-report
+     ? &(device-interface-report: 3807) => tdisp-device-interface-report
    )
 
    spdm-artefacts //= (
      &(certificates: 3803) => spdm-certificates
-     &(device-interface-report: 3807) => tdisp-device-interface-report
-   )
-
-   spdm-artefacts //= (
-     &(measurements: 3802) => spdm-measurements
-   )
-
-   spdm-artefacts //= (
-     &(certificates: 3803) => spdm-certificates
+     ? &(device-interface-report: 3807) => tdisp-device-interface-report
    )
 
 3.1.1.  Measurements Claim
@@ -357,15 +341,18 @@ Table of Contents
    aux-cert-slot-6 = 6
    aux-cert-slot-7 = 7
 
-3.1.3.  TDISP Device Interface Report #{tdisp-device-interface-report}
+3.1.3.  TDISP Device Interface Report
 
    A TDISP Device Interface Report begins with various bitfields
    indicating the state and characteristics of the PCIe device
-   interface.  Following are 3 register fields pertaining to MSI-X, LNR
-   (Lightweight Notification Requester) and TPH (TLP Processing Hints)
-   capabilities.  MMIO ranges are assigned from PCIe BAR(s) and provide
-   information about the memory areas a device is working with.  The
-   last field is device specific and optionally included to convey
+   interface.  Next are 3 register fields pertaining to MSI-X (Message
+   Signalled Interrupts), LNR (Lightweight Notification Requester) and
+   TPH (TLP Processing Hints) capabilities.  MMIO ranges are assigned
+   from PCIe BAR(s) and provide information about the memory areas a
+   device is working with.  More information on the MMIO range bitfields
+   and the ones defined as part of the device interface field (above)
+   can be found in the TDISP section of the PCI Express specification.
+   The last field is device-specific and optionally included to convey
    additional configuration information about the device.
 
    tdisp-device-interface-report = {
@@ -512,21 +499,17 @@ Table of Contents
    spdm-artefacts //= ((
            &(measurements: 3802) => spdm-measurements,
            &(certificates: 3803) => spdm-certificates,
-           &(device-interface-report: 3807) => tdisp-device-interface-\
-                                                                 report,
+           ? &(device-interface-report: 3807) => tdisp-device-interface\
+                                                                -report,
          ) // (
            &(measurements: 3802) => spdm-measurements,
-           &(certificates: 3803) => spdm-certificates,
-         ) // (
-           &(measurements: 3802) => spdm-measurements,
-           &(device-interface-report: 3807) => tdisp-device-interface-\
-                                                                 report,
+           ? &(device-interface-report: 3807) => tdisp-device-interface\
+                                                                -report,
          ) // (
            &(certificates: 3803) => spdm-certificates,
-           &(device-interface-report: 3807) => tdisp-device-interface-\
-                                                                 report,
-         ) // &(measurements: 3802) => spdm-measurements // &(\
-                               certificates: 3803) => spdm-certificates)
+           ? &(device-interface-report: 3807) => tdisp-device-interface\
+                                                                -report,
+         ))
    spdm-measurement = {
      &(component-type: 1) => component-type,
      measurement,
@@ -749,7 +732,7 @@ Table of Contents
 
    *  Change Controller: IETF
 
-   *  Specification Document(s): Section 6.1.6 of RFCthis
+   *  Specification Document(s): Section 3.1.3 of RFCthis
 
 7.  References
 
