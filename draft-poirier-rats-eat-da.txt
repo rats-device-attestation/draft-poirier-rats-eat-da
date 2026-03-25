@@ -5,7 +5,7 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 15 August 2026                                 11 February 2026
+Expires: 26 September 2026                                 25 March 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 August 2026.
+   This Internet-Draft will expire on 26 September 2026.
 
 Copyright Notice
 
@@ -79,9 +79,10 @@ Table of Contents
      3.1.  SPDM Claims
        3.1.1.  Measurements Claim
        3.1.2.  Certificate Claims
-       3.1.3.  Negotiated State Preamble (Version, Capabilities and
+       3.1.3.  TDISP Device Interface Report
+       3.1.4.  Negotiated State Preamble (Version, Capabilities and
                Algorithms)
-       3.1.4.  Submodule Naming
+       3.1.5.  Submodule Naming
      3.2.  PCIe Legacy Device Claims
        3.2.1.  Submodule Naming
    4.  Collated CDDL
@@ -93,6 +94,7 @@ Table of Contents
        6.1.3.   SPDM VCA Claim
        6.1.4.   PCIe Legacy Device Text Claim
        6.1.5.   PCIe Legacy Device Binary Claim
+       6.1.6.   TDISP Device Interface Report
    7.  References
      7.1.  Normative References
      7.2.  Informative References
@@ -148,7 +150,7 @@ Table of Contents
    a standard claims format based on the bus or protocol the device
    supports.  The syntax of the device name depends on the type of bus
    or protocol used.  Each name consists of two parts joined by a
-   semicolon: a namespace and a bus-specific name.  See Section 3.1.4
+   semicolon: a namespace and a bus-specific name.  See Section 3.1.5
    for SPDM devices, and Section 3.2.1 for legacy PCIe devices.  As
    previously mentioned, this draft currently defines the claims set for
    SPDM compliant devices and PCIe legacy devices that do not support
@@ -173,11 +175,15 @@ Table of Contents
 3.1.  SPDM Claims
 
    A SPDM claim instance is expected to be present for each SPDM
-   compatible device to be attested.  Each instance consists of either a
-   measurements section or a certificates section, or both.  Optionally,
-   the Negotiated State preamble (version, capabilities and algorithms)
-   bytes can be included to present the full negotiated state between
-   the SPDM requester and responder.
+   compatible device to be attested.  Each instance consists of a
+   measurements section, a certificates section, or both.  These can be
+   supplemented with an additional section that contains information
+   from the TEE Device Information Security Protocol (TDISP) Device
+   Interface Report.  TDISP messages are embedded in the
+   VENDOR_DEFINED_REQUEST and VENDOR_DEFINED_RESPONSE messages of the
+   SPDM protocol.  Optionally, the Negotiated State preamble (version,
+   capabilities and algorithms) bytes can be included to present the
+   full negotiated state between the SPDM requester and responder.
 
    spdm-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0"
@@ -188,14 +194,17 @@ Table of Contents
    spdm-artefacts //= (
      &(measurements: 3802) => spdm-measurements
      &(certificates: 3803) => spdm-certificates
+     ? &(device-interface-report: 3807) => tdisp-device-interface-report
    )
 
    spdm-artefacts //= (
      &(measurements: 3802) => spdm-measurements
+     ? &(device-interface-report: 3807) => tdisp-device-interface-report
    )
 
    spdm-artefacts //= (
      &(certificates: 3803) => spdm-certificates
+     ? &(device-interface-report: 3807) => tdisp-device-interface-report
    )
 
 3.1.1.  Measurements Claim
@@ -332,14 +341,68 @@ Table of Contents
    aux-cert-slot-6 = 6
    aux-cert-slot-7 = 7
 
-3.1.3.  Negotiated State Preamble (Version, Capabilities and Algorithms)
+3.1.3.  TDISP Device Interface Report
+
+   A TDISP Device Interface Report begins with various bitfields
+   indicating the state and characteristics of the PCIe device
+   interface.  Next are 3 register fields pertaining to MSI-X (Message
+   Signalled Interrupts), LNR (Lightweight Notification Requester) and
+   TPH (TLP Processing Hints) capabilities.  MMIO ranges are assigned
+   from PCIe BAR(s) and provide information about the memory areas a
+   device is working with.  More information on the MMIO range bitfields
+   and the ones defined as part of the device interface field (above)
+   can be found in the TDISP section of the PCI Express specification.
+   The last field is device-specific and optionally included to convey
+   additional configuration information about the device.
+
+   tdisp-device-interface-report = {
+     ? &(interface-info: 1) => interface-info-bits
+     ? &(msi-x-message-control: 2) => bytes .size 2
+     ? &(lnr-control: 2) => bytes .size 2
+     ? &(tph-control: 3) => bytes .size 4
+     ? &(mmio-ranges: 4) => mmio-ranges
+     ? &(device-specific-info: 5) => bytes
+   }
+
+   interface-info-bits = bytes .bits interface-info-flags
+   interface-info-flags = &(bit0: 0,
+                            bit1: 1,
+                            bit2: 2,
+                            bit3: 3,
+                            bit4: 4,
+                            bit5: 5,
+                           )
+
+   mmio-ranges = {
+     + &(mmio-range: 1) => mmio-range
+   }
+
+   mmio-range = {
+     &(first-4k-page: 1) => bytes .size 8
+     &(number-of-4k-pages: 2) => bytes .size 4
+     &(attributes: 3) => range-attributes
+   }
+
+   range-attributes = {
+     &(range-attribute-bits: 1) => range-attribute-bits
+     &(range-attribute-range-id: 2) => bytes .size 2
+   }
+
+   range-attribute-bits = bytes .bits range-attributes-flags
+   range-attributes-flags = &(bit0: 0,
+                              bit1: 1,
+                              bit2: 2,
+                              bit3: 3,
+                             )
+
+3.1.4.  Negotiated State Preamble (Version, Capabilities and Algorithms)
 
    The Negotiated State Preamble (i.e., vca) claim contains the
    concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES,
    CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged
    between the SPDM Requester and Responder.
 
-3.1.4.  Submodule Naming
+3.1.5.  Submodule Naming
 
    The namespace used for SPDM submodules is "spdm".
 
@@ -436,8 +499,17 @@ Table of Contents
    spdm-artefacts //= ((
            &(measurements: 3802) => spdm-measurements,
            &(certificates: 3803) => spdm-certificates,
-         ) // &(measurements: 3802) => spdm-measurements // &(\
-                               certificates: 3803) => spdm-certificates)
+           ? &(device-interface-report: 3807) => tdisp-device-interface\
+                                                                -report,
+         ) // (
+           &(measurements: 3802) => spdm-measurements,
+           ? &(device-interface-report: 3807) => tdisp-device-interface\
+                                                                -report,
+         ) // (
+           &(certificates: 3803) => spdm-certificates,
+           ? &(device-interface-report: 3807) => tdisp-device-interface\
+                                                                -report,
+         ))
    spdm-measurement = {
      &(component-type: 1) => component-type,
      measurement,
@@ -520,6 +592,40 @@ Table of Contents
      ? &(headerType: 9) => bytes .size 1,
      ? &(BITS: 10) => bytes .size 1,
    }
+   tdisp-device-interface-report = {
+     ? &(interface-info: 1) => interface-info-bits,
+     ? &(msi-x-message-control: 2) => bytes .size 2,
+     ? &(lnr-control: 2) => bytes .size 2,
+     ? &(tph-control: 3) => bytes .size 4,
+     ? &(mmio-ranges: 4) => mmio-ranges,
+     ? &(device-specific-info: 5) => bytes,
+   }
+   interface-info-bits = bytes .bits interface-info-flags
+   interface-info-flags = &(
+     bit0: 0,
+     bit1: 1,
+     bit2: 2,
+     bit3: 3,
+     bit4: 4,
+     bit5: 5,
+   )
+   mmio-ranges = {+ &(mmio-range: 1) => mmio-range}
+   mmio-range = {
+     &(first-4k-page: 1) => bytes .size 8,
+     &(number-of-4k-pages: 2) => bytes .size 4,
+     &(attributes: 3) => range-attributes,
+   }
+   range-attributes = {
+     &(range-attribute-bits: 1) => range-attribute-bits,
+     &(range-attribute-range-id: 2) => bytes .size 2,
+   }
+   range-attribute-bits = bytes .bits range-attributes-flags
+   range-attributes-flags = &(
+     bit0: 0,
+     bit1: 1,
+     bit2: 2,
+     bit3: 3,
+   )
 
 5.  Security Considerations
 
@@ -578,7 +684,7 @@ Table of Contents
 
    *  Change Controller: IETF
 
-   *  Specification Document(s): Section 3.1.3 of RFCthis
+   *  Specification Document(s): Section 3.1.4 of RFCthis
 
 6.1.4.   PCIe Legacy Device Text Claim
 
@@ -611,6 +717,22 @@ Table of Contents
    *  Change Controller: IETF
 
    *  Specification Document(s): Section 3.2 of RFCthis
+
+6.1.6.   TDISP Device Interface Report
+
+   *  Claim Name: tdisp-device-interface-report
+
+   *  Claim Description: TDISP Device Interface Report
+
+   *  JWT Claim Name: N/A
+
+   *  Claim Key: 3807
+
+   *  Claim Value Type(s): bytes
+
+   *  Change Controller: IETF
+
+   *  Specification Document(s): Section 3.1.3 of RFCthis
 
 7.  References
 
