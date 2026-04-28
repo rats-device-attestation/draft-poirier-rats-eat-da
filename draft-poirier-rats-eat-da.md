@@ -136,7 +136,7 @@ Those elements include L1 (see CDDL below), the combined SPDM prefix, the hash a
 The slot number of the leaf certificate used to sign the measurement log is also provided.
 
 ~~~ cddl
-{::include-fold cddl/spdm-measurement-blocks-signature.cddl}
+{::include-fold cddl/spdm-signature.cddl}
 ~~~
 
 ### Certificate Claims {#spdm-certificates}
