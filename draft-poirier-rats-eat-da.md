@@ -101,7 +101,8 @@ Careful condideration was also given to the overall design in order to leave roo
 
 A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
 Each instance consists of a measurements section, a certificates section, or both.
-These can be supplemented with an additional section that contains information from the TEE Device Information Security Protocol (TDISP) Device Interface Report.
+These can be supplemented with two additional sections: (1) a challenge for Component Mesaurement and Authentication (CMA) scenarios and (2) a device interface report that contains information from the TEE Device Information Security Protocol (TDISP) Device Interface Report.
+A challenge needs certificate information from the certificate section and as such, can only be present if certificates are included in the SPDM artifacts.
 TDISP messages are embedded in the VENDOR_DEFINED_REQUEST and VENDOR_DEFINED_RESPONSE messages of the SPDM protocol.
 Optionally, the Negotiated State preamble (version, capabilities and algorithms) bytes can be included to present the full negotiated state between the SPDM requester and responder.
 
@@ -128,11 +129,11 @@ The size of the digest value is derived from the measurement hash algorithm conv
 {::include-fold cddl/spdm-measurement.cddl}
 ~~~
 
-#### Measurements Signature
+### SPDM Challenge Claim {#spdm-challenge}
 
-SPDM compliant devices can optionally support the capability to sign measurements.
-Included in the measurement claim signature are all the elements needed by a third party entity to reconstruct the original measurement log signed by the device.
-Those elements include L1 (see CDDL below), the combined SPDM prefix, the hash algorithm used to generate a digest of the measurement log and nonces provided by the requester and responder.
+SPDM compliant devices can optionally support the capability to authenticate responders through the challenge-response protocol and sign measurements.
+Included in the signature are all the elements needed by a third party entity to reconstruct the original transcript or measurement log signed by the device.
+Those elements include M1 for challenge signatures or L1 for measurement signatures (see CDDL below), the combined SPDM prefix, the hash algorithm used to generate a digest of the measurement log and nonces provided by the requester and responder.
 The slot number of the leaf certificate used to sign the measurement log is also provided.
 
 ~~~ cddl
@@ -263,12 +264,22 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Change Controller: IETF
 * Specification Document(s): {{pcie-legacy-device}} of {{&SELF}}
 
+### SPDM Challenge Claim
+
+* Claim Name: spdm-challenge
+* Claim Description: SPDM Challenge signature block
+* JWT Claim Name: N/A
+* Claim Key: 3807
+* Claim Value Type(s): map
+* Change Controller: IETF
+* Specification Document(s): {{spdm-challenge}} of {{&SELF}}
+
 ### TDISP Device Interface Report
 
 * Claim Name: tdisp-device-interface-report
 * Claim Description: TDISP Device Interface Report
 * JWT Claim Name: N/A
-* Claim Key: 3807
+* Claim Key: 3808
 * Claim Value Type(s): bytes
 * Change Controller: IETF
 * Specification Document(s): {{interface-report}} of {{&SELF}}
