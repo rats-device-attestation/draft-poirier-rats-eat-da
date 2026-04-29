@@ -16,6 +16,20 @@ hash-algorithm-type /= &(tpm_alg_sm3_256: 64)
 
 ;
 ; See signature generation and verification algorithms for
+; CHALLENGE_AUTH message on page 108.
+;
+; M1 is _one_ of the following:
+;
+; M1 /= GET_VERSION , GET_CAPABILITIES , NEGOTIATE_ALGORITHMS , GET_DIGESTS , GET_CERTIFICATE , CHALLENGE (A1, B1, C1)
+; M1 /= GET_VERSION , GET_CAPABILITIES , NEGOTIATE_ALGORITHMS , GET_DIGESTS , CHALLENGE (A1, B3, C1)
+; M1 /= GET_VERSION , GET_CAPABILITIES , NEGOTIATE_ALGORITHMS , GET_CERTIFICATE , CHALLENGE (A1, B4, C1)
+; M1 /= GET_VERSION , GET_CAPABILITIES , NEGOTIATE_ALGORITHMS , CHALLENGE (A1, B2, C1)
+; M1 /= GET_DIGESTS , GET_CERTIFICATE , CHALLENGE (A2, B1, C1)
+; M1 /= GET_DIGESTS , CHALLENGE (A2, B3, C1)
+; M1 /= GET_CERTIFICATE , CHALLENGE (A2, B4, C1)
+; M1 /= CHALLENGE (A2, B2, C1)
+;
+; See signature generation and verification algorithms for
 ; MEASUREMENTS messages on page 126.
 ;
 ; L1 = Concatenate(VCA, GET_MEASUREMENTS_REQUEST1,
@@ -31,7 +45,7 @@ spdm-signature = {
    &(requester-nonce: 2) => bytes .size 32,
    &(responder-nonce: 3) => bytes .size 32,
    &(combined-spdm-prefix: 4) => bytes .size 100,
-   &(IL1: 5) => bytes, ; L1 (see comment above)
+   &(IL1: 5) => bytes, ; M1 or L1 (see comment above)
    &(base-hash-algo: 6) => hash-algorithm-type,
    &(signature: 7) => bytes
 }
