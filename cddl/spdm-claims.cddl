@@ -7,6 +7,7 @@ spdm-claims = {
 spdm-artefacts //= (
   &(measurements: 3802) => spdm-measurements
   &(certificates: 3803) => spdm-certificates
+  ? &(challenge: 3808) => spdm-signature
   ? &(device-interface-report: 3807) => tdisp-device-interface-report
 )
 
@@ -17,5 +18,6 @@ spdm-artefacts //= (
 
 spdm-artefacts //= (
   &(certificates: 3803) => spdm-certificates
+  ? &(challenge: 3808) => spdm-signature
   ? &(device-interface-report: 3807) => tdisp-device-interface-report
 )
