@@ -1172,16 +1172,19 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
                     <p id="section-toc.1-1.3.2.1.2.1.1" class="keepWithNext"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-measurements-claim" class="internal xref">Measurements Claim</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2">
-                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-certificate-claims" class="internal xref">Certificate Claims</a></p>
+                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-spdm-challenge-claim" class="internal xref">SPDM Challenge Claim</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3">
-                    <p id="section-toc.1-1.3.2.1.2.3.1"><a href="#section-3.1.3" class="auto internal xref">3.1.3</a>.  <a href="#name-tdisp-device-interface-repo" class="internal xref">TDISP Device Interface Report</a></p>
+                    <p id="section-toc.1-1.3.2.1.2.3.1"><a href="#section-3.1.3" class="auto internal xref">3.1.3</a>.  <a href="#name-certificate-claims" class="internal xref">Certificate Claims</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.4">
-                    <p id="section-toc.1-1.3.2.1.2.4.1"><a href="#section-3.1.4" class="auto internal xref">3.1.4</a>.  <a href="#name-negotiated-state-preamble-v" class="internal xref">Negotiated State Preamble (Version, Capabilities and Algorithms)</a></p>
+                    <p id="section-toc.1-1.3.2.1.2.4.1"><a href="#section-3.1.4" class="auto internal xref">3.1.4</a>.  <a href="#name-tdisp-device-interface-repo" class="internal xref">TDISP Device Interface Report</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.5">
-                    <p id="section-toc.1-1.3.2.1.2.5.1"><a href="#section-3.1.5" class="auto internal xref">3.1.5</a>.  <a href="#name-submodule-naming" class="internal xref">Submodule Naming</a></p>
+                    <p id="section-toc.1-1.3.2.1.2.5.1"><a href="#section-3.1.5" class="auto internal xref">3.1.5</a>.  <a href="#name-negotiated-state-preamble-v" class="internal xref">Negotiated State Preamble (Version, Capabilities and Algorithms)</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.6">
+                    <p id="section-toc.1-1.3.2.1.2.6.1"><a href="#section-3.1.6" class="auto internal xref">3.1.6</a>.  <a href="#name-submodule-naming" class="internal xref">Submodule Naming</a></p>
 </li>
                 </ul>
 </li>
@@ -1223,7 +1226,10 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
                     <p id="section-toc.1-1.6.2.1.2.5.1"><a href="#section-6.1.5" class="auto internal xref">6.1.5</a>.  <a href="#name-pcie-legacy-device-binary-c" class="internal xref">PCIe Legacy Device Binary Claim</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.6">
-                    <p id="section-toc.1-1.6.2.1.2.6.1"><a href="#section-6.1.6" class="auto internal xref">6.1.6</a>.  <a href="#name-tdisp-device-interface-repor" class="internal xref">TDISP Device Interface Report</a></p>
+                    <p id="section-toc.1-1.6.2.1.2.6.1"><a href="#section-6.1.6" class="auto internal xref">6.1.6</a>.  <a href="#name-spdm-challenge-claim-2" class="internal xref">SPDM Challenge Claim</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.7">
+                    <p id="section-toc.1-1.6.2.1.2.7.1"><a href="#section-6.1.7" class="auto internal xref">6.1.7</a>.  <a href="#name-tdisp-device-interface-repor" class="internal xref">TDISP Device Interface Report</a></p>
 </li>
                 </ul>
 </li>
@@ -1293,7 +1299,7 @@ A DAT consists of an EAT profile identifier, a nonce and an EAT submodule (<span
 Each individual device claim is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
 The syntax of the device name depends on the type of bus or protocol used.
 Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
-See <a href="#spdm-submod-name" class="auto internal xref">Section 3.1.5</a> for SPDM devices, and <a href="#pcie-legacy-submod-name" class="auto internal xref">Section 3.2.1</a> for legacy PCIe devices.
+See <a href="#spdm-submod-name" class="auto internal xref">Section 3.1.6</a> for SPDM devices, and <a href="#pcie-legacy-submod-name" class="auto internal xref">Section 3.2.1</a> for legacy PCIe devices.
 As previously mentioned, this draft currently defines the claims set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
 Careful condideration was also given to the overall design in order to leave room for future expansion.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3-2">
@@ -1336,19 +1342,19 @@ spdm-claims = {
 spdm-artefacts //= (
   &amp;(measurements: 3802) =&gt; spdm-measurements
   &amp;(certificates: 3803) =&gt; spdm-certificates
-  ? &amp;(challenge: 3808) =&gt; spdm-signature
-  ? &amp;(device-interface-report: 3807) =&gt; tdisp-device-interface-report
+  ? &amp;(challenge: 3807) =&gt; spdm-signature
+  ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface-report
 )
 
 spdm-artefacts //= (
   &amp;(measurements: 3802) =&gt; spdm-measurements
-  ? &amp;(device-interface-report: 3807) =&gt; tdisp-device-interface-report
+  ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface-report
 )
 
 spdm-artefacts //= (
   &amp;(certificates: 3803) =&gt; spdm-certificates
-  ? &amp;(challenge: 3808) =&gt; spdm-signature
-  ? &amp;(device-interface-report: 3807) =&gt; tdisp-device-interface-report
+  ? &amp;(challenge: 3807) =&gt; spdm-signature
+  ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface-report
 )
 </pre><a href="#section-3.1-2" class="pilcrow">¶</a>
 </div>
@@ -1410,16 +1416,18 @@ digest = [
 </div>
 </section>
 </div>
-<div id="spdm-signature">
-<section id="section-3.1.1.2">
-            <h5 id="name-spdm-signature">
-<a href="#section-3.1.1.2" class="section-number selfRef">3.1.1.2. </a><a href="#name-spdm-signature" class="section-name selfRef">SPDM Signature</a>
-            </h5>
-<p id="section-3.1.1.2-1">SPDM compliant devices can optionally support the capability to authenticate responders through the challenge-response protocol and sign measurements.
+</section>
+</div>
+<div id="spdm-challenge">
+<section id="section-3.1.2">
+          <h4 id="name-spdm-challenge-claim">
+<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-spdm-challenge-claim" class="section-name selfRef">SPDM Challenge Claim</a>
+          </h4>
+<p id="section-3.1.2-1">SPDM compliant devices can optionally support the capability to authenticate responders through the challenge-response protocol and sign measurements.
 Included in the signature are all the elements needed by a third party entity to reconstruct the original transcript or measurement log signed by the device.
 Those elements include M1 for challenge signatures or L1 for measurement signatures (see CDDL below), the combined SPDM prefix, the hash algorithm used to generate a digest of the measurement log and nonces provided by the requester and responder.
-The slot number of the leaf certificate used to sign the measurement log is also provided.<a href="#section-3.1.1.2-1" class="pilcrow">¶</a></p>
-<div class="breakable lang-cddl sourcecode" id="section-3.1.1.2-2">
+The slot number of the leaf certificate used to sign the measurement log is also provided.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+<div class="breakable lang-cddl sourcecode" id="section-3.1.2-2">
 <pre>
 =============== NOTE: '\' line wrapping per RFC 8792 ================
 
@@ -1478,22 +1486,20 @@ spdm-signature = {
    &amp;(base-hash-algo: 6) =&gt; hash-algorithm-type,
    &amp;(signature: 7) =&gt; bytes
 }
-</pre><a href="#section-3.1.1.2-2" class="pilcrow">¶</a>
-</div>
-</section>
+</pre><a href="#section-3.1.2-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="spdm-certificates">
-<section id="section-3.1.2">
+<section id="section-3.1.3">
           <h4 id="name-certificate-claims">
-<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-certificate-claims" class="section-name selfRef">Certificate Claims</a>
+<a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-certificate-claims" class="section-name selfRef">Certificate Claims</a>
           </h4>
-<p id="section-3.1.2-1">According to the specification, SPDM compliant devices should support at most 8 slots, with slot 0 populated by default.
+<p id="section-3.1.3-1">According to the specification, SPDM compliant devices should support at most 8 slots, with slot 0 populated by default.
 Slot 0 <span class="bcp14">SHALL</span> contain a certificate chain that follows the Device certificate model or the Alias certificate model.
 Regardless of the certificate model used, a certificate chain comprises one or more DER-encoded X.509 v3 certificates <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.
-The certificates <span class="bcp14">MUST</span> be concatenated with no intermediate padding.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-2">
+The certificates <span class="bcp14">MUST</span> be concatenated with no intermediate padding.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.3-2">
 <pre>
 spdm-certificates = {
   default-cert-slot =&gt; cert-chain
@@ -1519,21 +1525,21 @@ aux-cert-slot-4 = 4
 aux-cert-slot-5 = 5
 aux-cert-slot-6 = 6
 aux-cert-slot-7 = 7
-</pre><a href="#section-3.1.2-2" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.3-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="interface-report">
-<section id="section-3.1.3">
+<section id="section-3.1.4">
           <h4 id="name-tdisp-device-interface-repo">
-<a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-tdisp-device-interface-repo" class="section-name selfRef">TDISP Device Interface Report</a>
+<a href="#section-3.1.4" class="section-number selfRef">3.1.4. </a><a href="#name-tdisp-device-interface-repo" class="section-name selfRef">TDISP Device Interface Report</a>
           </h4>
-<p id="section-3.1.3-1">A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
+<p id="section-3.1.4-1">A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
 Next are 3 register fields pertaining to MSI-X (Message Signalled Interrupts), LNR (Lightweight Notification Requester) and TPH (TLP Processing Hints) capabilities.
 MMIO ranges are assigned from PCIe BAR(s) and provide information about the memory areas a device is working with.
 More information on the MMIO range bitfields and the ones defined as part of the device interface field (above) can be found in the TDISP section of the PCI Express specification.
-The last field is device-specific and optionally included to convey additional configuration information about the device.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.3-2">
+The last field is device-specific and optionally included to convey additional configuration information about the device.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.4-2">
 <pre>
 tdisp-device-interface-report = {
   ? &amp;(interface-info: 1) =&gt; interface-info-bits
@@ -1574,33 +1580,33 @@ range-attributes-flags = &amp;(bit0: 0,
                            bit2: 2,
                            bit3: 3,
                           )
-</pre><a href="#section-3.1.3-2" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.4-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="spdm-vca">
-<section id="section-3.1.4">
+<section id="section-3.1.5">
           <h4 id="name-negotiated-state-preamble-v">
-<a href="#section-3.1.4" class="section-number selfRef">3.1.4. </a><a href="#name-negotiated-state-preamble-v" class="section-name selfRef">Negotiated State Preamble (Version, Capabilities and Algorithms)</a>
+<a href="#section-3.1.5" class="section-number selfRef">3.1.5. </a><a href="#name-negotiated-state-preamble-v" class="section-name selfRef">Negotiated State Preamble (Version, Capabilities and Algorithms)</a>
           </h4>
-<p id="section-3.1.4-1">The Negotiated State Preamble (i.e., <code>vca</code>) claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.5-1">The Negotiated State Preamble (i.e., <code>vca</code>) claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.<a href="#section-3.1.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="spdm-submod-name">
-<section id="section-3.1.5">
+<section id="section-3.1.6">
           <h4 id="name-submodule-naming">
-<a href="#section-3.1.5" class="section-number selfRef">3.1.5. </a><a href="#name-submodule-naming" class="section-name selfRef">Submodule Naming</a>
+<a href="#section-3.1.6" class="section-number selfRef">3.1.6. </a><a href="#name-submodule-naming" class="section-name selfRef">Submodule Naming</a>
           </h4>
-<p id="section-3.1.5-1">The namespace used for SPDM submodules is "spdm".<a href="#section-3.1.5-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.5-2">The name associated with an SPDM submodule is extracted from the leaf certificate of the relevant device.<a href="#section-3.1.5-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.6-1">The namespace used for SPDM submodules is "spdm".<a href="#section-3.1.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.6-2">The name associated with an SPDM submodule is extracted from the leaf certificate of the relevant device.<a href="#section-3.1.6-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.1.5-3.1">
-              <p id="section-3.1.5-3.1.1">If the leaf certificate contains a Subject Alternative Name of type DMTFOtherName, the submodule name is the value contained in <code>ub-DMTF-device-info</code>.
-For example: "spdm:ACME:WIDGET:0123456789".<a href="#section-3.1.5-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.1.6-3.1">
+              <p id="section-3.1.6-3.1.1">If the leaf certificate contains a Subject Alternative Name of type DMTFOtherName, the submodule name is the value contained in <code>ub-DMTF-device-info</code>.
+For example: "spdm:ACME:WIDGET:0123456789".<a href="#section-3.1.6-3.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.1.5-3.2">
-              <p id="section-3.1.5-3.2.1">Otherwise, the submod name is the string representation of the certificate Subject, as described in <span>[<a href="#RFC4514" class="cite xref">RFC4514</a>]</span>.
-For example: "spdm:C=CA,O=ACME,OU=Widget,CN=0123456789".<a href="#section-3.1.5-3.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-3.1.6-3.2">
+              <p id="section-3.1.6-3.2.1">Otherwise, the submod name is the string representation of the certificate Subject, as described in <span>[<a href="#RFC4514" class="cite xref">RFC4514</a>]</span>.
+For example: "spdm:C=CA,O=ACME,OU=Widget,CN=0123456789".<a href="#section-3.1.6-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1697,17 +1703,17 @@ spdm-claims = {
 spdm-artefacts //= ((
         &amp;(measurements: 3802) =&gt; spdm-measurements,
         &amp;(certificates: 3803) =&gt; spdm-certificates,
-        ? &amp;(challenge: 3808) =&gt; spdm-signature,
-        ? &amp;(device-interface-report: 3807) =&gt; tdisp-device-interface\
+        ? &amp;(challenge: 3807) =&gt; spdm-signature,
+        ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface\
                                                              -report,
       ) // (
         &amp;(measurements: 3802) =&gt; spdm-measurements,
-        ? &amp;(device-interface-report: 3807) =&gt; tdisp-device-interface\
+        ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface\
                                                              -report,
       ) // (
         &amp;(certificates: 3803) =&gt; spdm-certificates,
-        ? &amp;(challenge: 3808) =&gt; spdm-signature,
-        ? &amp;(device-interface-report: 3807) =&gt; tdisp-device-interface\
+        ? &amp;(challenge: 3807) =&gt; spdm-signature,
+        ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface\
                                                              -report,
       ))
 spdm-measurement = {
@@ -1904,7 +1910,7 @@ range-attributes-flags = &amp;(
               <p id="section-6.1.2-1.6.1">Change Controller: IETF<a href="#section-6.1.2-1.6.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.2-1.7">
-              <p id="section-6.1.2-1.7.1">Specification Document(s): <a href="#spdm-certificates" class="auto internal xref">Section 3.1.2</a> of RFCthis<a href="#section-6.1.2-1.7.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.2-1.7.1">Specification Document(s): <a href="#spdm-certificates" class="auto internal xref">Section 3.1.3</a> of RFCthis<a href="#section-6.1.2-1.7.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1934,7 +1940,7 @@ range-attributes-flags = &amp;(
               <p id="section-6.1.3-1.6.1">Change Controller: IETF<a href="#section-6.1.3-1.6.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.3-1.7">
-              <p id="section-6.1.3-1.7.1">Specification Document(s): <a href="#spdm-vca" class="auto internal xref">Section 3.1.4</a> of RFCthis<a href="#section-6.1.3-1.7.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.3-1.7.1">Specification Document(s): <a href="#spdm-vca" class="auto internal xref">Section 3.1.5</a> of RFCthis<a href="#section-6.1.3-1.7.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1999,17 +2005,17 @@ range-attributes-flags = &amp;(
           </ul>
 </section>
 </div>
-<div id="tdisp-device-interface-report">
+<div id="spdm-challenge-claim">
 <section id="section-6.1.6">
-          <h4 id="name-tdisp-device-interface-repor">
-<a href="#section-6.1.6" class="section-number selfRef">6.1.6. </a><a href="#name-tdisp-device-interface-repor" class="section-name selfRef">TDISP Device Interface Report</a>
+          <h4 id="name-spdm-challenge-claim-2">
+<a href="#section-6.1.6" class="section-number selfRef">6.1.6. </a><a href="#name-spdm-challenge-claim-2" class="section-name selfRef">SPDM Challenge Claim</a>
           </h4>
 <ul class="normal">
 <li class="normal" id="section-6.1.6-1.1">
-              <p id="section-6.1.6-1.1.1">Claim Name: tdisp-device-interface-report<a href="#section-6.1.6-1.1.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.6-1.1.1">Claim Name: spdm-challenge<a href="#section-6.1.6-1.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.6-1.2">
-              <p id="section-6.1.6-1.2.1">Claim Description: TDISP Device Interface Report<a href="#section-6.1.6-1.2.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.6-1.2.1">Claim Description: SPDM Challenge signature block<a href="#section-6.1.6-1.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.6-1.3">
               <p id="section-6.1.6-1.3.1">JWT Claim Name: N/A<a href="#section-6.1.6-1.3.1" class="pilcrow">¶</a></p>
@@ -2018,13 +2024,43 @@ range-attributes-flags = &amp;(
               <p id="section-6.1.6-1.4.1">Claim Key: 3807<a href="#section-6.1.6-1.4.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.6-1.5">
-              <p id="section-6.1.6-1.5.1">Claim Value Type(s): bytes<a href="#section-6.1.6-1.5.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.6-1.5.1">Claim Value Type(s): map<a href="#section-6.1.6-1.5.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.6-1.6">
               <p id="section-6.1.6-1.6.1">Change Controller: IETF<a href="#section-6.1.6-1.6.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.6-1.7">
-              <p id="section-6.1.6-1.7.1">Specification Document(s): <a href="#interface-report" class="auto internal xref">Section 3.1.3</a> of RFCthis<a href="#section-6.1.6-1.7.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.6-1.7.1">Specification Document(s): <a href="#spdm-challenge" class="auto internal xref">Section 3.1.2</a> of RFCthis<a href="#section-6.1.6-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="tdisp-device-interface-report">
+<section id="section-6.1.7">
+          <h4 id="name-tdisp-device-interface-repor">
+<a href="#section-6.1.7" class="section-number selfRef">6.1.7. </a><a href="#name-tdisp-device-interface-repor" class="section-name selfRef">TDISP Device Interface Report</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-6.1.7-1.1">
+              <p id="section-6.1.7-1.1.1">Claim Name: tdisp-device-interface-report<a href="#section-6.1.7-1.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.7-1.2">
+              <p id="section-6.1.7-1.2.1">Claim Description: TDISP Device Interface Report<a href="#section-6.1.7-1.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.7-1.3">
+              <p id="section-6.1.7-1.3.1">JWT Claim Name: N/A<a href="#section-6.1.7-1.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.7-1.4">
+              <p id="section-6.1.7-1.4.1">Claim Key: 3808<a href="#section-6.1.7-1.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.7-1.5">
+              <p id="section-6.1.7-1.5.1">Claim Value Type(s): map<a href="#section-6.1.7-1.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.7-1.6">
+              <p id="section-6.1.7-1.6.1">Change Controller: IETF<a href="#section-6.1.7-1.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.1.7-1.7">
+              <p id="section-6.1.7-1.7.1">Specification Document(s): <a href="#interface-report" class="auto internal xref">Section 3.1.4</a> of RFCthis<a href="#section-6.1.7-1.7.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>

@@ -78,11 +78,12 @@ Table of Contents
    3.  Device Assignment Token (DAT) Claims
      3.1.  SPDM Claims
        3.1.1.  Measurements Claim
-       3.1.2.  Certificate Claims
-       3.1.3.  TDISP Device Interface Report
-       3.1.4.  Negotiated State Preamble (Version, Capabilities and
+       3.1.2.  SPDM Challenge Claim
+       3.1.3.  Certificate Claims
+       3.1.4.  TDISP Device Interface Report
+       3.1.5.  Negotiated State Preamble (Version, Capabilities and
                Algorithms)
-       3.1.5.  Submodule Naming
+       3.1.6.  Submodule Naming
      3.2.  PCIe Legacy Device Claims
        3.2.1.  Submodule Naming
    4.  Collated CDDL
@@ -94,7 +95,8 @@ Table of Contents
        6.1.3.   SPDM VCA Claim
        6.1.4.   PCIe Legacy Device Text Claim
        6.1.5.   PCIe Legacy Device Binary Claim
-       6.1.6.   TDISP Device Interface Report
+       6.1.6.   SPDM Challenge Claim
+       6.1.7.   TDISP Device Interface Report
    7.  References
      7.1.  Normative References
      7.2.  Informative References
@@ -150,7 +152,7 @@ Table of Contents
    a standard claims format based on the bus or protocol the device
    supports.  The syntax of the device name depends on the type of bus
    or protocol used.  Each name consists of two parts joined by a
-   semicolon: a namespace and a bus-specific name.  See Section 3.1.5
+   semicolon: a namespace and a bus-specific name.  See Section 3.1.6
    for SPDM devices, and Section 3.2.1 for legacy PCIe devices.  As
    previously mentioned, this draft currently defines the claims set for
    SPDM compliant devices and PCIe legacy devices that do not support
@@ -198,19 +200,19 @@ Table of Contents
    spdm-artefacts //= (
      &(measurements: 3802) => spdm-measurements
      &(certificates: 3803) => spdm-certificates
-     ? &(challenge: 3808) => spdm-signature
-     ? &(device-interface-report: 3807) => tdisp-device-interface-report
+     ? &(challenge: 3807) => spdm-signature
+     ? &(device-interface-report: 3808) => tdisp-device-interface-report
    )
 
    spdm-artefacts //= (
      &(measurements: 3802) => spdm-measurements
-     ? &(device-interface-report: 3807) => tdisp-device-interface-report
+     ? &(device-interface-report: 3808) => tdisp-device-interface-report
    )
 
    spdm-artefacts //= (
      &(certificates: 3803) => spdm-certificates
-     ? &(challenge: 3808) => spdm-signature
-     ? &(device-interface-report: 3807) => tdisp-device-interface-report
+     ? &(challenge: 3807) => spdm-signature
+     ? &(device-interface-report: 3808) => tdisp-device-interface-report
    )
 
 3.1.1.  Measurements Claim
@@ -263,7 +265,7 @@ Table of Contents
      val: bytes
    ]
 
-3.1.1.2.  SPDM Signature
+3.1.2.  SPDM Challenge Claim
 
    SPDM compliant devices can optionally support the capability to
    authenticate responders through the challenge-response protocol and
@@ -334,7 +336,7 @@ Table of Contents
       &(signature: 7) => bytes
    }
 
-3.1.2.  Certificate Claims
+3.1.3.  Certificate Claims
 
    According to the specification, SPDM compliant devices should support
    at most 8 slots, with slot 0 populated by default.  Slot 0 SHALL
@@ -369,7 +371,7 @@ Table of Contents
    aux-cert-slot-6 = 6
    aux-cert-slot-7 = 7
 
-3.1.3.  TDISP Device Interface Report
+3.1.4.  TDISP Device Interface Report
 
    A TDISP Device Interface Report begins with various bitfields
    indicating the state and characteristics of the PCIe device
@@ -423,14 +425,14 @@ Table of Contents
                               bit3: 3,
                              )
 
-3.1.4.  Negotiated State Preamble (Version, Capabilities and Algorithms)
+3.1.5.  Negotiated State Preamble (Version, Capabilities and Algorithms)
 
    The Negotiated State Preamble (i.e., vca) claim contains the
    concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES,
    CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged
    between the SPDM Requester and Responder.
 
-3.1.5.  Submodule Naming
+3.1.6.  Submodule Naming
 
    The namespace used for SPDM submodules is "spdm".
 
@@ -527,17 +529,17 @@ Table of Contents
    spdm-artefacts //= ((
            &(measurements: 3802) => spdm-measurements,
            &(certificates: 3803) => spdm-certificates,
-           ? &(challenge: 3808) => spdm-signature,
-           ? &(device-interface-report: 3807) => tdisp-device-interface\
+           ? &(challenge: 3807) => spdm-signature,
+           ? &(device-interface-report: 3808) => tdisp-device-interface\
                                                                 -report,
          ) // (
            &(measurements: 3802) => spdm-measurements,
-           ? &(device-interface-report: 3807) => tdisp-device-interface\
+           ? &(device-interface-report: 3808) => tdisp-device-interface\
                                                                 -report,
          ) // (
            &(certificates: 3803) => spdm-certificates,
-           ? &(challenge: 3808) => spdm-signature,
-           ? &(device-interface-report: 3807) => tdisp-device-interface\
+           ? &(challenge: 3807) => spdm-signature,
+           ? &(device-interface-report: 3808) => tdisp-device-interface\
                                                                 -report,
          ))
    spdm-measurement = {
@@ -698,7 +700,7 @@ Table of Contents
 
    *  Change Controller: IETF
 
-   *  Specification Document(s): Section 3.1.2 of RFCthis
+   *  Specification Document(s): Section 3.1.3 of RFCthis
 
 6.1.3.   SPDM VCA Claim
 
@@ -714,7 +716,7 @@ Table of Contents
 
    *  Change Controller: IETF
 
-   *  Specification Document(s): Section 3.1.4 of RFCthis
+   *  Specification Document(s): Section 3.1.5 of RFCthis
 
 6.1.4.   PCIe Legacy Device Text Claim
 
@@ -748,7 +750,23 @@ Table of Contents
 
    *  Specification Document(s): Section 3.2 of RFCthis
 
-6.1.6.   TDISP Device Interface Report
+6.1.6.   SPDM Challenge Claim
+
+   *  Claim Name: spdm-challenge
+
+   *  Claim Description: SPDM Challenge signature block
+
+   *  JWT Claim Name: N/A
+
+   *  Claim Key: 3807
+
+   *  Claim Value Type(s): map
+
+   *  Change Controller: IETF
+
+   *  Specification Document(s): Section 3.1.2 of RFCthis
+
+6.1.7.   TDISP Device Interface Report
 
    *  Claim Name: tdisp-device-interface-report
 
@@ -756,13 +774,13 @@ Table of Contents
 
    *  JWT Claim Name: N/A
 
-   *  Claim Key: 3807
+   *  Claim Key: 3808
 
-   *  Claim Value Type(s): bytes
+   *  Claim Value Type(s): map
 
    *  Change Controller: IETF
 
-   *  Specification Document(s): Section 3.1.3 of RFCthis
+   *  Specification Document(s): Section 3.1.4 of RFCthis
 
 7.  References
 
