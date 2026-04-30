@@ -280,7 +280,7 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Claim Description: TDISP Device Interface Report
 * JWT Claim Name: N/A
 * Claim Key: 3808
-* Claim Value Type(s): bytes
+* Claim Value Type(s): map
 * Change Controller: IETF
 * Specification Document(s): {{interface-report}} of {{&SELF}}
 
