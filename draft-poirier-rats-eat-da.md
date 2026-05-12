@@ -227,7 +227,7 @@ In this case, the DAT claims-set can be a UCCS {{-uccs}} and the protection is p
 
 The flexibility provided by the COSE {{-cose}} format should be sufficient to adapt to the level of cryptographic agility required for specific use cases.
 It is RECOMMENDED that commonly adopted algorithms, such as those discussed in {{-cose-algs}}, are used.
-While receivers are expected to accept a wide range of algorithms, Attesters would produce DAT using only one such algorithm.
+While receivers are expected to accept a wide range of algorithms, Attesters will produce DAT using only one such algorithm.
 
 ## Use with Conceptual Message Wrappers
 
@@ -236,7 +236,7 @@ When used in a CMW, the collector will wrap the serialised COSE_Sign1 or UCCS wi
 ## Freshness Model
 
 DAT supports the freshness models for attestation Evidence based on nonces and epoch IDs (see {{Section 10.2 and Section 10.3 of -rats-arch}}) using the `eat_nonce` claim to convey the nonce or epoch ID supplied by the Verifier.
-No further assumption are made about the specific remote attestation protocol.
+No further assumptions are made about the specific remote attestation protocol.
 
 Note that the use of epoch IDs is subject by the type restrictions imposed by the `eat_nonce` syntax.
 For use in DAT, the epoch ID must be encodable as an opaque binary string of between 8 and 64 octets; an Epoclet can be used for this purpose (see {{-epoch-markers}}).
