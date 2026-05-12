@@ -38,6 +38,17 @@ normative:
   RFC5280: pkix
   RFC4514: dn-string-rep
   IANA.cwt:
+  STD94:
+    -: cbor
+    =: RFC8949
+  RFC8392: cwt
+  RFC9781: uccs
+  RFC9782: eat-media-types
+  RFC9052: cose
+  RFC9053: cose-algs
+  RFC9334: rats-arch
+  I-D.ietf-rats-msg-wrap: cmw
+  I-D.ietf-rats-epoch-markers: epoch-markers
 
 informative:
   SPDM:
@@ -81,7 +92,7 @@ This list is by no means exhaustive and is expected to expand.
 
 {::boilerplate bcp14-tagged}
 
-# Device Assignment Token (DAT) Claims
+# Device Assignment Token (DAT) Claims {#dat-claims}
 
 The Device Assignment Token (DAT) is the encompassing envelope for the individual device claims to be presented.
 A DAT can be used as a standalone entity but can also be embedded in a larger, platform-specific attestation token.
@@ -197,6 +208,56 @@ The namespace used for legacy PCIe submodules is "legacy-pcie".
 The name is any arbitrary string chosen by the implementation.
 For example, "legacy-pcie:0000:01:02.0" where "0000" is the domain, "01" the PCI bus id, "02" the device on the bus and "0" the device function.
 
+# Profile {#profile}
+
+## Encoding
+
+A DAT is encoded in CBOR {{-cbor}}.
+The CBOR representation of a DAT MUST be "valid" according to the definition in {{Section 1.2 of -cbor}}.
+Only definite-length strings, arrays, and maps are allowed.
+Since a DAT emitter may be found in a constrained environment, it may not be able to emit CBOR preferred serializations ({{Section 4.1 of -cbor}}).
+Therefore, the Verifier MUST be a variation-tolerant CBOR decoder.
+
+## Cryptographic Protection
+
+Cryptographic protection can be obtained by wrapping the `dat` claims-set in a COSE Web Token (CWT) {{-cwt}}.
+In this case, the signature structure MUST be a tagged (18) COSE_Sign1.
+Alternatively, a DAT can be part of a Conceptual Message Wrapper (CMW) {{-cmw}} collection.
+In this case, the DAT claims-set can be a UCCS {{-uccs}} and the protection is provided by the signed CMW.
+
+The flexibility provided by the COSE {{-cose}} format should be sufficient to adapt to the level of cryptographic agility required for specific use cases.
+It is RECOMMENDED that commonly adopted algorithms, such as those discussed in {{-cose-algs}}, are used.
+While receivers are expected to accept a wide range of algorithms, Attesters will produce DAT using only one such algorithm.
+
+## Use with Conceptual Message Wrappers
+
+When used in a CMW, the collector will wrap the serialised COSE_Sign1 or UCCS with the appropriate media type or CoAP Content-Format defined in {{-eat-media-types}}.
+
+## Freshness Model
+
+DAT supports the freshness models for attestation Evidence based on nonces and epoch IDs (see {{Section 10.2 and Section 10.3 of -rats-arch}}) using the `eat_nonce` claim to convey the nonce or epoch ID supplied by the Verifier.
+No further assumptions are made about the specific remote attestation protocol.
+
+Note that the use of epoch IDs is subject by the type restrictions imposed by the `eat_nonce` syntax.
+For use in DAT, the epoch ID must be encodable as an opaque binary string of between 8 and 64 octets; an Epoclet can be used for this purpose (see {{-epoch-markers}}).
+For use in DAT, it must be possible to encode the epoch ID as an opaque binary string between 8 and 64 octets, for example using an Epoclet ({{-epoch-markers}}).
+
+## Synopsis
+
+{{tbl-profile}} presents a concise view of the requirements described in the preceding sections.
+
+| Issue | Profile Definition |
+| CBOR/JSON | CBOR MUST be used  |
+| CBOR Encoding | Definite length maps and arrays MUST be used |
+| CBOR Encoding | Definite length strings MUST be used |
+| CBOR Serialization | Variant serialization MAY be used |
+| COSE Protection | COSE_Sign1 MUST be used (directly or via CMW) |
+| Algorithms | {{-cose-algs}} SHOULD be used |
+| Detached EAT Bundle Usage | Detached EAT bundles MUST NOT be sent |
+| Verification Key Identification | Any identification method listed in {{Appendix F.1 of -rats-eat}} |
+| Freshness | nonce or epoch ID based ({{Section 10.2 and Section 10.3 of -rats-arch}}) |
+| Claims | Those defined in {{dat-claims}}. As per general EAT rules, the receiver MUST NOT error out on claims it does not understand. |
+{: #tbl-profile title="DAT Profile Synopsis"}
 
 # Collated CDDL
 
