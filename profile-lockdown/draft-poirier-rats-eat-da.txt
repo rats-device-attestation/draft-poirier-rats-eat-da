@@ -542,7 +542,7 @@ Table of Contents
    for specific use cases.  It is RECOMMENDED that commonly adopted
    algorithms, such as those discussed in [RFC9053], are used.  While
    receivers are expected to accept a wide range of algorithms,
-   Attesters would produce DAT using only one such algorithm.
+   Attesters will produce DAT using only one such algorithm.
 
 4.3.  Use with Conceptual Message Wrappers
 
@@ -555,7 +555,7 @@ Table of Contents
    DAT supports the freshness models for attestation Evidence based on
    nonces and epoch IDs (see Section 10.2 and Section 10.3 of [RFC9334])
    using the eat_nonce claim to convey the nonce or epoch ID supplied by
-   the Verifier.  No further assumption are made about the specific
+   the Verifier.  No further assumptions are made about the specific
    remote attestation protocol.
 
    Note that the use of epoch IDs is subject by the type restrictions
