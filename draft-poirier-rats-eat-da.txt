@@ -562,9 +562,7 @@ Table of Contents
    imposed by the eat_nonce syntax.  For use in DAT, the epoch ID must
    be encodable as an opaque binary string of between 8 and 64 octets;
    an Epoclet can be used for this purpose (see
-   [I-D.ietf-rats-epoch-markers]).  For use in DAT, it must be possible
-   to encode the epoch ID as an opaque binary string between 8 and 64
-   octets, for example using an Epoclet ([I-D.ietf-rats-epoch-markers]).
+   [I-D.ietf-rats-epoch-markers]).
 
 4.5.  Synopsis
 
