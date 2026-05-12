@@ -5,7 +5,7 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 5 November 2026                                      4 May 2026
+Expires: 13 November 2026                                    12 May 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 November 2026.
+   This Internet-Draft will expire on 13 November 2026.
 
 Copyright Notice
 
@@ -86,20 +86,26 @@ Table of Contents
        3.1.6.  Submodule Naming
      3.2.  PCIe Legacy Device Claims
        3.2.1.  Submodule Naming
-   4.  Collated CDDL
-   5.  Security Considerations
-   6.  IANA Considerations
-     6.1.  New CWT Claims Registrations
-       6.1.1.   SPDM Measurements Claim
-       6.1.2.   SPDM Certificates Claim
-       6.1.3.   SPDM VCA Claim
-       6.1.4.   PCIe Legacy Device Text Claim
-       6.1.5.   PCIe Legacy Device Binary Claim
-       6.1.6.   SPDM Challenge Claim
-       6.1.7.   TDISP Device Interface Report
-   7.  References
-     7.1.  Normative References
-     7.2.  Informative References
+   4.  Profile
+     4.1.  Encoding
+     4.2.  Cryptographic Protection
+     4.3.  Use with Conceptual Message Wrappers
+     4.4.  Freshness Model
+     4.5.  Synopsis
+   5.  Collated CDDL
+   6.  Security Considerations
+   7.  IANA Considerations
+     7.1.  New CWT Claims Registrations
+       7.1.1.   SPDM Measurements Claim
+       7.1.2.   SPDM Certificates Claim
+       7.1.3.   SPDM VCA Claim
+       7.1.4.   PCIe Legacy Device Text Claim
+       7.1.5.   PCIe Legacy Device Binary Claim
+       7.1.6.   SPDM Challenge Claim
+       7.1.7.   TDISP Device Interface Report
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Appendix A.  Examples
    Acknowledgments
    Authors' Addresses
@@ -509,7 +515,97 @@ Table of Contents
    the PCI bus id, "02" the device on the bus and "0" the device
    function.
 
-4.  Collated CDDL
+4.  Profile
+
+4.1.  Encoding
+
+   A DAT is encoded in CBOR [STD94].  The CBOR representation of a DAT
+   MUST be "valid" according to the definition in Section 1.2 of
+   [STD94].  Only definite-length strings, arrays, and maps are allowed.
+   Since a DAT emitter may be found in a constrained environment, it may
+   not be able to emit CBOR preferred serializations (Section 4.1 of
+   [STD94]).  Therefore, the Verifier MUST be a variation-tolerant CBOR
+   decoder.
+
+4.2.  Cryptographic Protection
+
+   Cryptographic protection can be obtained by wrapping the dat claims-
+   set in a COSE Web Token (CWT) [RFC8392].  In this case, the signature
+   structure MUST be a tagged (18) COSE_Sign1.  Alternatively, a DAT can
+   be part of a Conceptual Message Wrapper (CMW)
+   [I-D.ietf-rats-msg-wrap] collection.  In this case, the DAT claims-
+   set can be a UCCS [RFC9781] and the protection is provided by the
+   signed CMW.
+
+   The flexibility provided by the COSE [RFC9052] format should be
+   sufficient to adapt to the level of cryptographic agility required
+   for specific use cases.  It is RECOMMENDED that commonly adopted
+   algorithms, such as those discussed in [RFC9053], are used.  While
+   receivers are expected to accept a wide range of algorithms,
+   Attesters will produce DAT using only one such algorithm.
+
+4.3.  Use with Conceptual Message Wrappers
+
+   When used in a CMW, the collector will wrap the serialised COSE_Sign1
+   or UCCS with the appropriate media type or CoAP Content-Format
+   defined in [RFC9782].
+
+4.4.  Freshness Model
+
+   DAT supports the freshness models for attestation Evidence based on
+   nonces and epoch IDs (see Section 10.2 and Section 10.3 of [RFC9334])
+   using the eat_nonce claim to convey the nonce or epoch ID supplied by
+   the Verifier.  No further assumptions are made about the specific
+   remote attestation protocol.
+
+   Note that the use of epoch IDs is subject by the type restrictions
+   imposed by the eat_nonce syntax.  For use in DAT, the epoch ID must
+   be encodable as an opaque binary string of between 8 and 64 octets;
+   an Epoclet can be used for this purpose (see
+   [I-D.ietf-rats-epoch-markers]).  For use in DAT, it must be possible
+   to encode the epoch ID as an opaque binary string between 8 and 64
+   octets, for example using an Epoclet ([I-D.ietf-rats-epoch-markers]).
+
+4.5.  Synopsis
+
+   Table 1 presents a concise view of the requirements described in the
+   preceding sections.
+
+    +==================+=============================================+
+    | Issue            | Profile Definition                          |
+    +==================+=============================================+
+    | CBOR/JSON        | CBOR MUST be used                           |
+    +------------------+---------------------------------------------+
+    | CBOR Encoding    | Definite length maps and arrays MUST be     |
+    |                  | used                                        |
+    +------------------+---------------------------------------------+
+    | CBOR Encoding    | Definite length strings MUST be used        |
+    +------------------+---------------------------------------------+
+    | CBOR             | Variant serialization MAY be used           |
+    | Serialization    |                                             |
+    +------------------+---------------------------------------------+
+    | COSE Protection  | COSE_Sign1 MUST be used (directly or via    |
+    |                  | CMW)                                        |
+    +------------------+---------------------------------------------+
+    | Algorithms       | [RFC9053] SHOULD be used                    |
+    +------------------+---------------------------------------------+
+    | Detached EAT     | Detached EAT bundles MUST NOT be sent       |
+    | Bundle Usage     |                                             |
+    +------------------+---------------------------------------------+
+    | Verification Key | Any identification method listed in         |
+    | Identification   | Appendix F.1 of [RFC9711]                   |
+    +------------------+---------------------------------------------+
+    | Freshness        | nonce or epoch ID based (Section 10.2 and   |
+    |                  | Section 10.3 of [RFC9334])                  |
+    +------------------+---------------------------------------------+
+    | Claims           | Those defined in Section 3.  As per general |
+    |                  | EAT rules, the receiver MUST NOT error out  |
+    |                  | on claims it does not understand.           |
+    +------------------+---------------------------------------------+
+
+                      Table 1: DAT Profile Synopsis
+
+5.  Collated CDDL
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
@@ -659,18 +755,18 @@ Table of Contents
      bit3: 3,
    )
 
-5.  Security Considerations
+6.  Security Considerations
 
    TODO Security
 
-6.  IANA Considerations
+7.  IANA Considerations
 
-6.1.  New CWT Claims Registrations
+7.1.  New CWT Claims Registrations
 
    IANA is requested to register the following claims in the "CBOR Web
    Token (CWT) Claims" registry [IANA.cwt].
 
-6.1.1.   SPDM Measurements Claim
+7.1.1.   SPDM Measurements Claim
 
    *  Claim Name: spdm-measurements
 
@@ -686,7 +782,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.1 of RFCthis
 
-6.1.2.   SPDM Certificates Claim
+7.1.2.   SPDM Certificates Claim
 
    *  Claim Name: spdm-certificates
 
@@ -702,7 +798,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.3 of RFCthis
 
-6.1.3.   SPDM VCA Claim
+7.1.3.   SPDM VCA Claim
 
    *  Claim Name: spdm-vca
 
@@ -718,7 +814,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.5 of RFCthis
 
-6.1.4.   PCIe Legacy Device Text Claim
+7.1.4.   PCIe Legacy Device Text Claim
 
    *  Claim Name: pcie-legacy-device-text
 
@@ -734,7 +830,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.2 of RFCthis
 
-6.1.5.   PCIe Legacy Device Binary Claim
+7.1.5.   PCIe Legacy Device Binary Claim
 
    *  Claim Name: pcie-legacy-device-binary
 
@@ -750,7 +846,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.2 of RFCthis
 
-6.1.6.   SPDM Challenge Claim
+7.1.6.   SPDM Challenge Claim
 
    *  Claim Name: spdm-challenge
 
@@ -766,7 +862,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.2 of RFCthis
 
-6.1.7.   TDISP Device Interface Report
+7.1.7.   TDISP Device Interface Report
 
    *  Claim Name: tdisp-device-interface-report
 
@@ -782,9 +878,23 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.4 of RFCthis
 
-7.  References
+8.  References
 
-7.1.  Normative References
+8.1.  Normative References
+
+   [I-D.ietf-rats-epoch-markers]
+              Birkholz, H., Fossati, T., Pan, W., Mihalcea, I., and C.
+              Bormann, "Epoch Markers", Work in Progress, Internet-
+              Draft, draft-ietf-rats-epoch-markers-03, 2 March 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-rats-
+              epoch-markers-03>.
+
+   [I-D.ietf-rats-msg-wrap]
+              Birkholz, H., Smith, N., Fossati, T., Tschofenig, H., and
+              D. Glaze, "RATS Conceptual Messages Wrapper (CMW)", Work
+              in Progress, Internet-Draft, draft-ietf-rats-msg-wrap-23,
+              11 December 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-rats-msg-wrap-23>.
 
    [IANA.cwt] IANA, "CBOR Web Token (CWT) Claims",
               <https://www.iana.org/assignments/cwt>.
@@ -809,12 +919,46 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
+   [RFC8392]  Jones, M., Wahlstroem, E., Erdtman, S., and H. Tschofenig,
+              "CBOR Web Token (CWT)", RFC 8392, DOI 10.17487/RFC8392,
+              May 2018, <https://www.rfc-editor.org/rfc/rfc8392>.
+
+   [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Structures and Process", STD 96, RFC 9052,
+              DOI 10.17487/RFC9052, August 2022,
+              <https://www.rfc-editor.org/rfc/rfc9052>.
+
+   [RFC9053]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Initial Algorithms", RFC 9053, DOI 10.17487/RFC9053,
+              August 2022, <https://www.rfc-editor.org/rfc/rfc9053>.
+
+   [RFC9334]  Birkholz, H., Thaler, D., Richardson, M., Smith, N., and
+              W. Pan, "Remote ATtestation procedureS (RATS)
+              Architecture", RFC 9334, DOI 10.17487/RFC9334, January
+              2023, <https://www.rfc-editor.org/rfc/rfc9334>.
+
    [RFC9711]  Lundblade, L., Mandyam, G., O'Donoghue, J., and C.
               Wallace, "The Entity Attestation Token (EAT)", RFC 9711,
               DOI 10.17487/RFC9711, April 2025,
               <https://www.rfc-editor.org/rfc/rfc9711>.
 
-7.2.  Informative References
+   [RFC9781]  Birkholz, H., O'Donoghue, J., Cam-Winget, N., and C.
+              Bormann, "A Concise Binary Object Representation (CBOR)
+              Tag for Unprotected CBOR Web Token Claims Sets (UCCS)",
+              RFC 9781, DOI 10.17487/RFC9781, May 2025,
+              <https://www.rfc-editor.org/rfc/rfc9781>.
+
+   [RFC9782]  Lundblade, L., Birkholz, H., and T. Fossati, "Entity
+              Attestation Token (EAT) Media Types", RFC 9782,
+              DOI 10.17487/RFC9782, May 2025,
+              <https://www.rfc-editor.org/rfc/rfc9782>.
+
+   [STD94]    Bormann, C. and P. Hoffman, "Concise Binary Object
+              Representation (CBOR)", STD 94, RFC 8949,
+              DOI 10.17487/RFC8949, December 2020,
+              <https://www.rfc-editor.org/rfc/rfc8949>.
+
+8.2.  Informative References
 
    [SPDM]     DMTF, "Security Protocol and Data Model (SPDM)
               Specification Version: 1.3.2", 21 August 2024,
