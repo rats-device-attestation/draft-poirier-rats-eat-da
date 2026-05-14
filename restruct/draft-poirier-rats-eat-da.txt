@@ -141,8 +141,8 @@ Table of Contents
    for SPDM-compliant devices while leaving room for the definition of
    other Evidence formats such as Compute Express Link (CXL) and the
    Coherent Hub Interface (CHI).  This list is by no means exhaustive
-   and is expected to expand.  Section 5 describes the requirements for
-   extending the DAT framework with new bus technologies.
+   and is expected to expand.  Section 5 outlines the requirements for
+   incorporating new bus technologies into the DAT framework.
 
 2.  Conventions and Definitions
 
