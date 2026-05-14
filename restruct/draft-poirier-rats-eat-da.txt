@@ -612,7 +612,7 @@ Table of Contents
 5.  Extending the DAT Framework
 
    An extension to the DAT framework that introduces support for a new
-   bus technology must provide the following information in a public
+   bus technology MUST provide the following information in a public
    document (e.g., an Internet-Draft):
 
    *  A precise definition of the new claims-set,
@@ -623,7 +623,7 @@ Table of Contents
 
 5.1.  Claims-set Definition
 
-   The new claims-set must be specified clearly and unambiguously,
+   The new claims-set MUST be specified clearly and unambiguously,
    ideally using CDDL, with a separate prose description of each claim.
    The claims-set MUST include a suitable eat_profile value.
 
