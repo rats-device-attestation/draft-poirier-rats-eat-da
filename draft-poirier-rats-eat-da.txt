@@ -5,7 +5,7 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 13 November 2026                                    12 May 2026
+Expires: 16 November 2026                                    15 May 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 November 2026.
+   This Internet-Draft will expire on 16 November 2026.
 
 Copyright Notice
 
@@ -86,26 +86,30 @@ Table of Contents
        3.1.6.  Submodule Naming
      3.2.  PCIe Legacy Device Claims
        3.2.1.  Submodule Naming
-   4.  Profile
+   4.  DAT EAT Profile
      4.1.  Encoding
      4.2.  Cryptographic Protection
      4.3.  Use with Conceptual Message Wrappers
      4.4.  Freshness Model
      4.5.  Synopsis
-   5.  Collated CDDL
-   6.  Security Considerations
-   7.  IANA Considerations
-     7.1.  New CWT Claims Registrations
-       7.1.1.   SPDM Measurements Claim
-       7.1.2.   SPDM Certificates Claim
-       7.1.3.   SPDM VCA Claim
-       7.1.4.   PCIe Legacy Device Text Claim
-       7.1.5.   PCIe Legacy Device Binary Claim
-       7.1.6.   SPDM Challenge Claim
-       7.1.7.   TDISP Device Interface Report
-   8.  References
-     8.1.  Normative References
-     8.2.  Informative References
+   5.  Extending the DAT Framework
+     5.1.  Claims-set Definition
+     5.2.  Naming Conventions for the submod Key
+     5.3.  Claims Registrations
+   6.  Collated CDDL
+   7.  Security Considerations
+   8.  IANA Considerations
+     8.1.  New CWT Claims Registrations
+       8.1.1.   SPDM Measurements Claim
+       8.1.2.   SPDM Certificates Claim
+       8.1.3.   SPDM VCA Claim
+       8.1.4.   PCIe Legacy Device Text Claim
+       8.1.5.   PCIe Legacy Device Binary Claim
+       8.1.6.   SPDM Challenge Claim
+       8.1.7.   TDISP Device Interface Report
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Appendix A.  Examples
    Acknowledgments
    Authors' Addresses
@@ -133,10 +137,12 @@ Table of Contents
    devices that support the SPDM protocol [SPDM], but other bus
    architectures and protocols are expected to be supported as the
    technology gains wider adoption.  As such, this document focuses on
-   the formalization of an Evidence format for SPDM-compliant devices
-   while leaving room for the definition of other Evidence formats such
-   as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
-   This list is by no means exhaustive and is expected to expand.
+   establishing the overall framework and formalizing an Evidence format
+   for SPDM-compliant devices while leaving room for the definition of
+   other Evidence formats such as Compute Express Link (CXL) and the
+   Coherent Hub Interface (CHI).  This list is by no means exhaustive
+   and is expected to expand.  Section 5 outlines the requirements for
+   incorporating new bus technologies into the DAT framework.
 
 2.  Conventions and Definitions
 
@@ -173,7 +179,7 @@ Table of Contents
      }
    }
 
-   device-name = text .regexp "(legacy-pcie|spdm):.+"
+   device-name = text
 
    $device-claims-set /= spdm-claims
    $device-claims-set /= cxl-claims
@@ -515,7 +521,7 @@ Table of Contents
    the PCI bus id, "02" the device on the bus and "0" the device
    function.
 
-4.  Profile
+4.  DAT EAT Profile
 
 4.1.  Encoding
 
@@ -603,7 +609,44 @@ Table of Contents
 
                       Table 1: DAT Profile Synopsis
 
-5.  Collated CDDL
+5.  Extending the DAT Framework
+
+   An extension to the DAT framework that introduces support for a new
+   bus technology MUST provide the following information in a public
+   document (e.g., an Internet-Draft):
+
+   *  A precise definition of the new claims-set,
+
+   *  A naming convention for the submod map entry,
+
+   *  The registration of any new claims with IANA.
+
+5.1.  Claims-set Definition
+
+   The new claims-set MUST be specified clearly and unambiguously,
+   ideally using CDDL, with a separate prose description of each claim.
+   The claims-set MUST include a suitable eat_profile value.
+
+   See Section 3.1 for the blueprint.
+
+5.2.  Naming Conventions for the submod Key
+
+   A new claims-set MUST define a suitable naming convention for the
+   submod keys associated with it.  When creating this convention,
+   ensure that it does not clash with any existing ones.
+
+   See Section 3.1.6 for the blueprint.
+
+5.3.  Claims Registrations
+
+   A new claims-set can reuse any number of already registered claims.
+   If the claims-set needs to define new claims to express the desired
+   semantics, and if these claims have generally applicable semantics,
+   they SHOULD be registered with IANA.
+
+   See Section 8.1 for the blueprint.
+
+6.  Collated CDDL
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
@@ -612,7 +655,7 @@ Table of Contents
      &(eat_nonce: 10) => bytes .size 64,
      &(eat_submods: 266) => {+ device-name => $device-claims-set},
    }
-   device-name = text .regexp "(legacy-pcie|spdm):.+"
+   device-name = text
    $device-claims-set /= spdm-claims / cxl-claims / chi-claims / pcie-\
                                                            legacy-claims
    spdm-claims = {
@@ -753,18 +796,18 @@ Table of Contents
      bit3: 3,
    )
 
-6.  Security Considerations
+7.  Security Considerations
 
    TODO Security
 
-7.  IANA Considerations
+8.  IANA Considerations
 
-7.1.  New CWT Claims Registrations
+8.1.  New CWT Claims Registrations
 
    IANA is requested to register the following claims in the "CBOR Web
    Token (CWT) Claims" registry [IANA.cwt].
 
-7.1.1.   SPDM Measurements Claim
+8.1.1.   SPDM Measurements Claim
 
    *  Claim Name: spdm-measurements
 
@@ -780,7 +823,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.1 of RFCthis
 
-7.1.2.   SPDM Certificates Claim
+8.1.2.   SPDM Certificates Claim
 
    *  Claim Name: spdm-certificates
 
@@ -796,7 +839,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.3 of RFCthis
 
-7.1.3.   SPDM VCA Claim
+8.1.3.   SPDM VCA Claim
 
    *  Claim Name: spdm-vca
 
@@ -812,7 +855,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.5 of RFCthis
 
-7.1.4.   PCIe Legacy Device Text Claim
+8.1.4.   PCIe Legacy Device Text Claim
 
    *  Claim Name: pcie-legacy-device-text
 
@@ -828,7 +871,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.2 of RFCthis
 
-7.1.5.   PCIe Legacy Device Binary Claim
+8.1.5.   PCIe Legacy Device Binary Claim
 
    *  Claim Name: pcie-legacy-device-binary
 
@@ -844,7 +887,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.2 of RFCthis
 
-7.1.6.   SPDM Challenge Claim
+8.1.6.   SPDM Challenge Claim
 
    *  Claim Name: spdm-challenge
 
@@ -860,7 +903,7 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.2 of RFCthis
 
-7.1.7.   TDISP Device Interface Report
+8.1.7.   TDISP Device Interface Report
 
    *  Claim Name: tdisp-device-interface-report
 
@@ -876,9 +919,9 @@ Table of Contents
 
    *  Specification Document(s): Section 3.1.4 of RFCthis
 
-8.  References
+9.  References
 
-8.1.  Normative References
+9.1.  Normative References
 
    [I-D.ietf-rats-epoch-markers]
               Birkholz, H., Fossati, T., Pan, W., Mihalcea, I., and C.
@@ -956,7 +999,7 @@ Table of Contents
               DOI 10.17487/RFC8949, December 2020,
               <https://www.rfc-editor.org/rfc/rfc8949>.
 
-8.2.  Informative References
+9.2.  Informative References
 
    [SPDM]     DMTF, "Security Protocol and Data Model (SPDM)
               Specification Version: 1.3.2", 21 August 2024,
