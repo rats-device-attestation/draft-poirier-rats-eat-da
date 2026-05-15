@@ -84,9 +84,9 @@ For the TVM to trust the device, the device must provide the TVM with attestatio
 This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
 The format is designed to be generic, extensible and architecture-agnostic.
 Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}, but other bus architectures and protocols are expected to be supported as the technology gains wider adoption.
-As such, this document focuses on the formalization of an Evidence format for SPDM-compliant devices while leaving room for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
+As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices while leaving room for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
 This list is by no means exhaustive and is expected to expand.
-
+{{extend}} outlines the requirements for incorporating new bus technologies into the DAT framework.
 
 # Conventions and Definitions
 
@@ -108,7 +108,7 @@ Careful condideration was also given to the overall design in order to leave roo
 {::include-fold cddl/da-token.cddl}
 ~~~
 
-## SPDM Claims
+## SPDM Claims {#spdm-claims}
 
 A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
 Each instance consists of a measurements section, a certificates section, or both.
@@ -208,7 +208,7 @@ The namespace used for legacy PCIe submodules is "legacy-pcie".
 The name is any arbitrary string chosen by the implementation.
 For example, "legacy-pcie:0000:01:02.0" where "0000" is the domain, "01" the PCI bus id, "02" the device on the bus and "0" the device function.
 
-# Profile {#profile}
+# DAT EAT Profile {#profile}
 
 ## Encoding
 
@@ -258,6 +258,35 @@ For use in DAT, the epoch ID must be encodable as an opaque binary string of bet
 | Claims | Those defined in {{dat-claims}}. As per general EAT rules, the receiver MUST NOT error out on claims it does not understand. |
 {: #tbl-profile title="DAT Profile Synopsis"}
 
+# Extending the DAT Framework {#extend}
+
+An extension to the DAT framework that introduces support for a new bus technology MUST provide the following information in a public document (e.g., an Internet-Draft):
+
+* A precise definition of the new claims-set,
+* A naming convention for the `submod` map entry,
+* The registration of any new claims with IANA.
+
+## Claims-set Definition
+
+The new claims-set MUST be specified clearly and unambiguously, ideally using CDDL, with a separate prose description of each claim.
+The claims-set MUST include a suitable `eat_profile` value.
+
+See {{spdm-claims}} for the blueprint.
+
+## Naming Conventions for the `submod` Key
+
+A new claims-set MUST define a suitable naming convention for the `submod` keys associated with it.
+When creating this convention, ensure that it does not clash with any existing ones.
+
+See {{spdm-submod-name}} for the blueprint.
+
+## Claims Registrations
+
+A new claims-set can reuse any number of already registered claims.
+If the claims-set needs to define new claims to express the desired semantics, and if these claims have generally applicable semantics, they SHOULD be registered with IANA.
+
+See {{iana-claims-regs}} for the blueprint.
+
 # Collated CDDL
 
 ~~~ cddl
@@ -270,7 +299,7 @@ TODO Security
 
 # IANA Considerations
 
-## New CWT Claims Registrations
+## New CWT Claims Registrations {#iana-claims-regs}
 
 IANA is requested to register the following claims in the "CBOR Web Token (CWT) Claims" registry {{IANA.cwt}}.
 

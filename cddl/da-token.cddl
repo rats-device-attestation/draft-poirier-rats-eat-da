@@ -6,7 +6,7 @@ dat = {
   }
 }
 
-device-name = text .regexp "(legacy-pcie|spdm):.+"
+device-name = text
 
 $device-claims-set /= spdm-claims
 $device-claims-set /= cxl-claims
