@@ -283,7 +283,7 @@ See {{spdm-submod-name}} for the blueprint.
 ## Claims Registrations
 
 A new claims-set can reuse any number of already registered claims.
-If the claims-set needs to define new claims to express the desired semantics, and if these claims have genererally applicable semantics, they SHOULD be registered with IANA.
+If the claims-set needs to define new claims to express the desired semantics, and if these claims have generally applicable semantics, they SHOULD be registered with IANA.
 
 See {{iana-claims-regs}} for the blueprint.
 
