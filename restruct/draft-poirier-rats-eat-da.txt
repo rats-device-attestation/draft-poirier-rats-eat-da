@@ -5,7 +5,7 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                T. Fossati
 Intended status: Informational                                    Linaro
-Expires: 15 November 2026                                    14 May 2026
+Expires: 16 November 2026                                    15 May 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 November 2026.
+   This Internet-Draft will expire on 16 November 2026.
 
 Copyright Notice
 
@@ -641,7 +641,7 @@ Table of Contents
 
    A new claims-set can reuse any number of already registered claims.
    If the claims-set needs to define new claims to express the desired
-   semantics, and if these claims have genererally applicable semantics,
+   semantics, and if these claims have generally applicable semantics,
    they SHOULD be registered with IANA.
 
    See Section 8.1 for the blueprint.
