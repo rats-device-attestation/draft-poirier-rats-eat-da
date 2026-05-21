@@ -29,6 +29,10 @@ author:
     organization: Linaro
     email: mathieu.poirier@linaro.org
  -
+    fullname: Henk Birkholz
+    organization: Fraunhofer SIT
+    email: henk.birkholz@ietf.contact
+ -
     fullname: Thomas Fossati
     organization: Linaro
     email: thomas.fossati@linaro.org
