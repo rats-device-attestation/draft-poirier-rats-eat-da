@@ -169,7 +169,9 @@ The certificates MUST be concatenated with no intermediate padding.
 
 ### TDISP Device Interface Report {#interface-report}
 
-A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
+A TDISP Device Interface Report can only be obtained if the device interface has transitioned to the CONFIG_LOCK or RUN state of the TDISP state machine.
+
+It begins with various bitfields indicating the state and characteristics of the PCIe device interface.
 Next are 3 register fields pertaining to MSI-X (Message Signalled Interrupts), LNR (Lightweight Notification Requester) and TPH (TLP Processing Hints) capabilities.
 MMIO ranges are assigned from PCIe BAR(s) and provide information about the memory areas a device is working with.
 More information on the MMIO range bitfields and the ones defined as part of the device interface field (above) can be found in the TDISP section of the PCI Express specification.
