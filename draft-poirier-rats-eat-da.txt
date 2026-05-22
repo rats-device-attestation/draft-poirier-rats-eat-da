@@ -3,9 +3,12 @@
 
 
 Remote ATtestation ProcedureS                                 M. Poirier
-Internet-Draft                                                T. Fossati
-Intended status: Informational                                    Linaro
-Expires: 16 November 2026                                    15 May 2026
+Internet-Draft                                                    Linaro
+Intended status: Informational                               H. Birkholz
+Expires: 23 November 2026                                 Fraunhofer SIT
+                                                              T. Fossati
+                                                                  Linaro
+                                                             22 May 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -58,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 November 2026.
+   This Internet-Draft will expire on 23 November 2026.
 
 Copyright Notice
 
@@ -926,9 +929,9 @@ Table of Contents
    [I-D.ietf-rats-epoch-markers]
               Birkholz, H., Fossati, T., Pan, W., Mihalcea, I., and C.
               Bormann, "Epoch Markers", Work in Progress, Internet-
-              Draft, draft-ietf-rats-epoch-markers-03, 2 March 2026,
+              Draft, draft-ietf-rats-epoch-markers-04, 18 May 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-rats-
-              epoch-markers-03>.
+              epoch-markers-04>.
 
    [I-D.ietf-rats-msg-wrap]
               Birkholz, H., Smith, N., Fossati, T., Tschofenig, H., and
@@ -1067,6 +1070,11 @@ Authors' Addresses
    Mathieu Poirier
    Linaro
    Email: mathieu.poirier@linaro.org
+
+
+   Henk Birkholz
+   Fraunhofer SIT
+   Email: henk.birkholz@ietf.contact
 
 
    Thomas Fossati
