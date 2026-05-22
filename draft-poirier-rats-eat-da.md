@@ -87,8 +87,12 @@ For the TVM to trust the device, the device must provide the TVM with attestatio
 
 This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
 The format is designed to be generic, extensible and architecture-agnostic.
-Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}, but other bus architectures and protocols are expected to be supported as the technology gains wider adoption.
-As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices while leaving room for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
+Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}.
+As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices.
+This format is based on the information provided by the SPDM protocol without imposing additional security constraints.
+It is incumbent upon other entities to describe, select and enforce those additional security constraints based on operational requirements.
+
+Since other bus architectures and protocols are expected to be supported as the technology gains wider adoption, provisions have been made for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
 This list is by no means exhaustive and is expected to expand.
 {{extend}} outlines the requirements for incorporating new bus technologies into the DAT framework.
 Lastly, live migration of a TVM from one host to another is currently not addressed by the SPDM specification and therefore not covered herein.
