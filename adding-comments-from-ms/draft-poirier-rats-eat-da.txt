@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                    Linaro
 Intended status: Informational                               H. Birkholz
-Expires: 23 November 2026                                 Fraunhofer SIT
+Expires: 26 November 2026                                 Fraunhofer SIT
                                                               T. Fossati
                                                                   Linaro
-                                                             22 May 2026
+                                                             25 May 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 November 2026.
+   This Internet-Draft will expire on 26 November 2026.
 
 Copyright Notice
 
@@ -1073,9 +1073,9 @@ Appendix A.  Examples
 
 Acknowledgments
 
-   Thank you Basma El Gaabouri, Henk Birkholz, James Bottomley, Lukas
-   Wunner, Simon Frost and Yousuf Sait for your comments and
-   suggestions.
+   Thank you Basma El Gaabouri, James Bottomley, Jon Lange, Lukas
+   Wunner, Roksana Golizadeh Mojarad, Simon Frost and Yousuf Sait for
+   your comments and suggestions.
 
 Authors' Addresses
 
