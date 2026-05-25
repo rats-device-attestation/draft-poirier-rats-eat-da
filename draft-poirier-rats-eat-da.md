@@ -392,6 +392,82 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 {::include-fold cddl/examples/1.diag}
 ~~~
 
+# Example Composite Device
+
+{{fig-ratsd}} shows an example of the composite device described in {{Section 3.3 of -rats-arch}} within a confidential computing environment.
+In this setup, a Trusted Virtual Machine (TVM) executes on a Confidential Platform, which provides the confidential computing environment.
+One or more devices (e.g., a GPU) are assigned to the TVM.
+
+Within the TVM, a Lead Attester agent, e.g., a userland daemon, can collect Evidence from the Confidential Platform, as well as from all the assigned devices, using the relevant ABI offered by the guest OS kernel.
+
+~~~ aasvg
+      .---------------.
+     | Verifier / RP   |
+      '------------+--'
+                   |
+  .----------------|-------------------------------.
+ |                 |                                |
+ |                 |           .-----------------.  |
+ |                 |         .-+---------------. |  |
+ |  .--------------|----.  .-+---------------. | |  |
+ |  |  Trusted VM  |    |  | Assigned Device | | |  |
+ |  |              |    |  |                 | | |  |
+ |  | .------------+--. |  |                 | | |  |
+ |  | | Lead          | |  |                 | | |  |
+ |  | | Attester      | |  |                 | | |  |
+ |  | '---+-------+---' |  |                 | | |  |
+ |  |     |       |     |  | .-------------. | | |  |
+ |  | .---+-------+---. |  | | Device      | | | |  |
+ |  | | Guest Kernel  | |  | | Attester    | | | |  |
+ |  | '---+-------+---' |  | '---+---------' | +-'  |
+ |  |     |       |     |  |     |           +-'    |
+ |  '-----|-------|-----'  '-----|-----------'      |
+ |        |       |              |                  |
+ |  .-----|-------|-----.  .-----|-----------.      |
+ |  |     |       |     |  |     |           |      |
+ |  |     |        '------------'            |      |
+ |  | .---+-----------. |  |                 |      |
+ |  | | Platform      | |  |                 |      |
+ |  | | Attester      | |  |                 |      |
+ |  | '---------------' |  |                 |      |
+ |  |                   |  |                 |      |
+ |  |  Confidential     |  | Untrusted       |      |
+ |  |  Platform         |  | Platform        |      |
+ |  '-------------------'  '-----------------'      |
+ |                                                  |
+  '------------------------------------------------'
+~~~
+{: #fig-ratsd title="Confidential VM with Trusted Device(s)" align="center" }
+
+When a challenger (i.e., a Verifier or a Relying Party) requests Evidence from the TVM, the Lead Attester broadcasts the received nonce to all the sub-Attesters, obtains Evidence from each of them and assembles the composite Evidence using a CMW Collection (Section 3.3 of {{-cmw}}).
+It then signs the composite Evidence using its key material as shown in {{fig-ratsd-token}}.
+
+The claims obtained by the assigned devices are repackaged into DAT submods, which are then signed as part of the CMW collection using the Lead Attester key.
+
+~~~ aasvg
+                signed-cbor-cmw
+               .---------------------.
+               |  .---------------.  |
+         .------->| Lead Attester |  |
+         |     |  | Evidence      |  |
+         |     |  '---------------'  |
+         |     |                     |
+         |     |  .---------------.  |
+ nonce --+------->| Platform      |  |
+         |     |  | Evidence      |  |  .----------------------------.
+         |     |  '---------------'  |  | eat_profile                |
+         |     |                     |  | eat_nonce                  |
+         |     |  .---------------.  |  | submod: {                  |
+         '------->| DAT           +- - -+   "spdm:A": { ... }        |
+               |  '---------------'  |  |   "legacy-pcie:B": { ... } |
+               '---------------------'  |   "spdm:C": { ... }        |
+                                        | }                          |
+                                        '----------------------------'
+~~~
+{: #fig-ratsd-token title="Composite Attestation Evidence" align="center" }
+
+The Veraison project's `ratsd` daemon is an example of this behaviour.
+
 # Acknowledgments
 {:numbered="false"}
 
