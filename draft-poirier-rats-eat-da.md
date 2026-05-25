@@ -407,7 +407,7 @@ Within the TVM, a Lead Attester agent, e.g., a userland daemon, can collect Evid
                    |
   .----------------|-------------------------------.
  |                 |                                |
- |                 |           .-----------------.  |
+ |   Attester      |           .-----------------.  |
  |                 |         .-+---------------. |  |
  |  .--------------|----.  .-+---------------. | |  |
  |  |  Trusted VM  |    |  | Assigned Device | | |  |
@@ -457,7 +457,7 @@ The claims obtained by the assigned devices are repackaged into DAT submods, whi
          |     |  | Evidence      |  |  .----------------------------.
          |     |  '---------------'  |  | eat_profile                |
          |     |                     |  | eat_nonce                  |
-         |     |  .---------------.  |  | submod: {                  |
+         |     |  .---------------.  |  | submod {                   |
          '------->| DAT           +- - -+   "spdm:A": { ... }        |
                |  '---------------'  |  |   "legacy-pcie:B": { ... } |
                '---------------------'  |   "spdm:C": { ... }        |
