@@ -87,10 +87,15 @@ For the TVM to trust the device, the device must provide the TVM with attestatio
 
 This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
 The format is designed to be generic, extensible and architecture-agnostic.
-Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}, but other bus architectures and protocols are expected to be supported as the technology gains wider adoption.
-As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices while leaving room for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
+Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}.
+As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices.
+This format is based on the information provided by the SPDM protocol without imposing additional security constraints.
+It is incumbent upon other entities to describe, select and enforce those additional security constraints based on operational requirements.
+
+Since other bus architectures and protocols are expected to be supported as the technology gains wider adoption, provisions have been made for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
 This list is by no means exhaustive and is expected to expand.
 {{extend}} outlines the requirements for incorporating new bus technologies into the DAT framework.
+Lastly, live migration of a TVM from one host to another is currently not addressed by the SPDM specification and therefore not covered herein.
 
 # Conventions and Definitions
 
@@ -168,7 +173,9 @@ The certificates MUST be concatenated with no intermediate padding.
 
 ### TDISP Device Interface Report {#interface-report}
 
-A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
+A TDISP Device Interface Report can only be obtained if the device interface has transitioned to the CONFIG_LOCK or RUN state of the TDISP state machine.
+
+It begins with various bitfields indicating the state and characteristics of the PCIe device interface.
 Next are 3 register fields pertaining to MSI-X (Message Signalled Interrupts), LNR (Lightweight Notification Requester) and TPH (TLP Processing Hints) capabilities.
 MMIO ranges are assigned from PCIe BAR(s) and provide information about the memory areas a device is working with.
 More information on the MMIO range bitfields and the ones defined as part of the device interface field (above) can be found in the TDISP section of the PCI Express specification.
@@ -390,9 +397,10 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 
 Thank you
 Basma El Gaabouri,
-Henk Birkholz,
 James Bottomley,
+Jon Lange,
 Lukas Wunner,
+Roksana Golizadeh Mojarad,
 Simon Frost
 and
 Yousuf Sait
