@@ -114,6 +114,7 @@ Table of Contents
      9.1.  Normative References
      9.2.  Informative References
    Appendix A.  Examples
+   Appendix B.  Example Composite Device
    Acknowledgments
    Authors' Addresses
 
@@ -1070,6 +1071,92 @@ Appendix A.  Examples
        }
      }
    }
+
+Appendix B.  Example Composite Device
+
+   Figure 1 shows an example of the composite device described in
+   Section 3.3 of [RFC9334] within a confidential computing environment.
+   In this setup, a Trusted Virtual Machine (TVM) executes on a
+   Confidential Platform, which provides the confidential computing
+   environment.  One or more devices (e.g., a GPU) are assigned to the
+   TVM.
+
+   Within the TVM, a Lead Attester agent, e.g., a userland daemon, can
+   collect Evidence from the Confidential Platform, as well as from all
+   the assigned devices, using the relevant ABI offered by the guest OS
+   kernel.
+
+         .---------------.
+        | Verifier / RP   |
+         '------------+--'
+                      |
+     .----------------|-------------------------------.
+    |                 |                                |
+    |   Attester      |           .-----------------.  |
+    |                 |         .-+---------------. |  |
+    |  .--------------|----.  .-+---------------. | |  |
+    |  |  Trusted VM  |    |  | Assigned Device | | |  |
+    |  |              |    |  |                 | | |  |
+    |  | .------------+--. |  |                 | | |  |
+    |  | | Lead          | |  |                 | | |  |
+    |  | | Attester      | |  |                 | | |  |
+    |  | '---+-------+---' |  |                 | | |  |
+    |  |     |       |     |  | .-------------. | | |  |
+    |  | .---+-------+---. |  | | Device      | | | |  |
+    |  | | Guest Kernel  | |  | | Attester    | | | |  |
+    |  | '---+-------+---' |  | '---+---------' | +-'  |
+    |  |     |       |     |  |     |           +-'    |
+    |  '-----|-------|-----'  '-----|-----------'      |
+    |        |       |              |                  |
+    |  .-----|-------|-----.  .-----|-----------.      |
+    |  |     |       |     |  |     |           |      |
+    |  |     |        '------------'            |      |
+    |  | .---+-----------. |  |                 |      |
+    |  | | Platform      | |  |                 |      |
+    |  | | Attester      | |  |                 |      |
+    |  | '---------------' |  |                 |      |
+    |  |                   |  |                 |      |
+    |  |  Confidential     |  | Untrusted       |      |
+    |  |  Platform         |  | Platform        |      |
+    |  '-------------------'  '-----------------'      |
+    |                                                  |
+     '------------------------------------------------'
+
+              Figure 1: Confidential VM with Trusted Device(s)
+
+   When a challenger (i.e., a Verifier or a Relying Party) requests
+   Evidence from the TVM, the Lead Attester broadcasts the received
+   nonce to all the sub-Attesters, obtains Evidence from each of them
+   and assembles the composite Evidence using a CMW Collection
+   (Section 3.3 of [I-D.ietf-rats-msg-wrap]).  It then signs the
+   composite Evidence using its key material as shown in Figure 2.
+
+   The claims obtained by the assigned devices are repackaged into DAT
+   submods, which are then signed as part of the CMW collection using
+   the Lead Attester key.
+
+                  signed-cbor-cmw
+                 .---------------------.
+                 |  .---------------.  |
+           .------->| Lead Attester |  |
+           |     |  | Evidence      |  |
+           |     |  '---------------'  |
+           |     |                     |
+           |     |  .---------------.  |
+   nonce --+------->| Platform      |  |
+           |     |  | Evidence      |  |  .----------------------------.
+           |     |  '---------------'  |  | eat_profile                |
+           |     |                     |  | eat_nonce                  |
+           |     |  .---------------.  |  | submod {                   |
+           '------->| DAT           +- - -+   "spdm:A": { ... }        |
+                 |  '---------------'  |  |   "legacy-pcie:B": { ... } |
+                 '---------------------'  |   "spdm:C": { ... }        |
+                                          | }                          |
+                                          '----------------------------'
+
+                 Figure 2: Composite Attestation Evidence
+
+   The Veraison project's ratsd daemon is an example of this behaviour.
 
 Acknowledgments
 

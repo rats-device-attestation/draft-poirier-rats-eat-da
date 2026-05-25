@@ -1289,10 +1289,13 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
             <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-example-composite-device" class="internal xref">Example Composite Device</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -2428,12 +2431,207 @@ f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
 </div>
 </section>
 </div>
-<div id="acknowledgments">
+<div id="example-composite-device">
 <section id="appendix-B">
+      <h2 id="name-example-composite-device">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-example-composite-device" class="section-name selfRef">Example Composite Device</a>
+      </h2>
+<p id="appendix-B-1"><a href="#fig-ratsd" class="auto internal xref">Figure 1</a> shows an example of the composite device described in <span><a href="https://rfc-editor.org/rfc/rfc9334#section-3.3" class="relref">Section 3.3</a> of [<a href="#RFC9334" class="cite xref">RFC9334</a>]</span> within a confidential computing environment.
+In this setup, a Trusted Virtual Machine (TVM) executes on a Confidential Platform, which provides the confidential computing environment.
+One or more devices (e.g., a GPU) are assigned to the TVM.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">Within the TVM, a Lead Attester agent, e.g., a userland daemon, can collect Evidence from the Confidential Platform, as well as from all the assigned devices, using the relevant ABI offered by the guest OS kernel.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<span id="name-confidential-vm-with-truste"></span><div id="fig-ratsd">
+<figure id="figure-1">
+        <div id="appendix-B-3.1">
+          <div class="alignCenter art-svg artwork" id="appendix-B-3.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="608" width="424" viewBox="0 0 424 608" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,112 L 8,560" fill="none" stroke="black"></path>
+              <path d="M 32,160 L 32,352" fill="none" stroke="black"></path>
+              <path d="M 32,384 L 32,544" fill="none" stroke="black"></path>
+              <path d="M 48,208 L 48,256" fill="none" stroke="black"></path>
+              <path d="M 48,288 L 48,320" fill="none" stroke="black"></path>
+              <path d="M 48,432 L 48,480" fill="none" stroke="black"></path>
+              <path d="M 80,256 L 80,288" fill="none" stroke="black"></path>
+              <path d="M 80,320 L 80,432" fill="none" stroke="black"></path>
+              <path d="M 144,256 L 144,288" fill="none" stroke="black"></path>
+              <path d="M 144,320 L 144,400" fill="none" stroke="black"></path>
+              <path d="M 152,64 L 152,208" fill="none" stroke="black"></path>
+              <path d="M 176,208 L 176,256" fill="none" stroke="black"></path>
+              <path d="M 176,288 L 176,320" fill="none" stroke="black"></path>
+              <path d="M 176,432 L 176,480" fill="none" stroke="black"></path>
+              <path d="M 192,160 L 192,352" fill="none" stroke="black"></path>
+              <path d="M 192,384 L 192,408" fill="none" stroke="black"></path>
+              <path d="M 192,424 L 192,544" fill="none" stroke="black"></path>
+              <path d="M 216,160 L 216,352" fill="none" stroke="black"></path>
+              <path d="M 216,384 L 216,408" fill="none" stroke="black"></path>
+              <path d="M 216,424 L 216,544" fill="none" stroke="black"></path>
+              <path d="M 232,144 L 232,160" fill="none" stroke="black"></path>
+              <path d="M 232,272 L 232,320" fill="none" stroke="black"></path>
+              <path d="M 248,128 L 248,144" fill="none" stroke="black"></path>
+              <path d="M 264,320 L 264,400" fill="none" stroke="black"></path>
+              <path d="M 344,272 L 344,320" fill="none" stroke="black"></path>
+              <path d="M 360,160 L 360,352" fill="none" stroke="black"></path>
+              <path d="M 360,384 L 360,544" fill="none" stroke="black"></path>
+              <path d="M 376,144 L 376,336" fill="none" stroke="black"></path>
+              <path d="M 392,128 L 392,320" fill="none" stroke="black"></path>
+              <path d="M 416,112 L 416,560" fill="none" stroke="black"></path>
+              <path d="M 56,32 L 168,32" fill="none" stroke="black"></path>
+              <path d="M 56,64 L 168,64" fill="none" stroke="black"></path>
+              <path d="M 24,96 L 144,96" fill="none" stroke="black"></path>
+              <path d="M 160,96 L 400,96" fill="none" stroke="black"></path>
+              <path d="M 248,128 L 392,128" fill="none" stroke="black"></path>
+              <path d="M 232,144 L 376,144" fill="none" stroke="black"></path>
+              <path d="M 32,160 L 144,160" fill="none" stroke="black"></path>
+              <path d="M 160,160 L 192,160" fill="none" stroke="black"></path>
+              <path d="M 216,160 L 360,160" fill="none" stroke="black"></path>
+              <path d="M 48,208 L 176,208" fill="none" stroke="black"></path>
+              <path d="M 48,256 L 176,256" fill="none" stroke="black"></path>
+              <path d="M 232,272 L 344,272" fill="none" stroke="black"></path>
+              <path d="M 48,288 L 176,288" fill="none" stroke="black"></path>
+              <path d="M 48,320 L 176,320" fill="none" stroke="black"></path>
+              <path d="M 232,320 L 344,320" fill="none" stroke="black"></path>
+              <path d="M 376,320 L 392,320" fill="none" stroke="black"></path>
+              <path d="M 360,336 L 376,336" fill="none" stroke="black"></path>
+              <path d="M 32,352 L 72,352" fill="none" stroke="black"></path>
+              <path d="M 88,352 L 136,352" fill="none" stroke="black"></path>
+              <path d="M 152,352 L 192,352" fill="none" stroke="black"></path>
+              <path d="M 216,352 L 256,352" fill="none" stroke="black"></path>
+              <path d="M 272,352 L 360,352" fill="none" stroke="black"></path>
+              <path d="M 32,384 L 72,384" fill="none" stroke="black"></path>
+              <path d="M 88,384 L 136,384" fill="none" stroke="black"></path>
+              <path d="M 152,384 L 192,384" fill="none" stroke="black"></path>
+              <path d="M 216,384 L 256,384" fill="none" stroke="black"></path>
+              <path d="M 272,384 L 360,384" fill="none" stroke="black"></path>
+              <path d="M 160,416 L 248,416" fill="none" stroke="black"></path>
+              <path d="M 48,432 L 176,432" fill="none" stroke="black"></path>
+              <path d="M 48,480 L 176,480" fill="none" stroke="black"></path>
+              <path d="M 32,544 L 192,544" fill="none" stroke="black"></path>
+              <path d="M 216,544 L 360,544" fill="none" stroke="black"></path>
+              <path d="M 24,576 L 400,576" fill="none" stroke="black"></path>
+              <path d="M 56,32 C 47.16936,32 40,39.16936 40,48" fill="none" stroke="black"></path>
+              <path d="M 168,32 C 176.83064,32 184,39.16936 184,48" fill="none" stroke="black"></path>
+              <path d="M 56,64 C 47.16936,64 40,56.83064 40,48" fill="none" stroke="black"></path>
+              <path d="M 168,64 C 176.83064,64 184,56.83064 184,48" fill="none" stroke="black"></path>
+              <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+              <path d="M 400,96 C 408.83064,96 416,103.16936 416,112" fill="none" stroke="black"></path>
+              <path d="M 160,416 C 151.16936,416 144,408.83064 144,400" fill="none" stroke="black"></path>
+              <path d="M 248,416 C 256.83064,416 264,408.83064 264,400" fill="none" stroke="black"></path>
+              <path d="M 24,576 C 15.16936,576 8,568.83064 8,560" fill="none" stroke="black"></path>
+              <path d="M 400,576 C 408.83064,576 416,568.83064 416,560" fill="none" stroke="black"></path>
+              <g class="text">
+                <text x="84" y="52">Verifier</text>
+                <text x="128" y="52">/</text>
+                <text x="148" y="52">RP</text>
+                <text x="68" y="132">Attester</text>
+                <text x="80" y="180">Trusted</text>
+                <text x="124" y="180">VM</text>
+                <text x="260" y="180">Assigned</text>
+                <text x="324" y="180">Device</text>
+                <text x="76" y="228">Lead</text>
+                <text x="92" y="244">Attester</text>
+                <text x="268" y="292">Device</text>
+                <text x="80" y="308">Guest</text>
+                <text x="132" y="308">Kernel</text>
+                <text x="276" y="308">Attester</text>
+                <text x="92" y="452">Platform</text>
+                <text x="92" y="468">Attester</text>
+                <text x="100" y="516">Confidential</text>
+                <text x="264" y="516">Untrusted</text>
+                <text x="84" y="532">Platform</text>
+                <text x="260" y="532">Platform</text>
+              </g>
+            </svg><a href="#appendix-B-3.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-confidential-vm-with-truste" class="selfRef">Confidential VM with Trusted Device(s)</a>
+        </figcaption></figure>
+</div>
+<p id="appendix-B-4">When a challenger (i.e., a Verifier or a Relying Party) requests Evidence from the TVM, the Lead Attester broadcasts the received nonce to all the sub-Attesters, obtains Evidence from each of them and assembles the composite Evidence using a CMW Collection (Section 3.3 of <span>[<a href="#I-D.ietf-rats-msg-wrap" class="cite xref">I-D.ietf-rats-msg-wrap</a>]</span>).
+It then signs the composite Evidence using its key material as shown in <a href="#fig-ratsd-token" class="auto internal xref">Figure 2</a>.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
+<p id="appendix-B-5">The claims obtained by the assigned devices are repackaged into DAT submods, which are then signed as part of the CMW collection using the Lead Attester key.<a href="#appendix-B-5" class="pilcrow">¶</a></p>
+<span id="name-composite-attestation-evide"></span><div id="fig-ratsd-token">
+<figure id="figure-2">
+        <div id="appendix-B-6.1">
+          <div class="alignCenter art-svg artwork" id="appendix-B-6.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="336" width="560" viewBox="0 0 560 336" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 72,80 L 72,240" fill="none" stroke="black"></path>
+              <path d="M 120,48 L 120,72" fill="none" stroke="black"></path>
+              <path d="M 120,88 L 120,152" fill="none" stroke="black"></path>
+              <path d="M 120,168 L 120,232" fill="none" stroke="black"></path>
+              <path d="M 120,248 L 120,272" fill="none" stroke="black"></path>
+              <path d="M 144,64 L 144,112" fill="none" stroke="black"></path>
+              <path d="M 144,144 L 144,192" fill="none" stroke="black"></path>
+              <path d="M 144,224 L 144,256" fill="none" stroke="black"></path>
+              <path d="M 272,64 L 272,112" fill="none" stroke="black"></path>
+              <path d="M 272,144 L 272,192" fill="none" stroke="black"></path>
+              <path d="M 272,224 L 272,256" fill="none" stroke="black"></path>
+              <path d="M 296,48 L 296,232" fill="none" stroke="black"></path>
+              <path d="M 296,248 L 296,272" fill="none" stroke="black"></path>
+              <path d="M 320,176 L 320,304" fill="none" stroke="black"></path>
+              <path d="M 552,176 L 552,304" fill="none" stroke="black"></path>
+              <path d="M 120,48 L 296,48" fill="none" stroke="black"></path>
+              <path d="M 144,64 L 272,64" fill="none" stroke="black"></path>
+              <path d="M 72,80 L 136,80" fill="none" stroke="black"></path>
+              <path d="M 144,112 L 272,112" fill="none" stroke="black"></path>
+              <path d="M 144,144 L 272,144" fill="none" stroke="black"></path>
+              <path d="M 56,160 L 136,160" fill="none" stroke="black"></path>
+              <path d="M 320,176 L 552,176" fill="none" stroke="black"></path>
+              <path d="M 144,192 L 272,192" fill="none" stroke="black"></path>
+              <path d="M 144,224 L 272,224" fill="none" stroke="black"></path>
+              <path d="M 72,240 L 136,240" fill="none" stroke="black"></path>
+              <path d="M 144,256 L 272,256" fill="none" stroke="black"></path>
+              <path d="M 120,272 L 296,272" fill="none" stroke="black"></path>
+              <path d="M 320,304 L 552,304" fill="none" stroke="black"></path>
+              <polygon class="arrowhead" points="144,240 132,234.4 132,245.6" fill="black" transform="rotate(0,136,240)"></polygon>
+              <polygon class="arrowhead" points="144,160 132,154.4 132,165.6" fill="black" transform="rotate(0,136,160)"></polygon>
+              <polygon class="arrowhead" points="144,80 132,74.4 132,85.6" fill="black" transform="rotate(0,136,80)"></polygon>
+              <g class="text">
+                <text x="184" y="36">signed-cbor-cmw</text>
+                <text x="172" y="84">Lead</text>
+                <text x="228" y="84">Attester</text>
+                <text x="188" y="100">Evidence</text>
+                <text x="24" y="164">nonce</text>
+                <text x="188" y="164">Platform</text>
+                <text x="188" y="180">Evidence</text>
+                <text x="376" y="196">eat_profile</text>
+                <text x="368" y="212">eat_nonce</text>
+                <text x="356" y="228">submod</text>
+                <text x="392" y="228">{</text>
+                <text x="168" y="244">DAT</text>
+                <text x="280" y="244">-</text>
+                <text x="296" y="244">-</text>
+                <text x="312" y="244">-</text>
+                <text x="384" y="244">"spdm:A":</text>
+                <text x="432" y="244">{</text>
+                <text x="456" y="244">...</text>
+                <text x="480" y="244">}</text>
+                <text x="412" y="260">"legacy-pcie:B":</text>
+                <text x="488" y="260">{</text>
+                <text x="512" y="260">...</text>
+                <text x="536" y="260">}</text>
+                <text x="384" y="276">"spdm:C":</text>
+                <text x="432" y="276">{</text>
+                <text x="456" y="276">...</text>
+                <text x="480" y="276">}</text>
+                <text x="336" y="292">}</text>
+              </g>
+            </svg><a href="#appendix-B-6.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-composite-attestation-evide" class="selfRef">Composite Attestation Evidence</a>
+        </figcaption></figure>
+</div>
+<p id="appendix-B-7">The Veraison project's <code>ratsd</code> daemon is an example of this behaviour.<a href="#appendix-B-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="appendix-C">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-B-1">Thank you
+<p id="appendix-C-1">Thank you
 Basma El Gaabouri,
 James Bottomley,
 Jon Lange,
@@ -2442,11 +2640,11 @@ Roksana Golizadeh Mojarad,
 Simon Frost
 and
 Yousuf Sait
-for your comments and suggestions.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+for your comments and suggestions.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-C">
+<section id="appendix-D">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
