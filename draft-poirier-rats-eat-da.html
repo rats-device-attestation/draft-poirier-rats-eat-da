@@ -1056,7 +1056,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Poirier, et al.</td>
-<td class="center">Expires 23 November 2026</td>
+<td class="center">Expires 26 November 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-poirier-rats-eat-da-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-05-22" class="published">22 May 2026</time>
+<time datetime="2026-05-25" class="published">25 May 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-11-23">23 November 2026</time></dd>
+<dd class="expires"><time datetime="2026-11-26">26 November 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1135,7 +1135,7 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 23 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 26 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1311,10 +1311,14 @@ From a trust perspective, DA allows a device to be included in the TVM's Trusted
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This document defines an attestation Evidence format for DA as an EAT <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> profile.
 The format is designed to be generic, extensible and architecture-agnostic.
-Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>, but other bus architectures and protocols are expected to be supported as the technology gains wider adoption.
-As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices while leaving room for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
+Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>.
+As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices.
+This format is based on the information provided by the SPDM protocol without imposing additional security constraints.
+It is incumbent upon other entities to describe, select and enforce those additional security constraints based on operational requirements.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">Since other bus architectures and protocols are expected to be supported as the technology gains wider adoption, provisions have been made for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
 This list is by no means exhaustive and is expected to expand.
-<a href="#extend" class="auto internal xref">Section 5</a> outlines the requirements for incorporating new bus technologies into the DAT framework.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<a href="#extend" class="auto internal xref">Section 5</a> outlines the requirements for incorporating new bus technologies into the DAT framework.
+Lastly, live migration of a TVM from one host to another is currently not addressed by the SPDM specification and therefore not covered herein.<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1574,12 +1578,13 @@ aux-cert-slot-7 = 7
           <h4 id="name-tdisp-device-interface-repo">
 <a href="#section-3.1.4" class="section-number selfRef">3.1.4. </a><a href="#name-tdisp-device-interface-repo" class="section-name selfRef">TDISP Device Interface Report</a>
           </h4>
-<p id="section-3.1.4-1">A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
+<p id="section-3.1.4-1">A TDISP Device Interface Report can only be obtained if the device interface has transitioned to the CONFIG_LOCK or RUN state of the TDISP state machine.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.4-2">It begins with various bitfields indicating the state and characteristics of the PCIe device interface.
 Next are 3 register fields pertaining to MSI-X (Message Signalled Interrupts), LNR (Lightweight Notification Requester) and TPH (TLP Processing Hints) capabilities.
 MMIO ranges are assigned from PCIe BAR(s) and provide information about the memory areas a device is working with.
 More information on the MMIO range bitfields and the ones defined as part of the device interface field (above) can be found in the TDISP section of the PCI Express specification.
-The last field is device-specific and optionally included to convey additional configuration information about the device.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.4-2">
+The last field is device-specific and optionally included to convey additional configuration information about the device.<a href="#section-3.1.4-2" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.4-3">
 <pre>
 tdisp-device-interface-report = {
   ? &amp;(interface-info: 1) =&gt; interface-info-bits
@@ -1620,7 +1625,7 @@ range-attributes-flags = &amp;(bit0: 0,
                            bit2: 2,
                            bit3: 3,
                           )
-</pre><a href="#section-3.1.4-2" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.4-3" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2430,9 +2435,10 @@ f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
       </h2>
 <p id="appendix-B-1">Thank you
 Basma El Gaabouri,
-Henk Birkholz,
 James Bottomley,
+Jon Lange,
 Lukas Wunner,
+Roksana Golizadeh Mojarad,
 Simon Frost
 and
 Yousuf Sait
