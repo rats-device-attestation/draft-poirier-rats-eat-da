@@ -320,7 +320,7 @@ It can also enable tracking of a given workload across multiple TVM instances in
 
 A DAT is usually one component of a composite evidence payload.
 In such cases, multiple Verifiers may be involved in the appraisal process.
-The differential encryption considerations discussed in {{Section 9.1 (Multiple DAT Consumers) of -rats-eat}} therefore apply.
+The differential encryption considerations discussed in {{Section 9.4 (Multiple EAT Consumers) of -rats-eat}} therefore apply.
 
 # IANA Considerations
 
