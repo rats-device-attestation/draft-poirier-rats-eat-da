@@ -306,7 +306,21 @@ See {{iana-claims-regs}} for the blueprint.
 
 # Security Considerations
 
-TODO Security
+As this specification reuses the EAT specification {{-rats-eat}}, it also reuses the CWT specification {{-cwt}}.
+The security and privacy considerations of these specifications therefore apply here too.
+In particular, the considerations discussed in {{Sections 9.1 (Claim Trustworthiness), 9.4 (Multiple EAT Consumers) and 9.5 (Detached EAT Bundle Digest Security Considerations) of -rats-eat}} apply fully.
+
+When DAT is an UCCS, the considerations in {{-uccs}} also apply.
+
+# Privacy Considerations
+
+A DAT can include a great deal of detail about the execution environment associated with the TVM and, therefore, the workload being executed within it.
+This can provide insight into the type of computation being carried out by the workload.
+It can also enable tracking of a given workload across multiple TVM instances in both the temporal and spatial dimensions.
+
+A DAT is usually one component of a composite evidence payload.
+In such cases, multiple Verifiers may be involved in the appraisal process.
+The differential encryption considerations discussed in {{Section 9.1 (Multiple DAT Consumers) of -rats-eat}} therefore apply.
 
 # IANA Considerations
 
