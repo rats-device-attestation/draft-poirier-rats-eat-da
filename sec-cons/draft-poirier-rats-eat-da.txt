@@ -836,7 +836,7 @@ Table of Contents
    A DAT is usually one component of a composite evidence payload.  In
    such cases, multiple Verifiers may be involved in the appraisal
    process.  The differential encryption considerations discussed in
-   Section 9.1 (Multiple DAT Consumers) of [RFC9711] therefore apply.
+   Section 9.4 (Multiple EAT Consumers) of [RFC9711] therefore apply.
 
 9.  IANA Considerations
 
