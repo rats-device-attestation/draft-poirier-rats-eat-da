@@ -1,4 +1,0 @@
-chi-claims = {
-  &(eat_profile: 265) => "tag:linaro.org,2025:device-chi#1.0.0"
-  ; TODO
-}
