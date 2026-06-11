@@ -89,6 +89,12 @@ This document defines an attestation Evidence format for DA as an EAT {{-rats-ea
 The format is designed to be generic, extensible and architecture-agnostic.
 Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}.
 As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices.
+
+The TVM uses the platform, i.e., PCIe DOE, to transport SPDM packets, but the SPDM protocol uses its own mechanism and messages to guarantee the authenticity and privacy of the information it carries.
+It defines specific messages for creating and exchanging cryptographic keys between requester and responder for the establishment of secure communication.
+The cryptographic algorithms are selected based on the pre-negotiated capabilities of both parties.
+The SPDM protocol does not rely on the hypervisor or host for anything else other than the physical delivery of content between the trusted and non-trusted worlds.
+
 This format is based on the information provided by the SPDM protocol without imposing additional security constraints.
 It is incumbent upon other entities to describe, select and enforce those additional security constraints based on operational requirements.
 
@@ -132,7 +138,8 @@ Optionally, the Negotiated State preamble (version, capabilities and algorithms)
 
 ### Measurements Claim {#spdm-measurements}
 
-There can be up to 239 measurements per device with the entire measurement log optionally signed by the certificate populated in one of the 8 certificate slots.
+The SPDM specification reserves measurement indexes between 240 and 255, leaving space for 239 measurements per device.
+The entire measurement log is optionally signed by the certificate populated in one of the 8 certificate slots.
 It should be noted that measurements formalized herein follow the DMTF measurement specification.
 
 ~~~ cddl
@@ -174,8 +181,10 @@ The certificates MUST be concatenated with no intermediate padding.
 ### TDISP Device Interface Report {#interface-report}
 
 A TDISP Device Interface Report can only be obtained if the device interface has transitioned to the CONFIG_LOCK or RUN state of the TDISP state machine.
+Once in either of those states, the device's firmware ensures that modifications to the interface can't be made by an untrusted party.
+Trust in the device firmware's implemenation is imparted by its measurement and the signature it generates, both verifiable by a 3rd party entity.
 
-It begins with various bitfields indicating the state and characteristics of the PCIe device interface.
+A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
 Next are 3 register fields pertaining to MSI-X (Message Signalled Interrupts), LNR (Lightweight Notification Requester) and TPH (TLP Processing Hints) capabilities.
 MMIO ranges are assigned from PCIe BAR(s) and provide information about the memory areas a device is working with.
 More information on the MMIO range bitfields and the ones defined as part of the device interface field (above) can be found in the TDISP section of the PCI Express specification.
