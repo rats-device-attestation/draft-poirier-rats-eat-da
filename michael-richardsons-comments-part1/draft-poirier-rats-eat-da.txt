@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                    Linaro
 Intended status: Informational                               H. Birkholz
-Expires: 13 December 2026                                 Fraunhofer SIT
+Expires: 17 December 2026                                 Fraunhofer SIT
                                                               T. Fossati
                                                                   Linaro
-                                                            11 June 2026
+                                                            15 June 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 December 2026.
+   This Internet-Draft will expire on 17 December 2026.
 
 Copyright Notice
 
@@ -144,7 +144,7 @@ Table of Contents
    formalizing an Evidence format for SPDM-compliant devices.
 
    The TVM uses the platform, i.e., PCIe DOE, to transport SPDM packets,
-   but the SPDM protocol uses its own mechanism and messages to
+   but the SPDM protocol uses its own mechanisms and messages to
    guarantee the authenticity and privacy of the information it carries.
    It defines specific messages for creating and exchanging
    cryptographic keys between requester and responder for the
