@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                    Linaro
 Intended status: Informational                               H. Birkholz
-Expires: 29 November 2026                                 Fraunhofer SIT
+Expires: 17 December 2026                                 Fraunhofer SIT
                                                               T. Fossati
                                                                   Linaro
-                                                             28 May 2026
+                                                            15 June 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 November 2026.
+   This Internet-Draft will expire on 17 December 2026.
 
 Copyright Notice
 
@@ -141,8 +141,20 @@ Table of Contents
    and architecture-agnostic.  Ongoing work on DA concentrates on PCIe
    devices that support the SPDM protocol [SPDM].  As such, this
    document focuses on establishing the overall framework and
-   formalizing an Evidence format for SPDM-compliant devices.  This
-   format is based on the information provided by the SPDM protocol
+   formalizing an Evidence format for SPDM-compliant devices.
+
+   The TVM uses the platform, i.e., PCIe DOE, to transport SPDM packets,
+   but the SPDM protocol uses its own mechanisms and messages to
+   guarantee the authenticity and privacy of the information it carries.
+   It defines specific messages for creating and exchanging
+   cryptographic keys between requester and responder to establish
+   secure communication.  The cryptographic algorithms are selected
+   based on the pre-negotiated capabilities of both parties.  The SPDM
+   protocol does not rely on the hypervisor or host for anything else
+   other than the physical delivery of content between the trusted and
+   non-trusted worlds.
+
+   This format is based on the information provided by the SPDM protocol
    without imposing additional security constraints.  It is incumbent
    upon other entities to describe, select and enforce those additional
    security constraints based on operational requirements.
@@ -240,9 +252,10 @@ Table of Contents
 
 3.1.1.  Measurements Claim
 
-   There can be up to 239 measurements per device with the entire
-   measurement log optionally signed by the certificate populated in one
-   of the 8 certificate slots.  It should be noted that measurements
+   The SPDM specification reserves measurement indexes between 240 and
+   255, leaving space for 239 measurements per device.  The entire
+   measurement log is optionally signed by the certificate populated in
+   one of the 8 certificate slots.  It should be noted that measurements
    formalized herein follow the DMTF measurement specification.
 
    spdm-measurements = {
@@ -398,19 +411,23 @@ Table of Contents
 
    A TDISP Device Interface Report can only be obtained if the device
    interface has transitioned to the CONFIG_LOCK or RUN state of the
-   TDISP state machine.
+   TDISP state machine.  Once in either of these states, the device's
+   firmware ensures that modifications to the interface can't be made by
+   an untrusted party.  Trust in the device firmware's implemenation is
+   imparted by its measurement and the signature it generates, both
+   verifiable by a 3rd party entity.
 
-   It begins with various bitfields indicating the state and
-   characteristics of the PCIe device interface.  Next are 3 register
-   fields pertaining to MSI-X (Message Signalled Interrupts), LNR
-   (Lightweight Notification Requester) and TPH (TLP Processing Hints)
-   capabilities.  MMIO ranges are assigned from PCIe BAR(s) and provide
-   information about the memory areas a device is working with.  More
-   information on the MMIO range bitfields and the ones defined as part
-   of the device interface field (above) can be found in the TDISP
-   section of the PCI Express specification.  The last field is device-
-   specific and optionally included to convey additional configuration
-   information about the device.
+   A TDISP Device Interface Report begins with various bitfields
+   indicating the state and characteristics of the PCIe device
+   interface.  Next are 3 register fields pertaining to MSI-X (Message
+   Signalled Interrupts), LNR (Lightweight Notification Requester) and
+   TPH (TLP Processing Hints) capabilities.  MMIO ranges are assigned
+   from PCIe BAR(s) and provide information about the memory areas a
+   device is working with.  More information on the MMIO range bitfields
+   and the ones defined as part of the device interface field (above)
+   can be found in the TDISP section of the PCI Express specification.
+   The last field is device-specific and optionally included to convey
+   additional configuration information about the device.
 
    tdisp-device-interface-report = {
      ? &(interface-info: 1) => interface-info-bits
