@@ -1586,7 +1586,7 @@ aux-cert-slot-7 = 7
 <a href="#section-3.1.4" class="section-number selfRef">3.1.4. </a><a href="#name-tdisp-device-interface-repo" class="section-name selfRef">TDISP Device Interface Report</a>
           </h4>
 <p id="section-3.1.4-1">A TDISP Device Interface Report can only be obtained if the device interface has transitioned to the CONFIG_LOCK or RUN state of the TDISP state machine.
-Once in either of those states, the device's firmware ensures that modifications to the interface can't be made by an untrusted party.
+Once in either of these states, the device's firmware ensures that modifications to the interface can't be made by an untrusted party.
 Trust in the device firmware's implemenation is imparted by its measurement and the signature it generates, both verifiable by a 3rd party entity.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.1.4-2">A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
 Next are 3 register fields pertaining to MSI-X (Message Signalled Interrupts), LNR (Lightweight Notification Requester) and TPH (TLP Processing Hints) capabilities.
