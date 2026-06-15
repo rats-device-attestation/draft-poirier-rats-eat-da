@@ -181,7 +181,7 @@ The certificates MUST be concatenated with no intermediate padding.
 ### TDISP Device Interface Report {#interface-report}
 
 A TDISP Device Interface Report can only be obtained if the device interface has transitioned to the CONFIG_LOCK or RUN state of the TDISP state machine.
-Once in either of those states, the device's firmware ensures that modifications to the interface can't be made by an untrusted party.
+Once in either of these states, the device's firmware ensures that modifications to the interface can't be made by an untrusted party.
 Trust in the device firmware's implemenation is imparted by its measurement and the signature it generates, both verifiable by a 3rd party entity.
 
 A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
