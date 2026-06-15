@@ -90,7 +90,7 @@ The format is designed to be generic, extensible and architecture-agnostic.
 Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}.
 As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices.
 
-The TVM uses the platform, i.e., PCIe DOE, to transport SPDM packets, but the SPDM protocol uses its own mechanism and messages to guarantee the authenticity and privacy of the information it carries.
+The TVM uses the platform, i.e., PCIe DOE, to transport SPDM packets, but the SPDM protocol uses its own mechanisms and messages to guarantee the authenticity and privacy of the information it carries.
 It defines specific messages for creating and exchanging cryptographic keys between requester and responder for the establishment of secure communication.
 The cryptographic algorithms are selected based on the pre-negotiated capabilities of both parties.
 The SPDM protocol does not rely on the hypervisor or host for anything else other than the physical delivery of content between the trusted and non-trusted worlds.
