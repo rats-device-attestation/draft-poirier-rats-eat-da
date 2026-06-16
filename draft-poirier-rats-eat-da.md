@@ -117,7 +117,7 @@ The syntax of the device name depends on the type of bus or protocol used.
 Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
 See {{spdm-submod-name}} for SPDM devices, and {{pcie-legacy-submod-name}} for legacy PCIe devices.
 As previously mentioned, this draft currently defines the claims set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
-Careful condideration was also given to the overall design in order to leave room for future expansion.
+Careful consideration was also given to the overall design in order to leave room for future expansion.
 
 ~~~ cddl
 {::include-fold cddl/da-token.cddl}
