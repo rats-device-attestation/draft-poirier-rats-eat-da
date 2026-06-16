@@ -62,6 +62,12 @@ informative:
     - org: DMTF
     title: "Security Protocol and Data Model (SPDM) Specification Version: 1.3.2"
     date: 2024-08-21
+  PCIe:
+    -: pcie
+    author:
+    - org: PCI-SIG
+    title: "PCI Express Base Specification Revision 7.0"
+    date: 2025-06-05
 
 entity:
   SELF: "RFCthis"
@@ -90,7 +96,7 @@ The format is designed to be generic, extensible and architecture-agnostic.
 Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}.
 As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices.
 
-The TVM uses the platform, i.e., PCIe DOE, to transport SPDM packets, but the SPDM protocol uses its own mechanisms and messages to guarantee the authenticity and privacy of the information it carries.
+The TVM uses the platform, i.e., PCIe Data Object Exchange (DOE), to transport SPDM packets, but the SPDM protocol uses its own mechanisms and messages to guarantee the authenticity and privacy of the information it carries.
 It defines specific messages for creating and exchanging cryptographic keys between requester and responder to establish secure communication.
 The cryptographic algorithms are selected based on the pre-negotiated capabilities of both parties.
 The SPDM protocol does not rely on the hypervisor or host for anything else other than the physical delivery of content between the trusted and non-trusted worlds.
@@ -100,7 +106,7 @@ It is incumbent upon other entities to describe, select and enforce those additi
 
 Since other bus architectures and protocols are expected to be supported as the technology gains wider adoption, provisions have been made for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
 This list is by no means exhaustive and is expected to expand.
-{{extend}} outlines the requirements for incorporating new bus technologies into the DAT framework.
+{{extend}} outlines the requirements for incorporating new bus technologies into the Device Assignment (DAT) framework.
 Lastly, live migration of a TVM from one host to another is currently not addressed by the SPDM specification and therefore not covered herein.
 
 # Conventions and Definitions
@@ -116,7 +122,7 @@ Each individual device claim is the combination of a device name and a standard 
 The syntax of the device name depends on the type of bus or protocol used.
 Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
 See {{spdm-submod-name}} for SPDM devices, and {{pcie-legacy-submod-name}} for legacy PCIe devices.
-As previously mentioned, this draft currently defines the claims set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
+As previously mentioned, this draft currently defines the claims-set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
 Careful consideration was also given to the overall design in order to leave room for future expansion.
 
 ~~~ cddl
@@ -127,7 +133,7 @@ Careful consideration was also given to the overall design in order to leave roo
 
 A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
 Each instance consists of a measurements section, a certificates section, or both.
-These can be supplemented with two additional sections: (1) a challenge for Component Mesaurement and Authentication (CMA) scenarios and (2) a device interface report that contains information from the TEE Device Information Security Protocol (TDISP) Device Interface Report.
+These can be supplemented with two additional sections: (1) a challenge for Component Mesaurement and Authentication (CMA) scenarios and (2) a device interface report that contains information from the TEE Device Information Security Protocol (TDISP) Device Interface Report (see Chapter 11 of {{-pcie}}).
 A challenge needs certificate information from the certificate section and as such, can only be present if certificates are included in the SPDM artifacts.
 TDISP messages are embedded in the VENDOR_DEFINED_REQUEST and VENDOR_DEFINED_RESPONSE messages of the SPDM protocol.
 Optionally, the Negotiated State preamble (version, capabilities and algorithms) bytes can be included to present the full negotiated state between the SPDM requester and responder.
@@ -140,7 +146,7 @@ Optionally, the Negotiated State preamble (version, capabilities and algorithms)
 
 The SPDM specification reserves measurement indexes between 240 and 255, leaving space for 239 measurements per device.
 The entire measurement log is optionally signed by the certificate populated in one of the 8 certificate slots.
-It should be noted that measurements formalized herein follow the DMTF measurement specification.
+It should be noted that measurements formalized herein follow the DMTF measurement specification (see Table 55 of {{-spdm}}).
 
 ~~~ cddl
 {::include-fold cddl/spdm-measurements.cddl}
@@ -193,6 +199,8 @@ MMIO ranges are assigned from PCIe BAR(s) and provide information about the memo
 More information on the MMIO range bitfields and the ones defined as part of the device interface field (above) can be found in the TDISP section of the PCI Express specification.
 The last field is device-specific and optionally included to convey additional configuration information about the device.
 
+The `tdisp-device-interface-report` map MUST NOT be empty.
+
 ~~~ cddl
 {::include-fold cddl/tdisp-device-interface-report.cddl}
 ~~~
@@ -214,8 +222,9 @@ For example: "spdm:C=CA,O=ACME,OU=Widget,CN=0123456789".
 
 ## PCIe Legacy Device Claims {#pcie-legacy-device}
 
-The definition of a device claims set for PCIe legacy devices that do not implement the extensions needed to attest for their provenance and configuration is provided, making it is possible to keep using current assets as secures ones are being provisioned.
-This legacy device claims set simply mirrors the type 0/1 common registers of the PCIe configuration space, mandating only that the vendor and device identification code be provided.
+A definition is provided for a device claims-set for PCIe legacy devices that do not implement the necessary extensions to attest to their provenance and configuration.
+This makes it possible to keep using current assets as secured ones are being provisioned.
+This legacy device claims-set simply mirrors the type 0/1 common registers of the PCIe configuration space, mandating only that the vendor and device identification code be provided.
 Other fields of the configuration space header may optionally be included should they add value.
 A binary format of the PCIe configuration space is made available for processing by existing PCIe configuration space tools.
 Implementers may optionally choose to include both text and binary versions should there be a use case to support this representation.
