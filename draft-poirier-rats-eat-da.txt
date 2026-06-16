@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                    Linaro
 Intended status: Informational                               H. Birkholz
-Expires: 17 December 2026                                 Fraunhofer SIT
+Expires: 18 December 2026                                 Fraunhofer SIT
                                                               T. Fossati
                                                                   Linaro
-                                                            15 June 2026
+                                                            16 June 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 December 2026.
+   This Internet-Draft will expire on 18 December 2026.
 
 Copyright Notice
 
@@ -193,7 +193,7 @@ Table of Contents
    for SPDM devices, and Section 3.2.1 for legacy PCIe devices.  As
    previously mentioned, this draft currently defines the claims set for
    SPDM compliant devices and PCIe legacy devices that do not support
-   the SPDM protocol.  Careful condideration was also given to the
+   the SPDM protocol.  Careful consideration was also given to the
    overall design in order to leave room for future expansion.
 
    dat = {
@@ -380,7 +380,13 @@ Table of Contents
    or the Alias certificate model.  Regardless of the certificate model
    used, a certificate chain comprises one or more DER-encoded X.509 v3
    certificates [RFC5280].  The certificates MUST be concatenated with
-   no intermediate padding.
+   no intermediate padding.  As described in paragraph 355 of
+   Section 10.6.1 of [SPDM], the certificates in the chain are sorted in
+   descending order, with the end-entity certificate (also known as the
+   "leaf") appearing last.  According to the same paragraph, a trust
+   anchor may appear as the first certificate in the chain.  If so, it
+   should not be used to validate the chain without first confirming its
+   presence in a trust anchor store.
 
    spdm-certificates = {
      default-cert-slot => cert-chain
