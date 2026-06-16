@@ -117,7 +117,7 @@ The syntax of the device name depends on the type of bus or protocol used.
 Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
 See {{spdm-submod-name}} for SPDM devices, and {{pcie-legacy-submod-name}} for legacy PCIe devices.
 As previously mentioned, this draft currently defines the claims set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
-Careful condideration was also given to the overall design in order to leave room for future expansion.
+Careful consideration was also given to the overall design in order to leave room for future expansion.
 
 ~~~ cddl
 {::include-fold cddl/da-token.cddl}
@@ -173,6 +173,9 @@ According to the specification, SPDM compliant devices should support at most 8 
 Slot 0 SHALL contain a certificate chain that follows the Device certificate model or the Alias certificate model.
 Regardless of the certificate model used, a certificate chain comprises one or more DER-encoded X.509 v3 certificates {{-pkix}}.
 The certificates MUST be concatenated with no intermediate padding.
+As described in paragraph 355 of Section 10.6.1 of {{-spdm}}, the certificates in the chain are sorted in descending order, with the end-entity certificate (also known as the "leaf") appearing last.
+According to the same paragraph, a trust anchor may appear as the first certificate in the chain.
+If so, it should not be used to validate the chain without first confirming its presence in a trust anchor store.
 
 ~~~ cddl
 {::include-fold cddl/spdm-certificates.cddl}
