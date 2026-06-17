@@ -91,6 +91,49 @@ This includes, for example, protection of device MMIO interfaces and device cach
 From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
 
+{{fig-ratsd}} described in {{Section 3.3 of -rats-arch}} gives an overview of the architecture targeted by this specification.
+Devices assigned to a TVM must be authenticated by a 3rd party verifier before being accepted into the TCB.
+
+~~~ aasvg
+      .---------------.
+     | Verifier / RP   |
+      '---------------'
+              ^
+  .-----------+------------------------------------.
+ |            |                                     |
+ |  Attester  |                .-----------------.  |
+ |            |              .-+---------------. |  |
+ |  .---------+---------.  .-+---------------. | |  |
+ |  | TVM     |         |  | Assigned Device | | |  |
+ |  |         v         |  |                 | | |  |
+ |  | .---------------. |  |                 | | |  |
+ |  | | Lead Attester | |  |                 | | |  |
+ |  | '---------------' |  |                 | | |  |
+ |  |     ^       ^     |  |                 | | |  |
+ |  |     |       |     |  |                 | | |  |
+ |  |     v       v     |  | .-------------. | | |  |
+ |  | .---+-------+---. |  | | Device      | | | |  |
+ |  | | Guest Kernel  | |  | | Attester    | | | |  |
+ |  | '---------------' |  | '-------------' | +-'  |
+ |  |     ^       ^     |  |     ^           +-'    |
+ |  '-----|-------|-----'  '-----|-----------'      |
+ |        |       |              |                  |
+ |  .-----|-------|-----.  .-----|---------------.  |
+ |  |     |       |     |  | .---|-------------. |  |
+ |  |     v        '---------+--'  Host Kernel | |  |
+ |  | .---------------. |  | '-----------------' |  |
+ |  | | Platform      | |  |                     |  |
+ |  | | Attester      | |  |                     |  |
+ |  | '---------------' |  |                     |  |
+ |  |                   |  |                     |  |
+ |  | Confidential      |  | Untrusted           |  |
+ |  | Platform          |  | Platform            |  |
+ |  '-------------------'  '---------------------'  |
+ |                                                  |
+  '------------------------------------------------'
+~~~
+{: #fig-ratsd title="Confidential VM with Trusted Device(s)" align="center" }
+
 This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
 The format is designed to be generic, extensible and architecture-agnostic.
 Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}.
@@ -435,46 +478,6 @@ In this setup, a Trusted Virtual Machine (TVM) executes on a Confidential Platfo
 One or more devices (e.g., a GPU) are assigned to the TVM.
 
 Within the TVM, a Lead Attester agent, e.g., a userland daemon, can collect Evidence from the Confidential Platform, as well as from all the assigned devices, using the relevant ABI offered by the guest OS kernel.
-
-~~~ aasvg
-      .---------------.
-     | Verifier / RP   |
-      '---------------'
-              ^
-  .-----------+------------------------------------.
- |            |                                     |
- |  Attester  |                .-----------------.  |
- |            |              .-+---------------. |  |
- |  .---------+---------.  .-+---------------. | |  |
- |  | TVM     |         |  | Assigned Device | | |  |
- |  |         v         |  |                 | | |  |
- |  | .---------------. |  |                 | | |  |
- |  | | Lead Attester | |  |                 | | |  |
- |  | '---------------' |  |                 | | |  |
- |  |     ^       ^     |  |                 | | |  |
- |  |     |       |     |  |                 | | |  |
- |  |     v       v     |  | .-------------. | | |  |
- |  | .---+-------+---. |  | | Device      | | | |  |
- |  | | Guest Kernel  | |  | | Attester    | | | |  |
- |  | '---------------' |  | '-------------' | +-'  |
- |  |     ^       ^     |  |     ^           +-'    |
- |  '-----|-------|-----'  '-----|-----------'      |
- |        |       |              |                  |
- |  .-----|-------|-----.  .-----|---------------.  |
- |  |     |       |     |  | .---|-------------. |  |
- |  |     v        '---------+--'  Host Kernel | |  |
- |  | .---------------. |  | '-----------------' |  |
- |  | | Platform      | |  |                     |  |
- |  | | Attester      | |  |                     |  |
- |  | '---------------' |  |                     |  |
- |  |                   |  |                     |  |
- |  | Confidential      |  | Untrusted           |  |
- |  | Platform          |  | Platform            |  |
- |  '-------------------'  '---------------------'  |
- |                                                  |
-  '------------------------------------------------'
-~~~
-{: #fig-ratsd title="Confidential VM with Trusted Device(s)" align="center" }
 
 When a challenger (i.e., a Verifier or a Relying Party) requests Evidence from the TVM, the Lead Attester broadcasts the received nonce to all the sub-Attesters, obtains Evidence from each of them and assembles the composite Evidence using a CMW Collection (Section 3.3 of {{-cmw}}).
 It then signs the composite Evidence using its key material as shown in {{fig-ratsd-token}}.
