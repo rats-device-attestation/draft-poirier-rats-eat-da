@@ -1,11 +1,11 @@
-tdisp-device-interface-report = {
+tdisp-device-interface-report = non-empty<{
   ? &(interface-info: 1) => interface-info-bits
   ? &(msi-x-message-control: 2) => bytes .size 2
   ? &(lnr-control: 2) => bytes .size 2
   ? &(tph-control: 3) => bytes .size 4
   ? &(mmio-ranges: 4) => mmio-ranges
   ? &(device-specific-info: 5) => bytes
-}
+}>
 
 interface-info-bits = bytes .bits interface-info-flags
 interface-info-flags = &(bit0: 0,
