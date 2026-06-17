@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                    Linaro
 Intended status: Informational                               H. Birkholz
-Expires: 18 December 2026                                 Fraunhofer SIT
+Expires: 19 December 2026                                 Fraunhofer SIT
                                                               T. Fossati
                                                                   Linaro
-                                                            16 June 2026
+                                                            17 June 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 December 2026.
+   This Internet-Draft will expire on 19 December 2026.
 
 Copyright Notice
 
@@ -143,16 +143,16 @@ Table of Contents
    document focuses on establishing the overall framework and
    formalizing an Evidence format for SPDM-compliant devices.
 
-   The TVM uses the platform, i.e., PCIe DOE, to transport SPDM packets,
-   but the SPDM protocol uses its own mechanisms and messages to
-   guarantee the authenticity and privacy of the information it carries.
-   It defines specific messages for creating and exchanging
-   cryptographic keys between requester and responder to establish
-   secure communication.  The cryptographic algorithms are selected
-   based on the pre-negotiated capabilities of both parties.  The SPDM
-   protocol does not rely on the hypervisor or host for anything else
-   other than the physical delivery of content between the trusted and
-   non-trusted worlds.
+   The TVM uses the platform, i.e., PCIe Data Object Exchange (DOE), to
+   transport SPDM packets, but the SPDM protocol uses its own mechanisms
+   and messages to guarantee the authenticity and privacy of the
+   information it carries.  It defines specific messages for creating
+   and exchanging cryptographic keys between requester and responder to
+   establish secure communication.  The cryptographic algorithms are
+   selected based on the pre-negotiated capabilities of both parties.
+   The SPDM protocol does not rely on the hypervisor or host for
+   anything else other than the physical delivery of content between the
+   trusted and non-trusted worlds.
 
    This format is based on the information provided by the SPDM protocol
    without imposing additional security constraints.  It is incumbent
@@ -165,9 +165,9 @@ Table of Contents
    Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
    This list is by no means exhaustive and is expected to expand.
    Section 5 outlines the requirements for incorporating new bus
-   technologies into the DAT framework.  Lastly, live migration of a TVM
-   from one host to another is currently not addressed by the SPDM
-   specification and therefore not covered herein.
+   technologies into the Device Assignment (DAT) framework.  Lastly,
+   live migration of a TVM from one host to another is currently not
+   addressed by the SPDM specification and therefore not covered herein.
 
 2.  Conventions and Definitions
 
