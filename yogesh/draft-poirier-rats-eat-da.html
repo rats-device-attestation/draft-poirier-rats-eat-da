@@ -1353,7 +1353,7 @@ The syntax of the device name depends on the type of bus or protocol used.
 Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
 See <a href="#spdm-submod-name" class="auto internal xref">Section 3.1.6</a> for SPDM devices, and <a href="#pcie-legacy-submod-name" class="auto internal xref">Section 3.2.1</a> for legacy PCIe devices.
 As previously mentioned, this draft currently defines the claims-set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
-Careful condideration was also given to the overall design in order to leave room for future expansion.<a href="#section-3-1" class="pilcrow">¶</a></p>
+Careful consideration was also given to the overall design in order to leave room for future expansion.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3-2">
 <pre>
 dat = {
@@ -1549,7 +1549,10 @@ spdm-signature = {
 <p id="section-3.1.3-1">According to the specification, SPDM compliant devices should support at most 8 slots, with slot 0 populated by default.
 Slot 0 <span class="bcp14">SHALL</span> contain a certificate chain that follows the Device certificate model or the Alias certificate model.
 Regardless of the certificate model used, a certificate chain comprises one or more DER-encoded X.509 v3 certificates <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.
-The certificates <span class="bcp14">MUST</span> be concatenated with no intermediate padding.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+The certificates <span class="bcp14">MUST</span> be concatenated with no intermediate padding.
+As described in paragraph 355 of Section 10.6.1 of <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>, the certificates in the chain are sorted in descending order, with the end-entity certificate (also known as the "leaf") appearing last.
+According to the same paragraph, a trust anchor may appear as the first certificate in the chain.
+If so, it should not be used to validate the chain without first confirming its presence in a trust anchor store.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.3-2">
 <pre>
 spdm-certificates = {
