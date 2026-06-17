@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                    Linaro
 Intended status: Informational                               H. Birkholz
-Expires: 18 December 2026                                 Fraunhofer SIT
+Expires: 19 December 2026                                 Fraunhofer SIT
                                                               T. Fossati
                                                                   Linaro
-                                                            16 June 2026
+                                                            17 June 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 December 2026.
+   This Internet-Draft will expire on 19 December 2026.
 
 Copyright Notice
 
@@ -143,16 +143,16 @@ Table of Contents
    document focuses on establishing the overall framework and
    formalizing an Evidence format for SPDM-compliant devices.
 
-   The TVM uses the platform, i.e., PCIe DOE, to transport SPDM packets,
-   but the SPDM protocol uses its own mechanisms and messages to
-   guarantee the authenticity and privacy of the information it carries.
-   It defines specific messages for creating and exchanging
-   cryptographic keys between requester and responder to establish
-   secure communication.  The cryptographic algorithms are selected
-   based on the pre-negotiated capabilities of both parties.  The SPDM
-   protocol does not rely on the hypervisor or host for anything else
-   other than the physical delivery of content between the trusted and
-   non-trusted worlds.
+   The TVM uses the platform, i.e., PCIe Data Object Exchange (DOE), to
+   transport SPDM packets, but the SPDM protocol uses its own mechanisms
+   and messages to guarantee the authenticity and privacy of the
+   information it carries.  It defines specific messages for creating
+   and exchanging cryptographic keys between requester and responder to
+   establish secure communication.  The cryptographic algorithms are
+   selected based on the pre-negotiated capabilities of both parties.
+   The SPDM protocol does not rely on the hypervisor or host for
+   anything else other than the physical delivery of content between the
+   trusted and non-trusted worlds.
 
    This format is based on the information provided by the SPDM protocol
    without imposing additional security constraints.  It is incumbent
@@ -165,9 +165,9 @@ Table of Contents
    Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
    This list is by no means exhaustive and is expected to expand.
    Section 5 outlines the requirements for incorporating new bus
-   technologies into the DAT framework.  Lastly, live migration of a TVM
-   from one host to another is currently not addressed by the SPDM
-   specification and therefore not covered herein.
+   technologies into the Device Assignment (DAT) framework.  Lastly,
+   live migration of a TVM from one host to another is currently not
+   addressed by the SPDM specification and therefore not covered herein.
 
 2.  Conventions and Definitions
 
@@ -191,7 +191,7 @@ Table of Contents
    or protocol used.  Each name consists of two parts joined by a
    semicolon: a namespace and a bus-specific name.  See Section 3.1.6
    for SPDM devices, and Section 3.2.1 for legacy PCIe devices.  As
-   previously mentioned, this draft currently defines the claims set for
+   previously mentioned, this draft currently defines the claims-set for
    SPDM compliant devices and PCIe legacy devices that do not support
    the SPDM protocol.  Careful consideration was also given to the
    overall design in order to leave room for future expansion.
@@ -217,14 +217,15 @@ Table of Contents
    supplemented with two additional sections: (1) a challenge for
    Component Mesaurement and Authentication (CMA) scenarios and (2) a
    device interface report that contains information from the TEE Device
-   Information Security Protocol (TDISP) Device Interface Report.  A
-   challenge needs certificate information from the certificate section
-   and as such, can only be present if certificates are included in the
-   SPDM artifacts.  TDISP messages are embedded in the
-   VENDOR_DEFINED_REQUEST and VENDOR_DEFINED_RESPONSE messages of the
-   SPDM protocol.  Optionally, the Negotiated State preamble (version,
-   capabilities and algorithms) bytes can be included to present the
-   full negotiated state between the SPDM requester and responder.
+   Information Security Protocol (TDISP) Device Interface Report (see
+   Chapter 11 of [PCIe]).  A challenge needs certificate information
+   from the certificate section and as such, can only be present if
+   certificates are included in the SPDM artifacts.  TDISP messages are
+   embedded in the VENDOR_DEFINED_REQUEST and VENDOR_DEFINED_RESPONSE
+   messages of the SPDM protocol.  Optionally, the Negotiated State
+   preamble (version, capabilities and algorithms) bytes can be included
+   to present the full negotiated state between the SPDM requester and
+   responder.
 
    spdm-claims = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device-spdm#1.0.0"
@@ -256,7 +257,8 @@ Table of Contents
    255, leaving space for 239 measurements per device.  The entire
    measurement log is optionally signed by the certificate populated in
    one of the 8 certificate slots.  It should be noted that measurements
-   formalized herein follow the DMTF measurement specification.
+   formalized herein follow the DMTF measurement specification (see
+   Table 55 of [SPDM]).
 
    spdm-measurements = {
      + block-id => spdm-measurement
@@ -435,14 +437,16 @@ Table of Contents
    The last field is device-specific and optionally included to convey
    additional configuration information about the device.
 
-   tdisp-device-interface-report = {
+   The tdisp-device-interface-report map MUST NOT be empty.
+
+   tdisp-device-interface-report = non-empty<{
      ? &(interface-info: 1) => interface-info-bits
      ? &(msi-x-message-control: 2) => bytes .size 2
      ? &(lnr-control: 2) => bytes .size 2
      ? &(tph-control: 3) => bytes .size 4
      ? &(mmio-ranges: 4) => mmio-ranges
      ? &(device-specific-info: 5) => bytes
-   }
+   }>
 
    interface-info-bits = bytes .bits interface-info-flags
    interface-info-flags = &(bit0: 0,
@@ -499,18 +503,18 @@ Table of Contents
 
 3.2.  PCIe Legacy Device Claims
 
-   The definition of a device claims set for PCIe legacy devices that do
-   not implement the extensions needed to attest for their provenance
-   and configuration is provided, making it is possible to keep using
-   current assets as secures ones are being provisioned.  This legacy
-   device claims set simply mirrors the type 0/1 common registers of the
-   PCIe configuration space, mandating only that the vendor and device
-   identification code be provided.  Other fields of the configuration
-   space header may optionally be included should they add value.  A
-   binary format of the PCIe configuration space is made available for
-   processing by existing PCIe configuration space tools.  Implementers
-   may optionally choose to include both text and binary versions should
-   there be a use case to support this representation.
+   A definition is provided for a device claims-set for PCIe legacy
+   devices that do not implement the necessary extensions to attest to
+   their provenance and configuration.  This makes it possible to keep
+   using current assets as secured ones are being provisioned.  This
+   legacy device claims-set simply mirrors the type 0/1 common registers
+   of the PCIe configuration space, mandating only that the vendor and
+   device identification code be provided.  Other fields of the
+   configuration space header may optionally be included should they add
+   value.  A binary format of the PCIe configuration space is made
+   available for processing by existing PCIe configuration space tools.
+   Implementers may optionally choose to include both text and binary
+   versions should there be a use case to support this representation.
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
@@ -794,14 +798,14 @@ Table of Contents
      ? &(headerType: 9) => bytes .size 1,
      ? &(BITS: 10) => bytes .size 1,
    }
-   tdisp-device-interface-report = {
-     ? &(interface-info: 1) => interface-info-bits,
-     ? &(msi-x-message-control: 2) => bytes .size 2,
-     ? &(lnr-control: 2) => bytes .size 2,
-     ? &(tph-control: 3) => bytes .size 4,
-     ? &(mmio-ranges: 4) => mmio-ranges,
-     ? &(device-specific-info: 5) => bytes,
-   }
+   tdisp-device-interface-report = non-empty<{
+       ? &(interface-info: 1) => interface-info-bits,
+       ? &(msi-x-message-control: 2) => bytes .size 2,
+       ? &(lnr-control: 2) => bytes .size 2,
+       ? &(tph-control: 3) => bytes .size 4,
+       ? &(mmio-ranges: 4) => mmio-ranges,
+       ? &(device-specific-info: 5) => bytes,
+   }>
    interface-info-bits = bytes .bits interface-info-flags
    interface-info-flags = &(
      bit0: 0,
@@ -828,6 +832,7 @@ Table of Contents
      bit2: 2,
      bit3: 3,
    )
+   non-empty<M> = M .and ({+ any => any})
 
 7.  Security Considerations
 
@@ -1054,6 +1059,9 @@ Table of Contents
               <https://www.rfc-editor.org/rfc/rfc8949>.
 
 10.2.  Informative References
+
+   [PCIe]     PCI-SIG, "PCI Express Base Specification Revision 7.0", 5
+              June 2025.
 
    [SPDM]     DMTF, "Security Protocol and Data Model (SPDM)
               Specification Version: 1.3.2", 21 August 2024,
