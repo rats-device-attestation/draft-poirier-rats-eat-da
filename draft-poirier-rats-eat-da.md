@@ -377,6 +377,11 @@ In particular, the considerations discussed in {{Sections 9.1 (Claim Trustworthi
 
 When DAT is an UCCS, the considerations in {{-uccs}} also apply.
 
+PCIe devices are assigned to a TVM by way of their physical or virtual functions.
+The hardware implementation of a device guarantees that functions are mutually exclusive, i.e operations happening on one function does not affect other functions.
+The TDISP standard also guarantees that in the CONFIG_LOCK and RUN state, the characteristics of a device function can not be modified by untrusted parties.
+Faulty hardware or deficient implementation of the TDISP specification can be leveraged by the attacker for side-channel attacks.
+
 # Privacy Considerations
 
 A DAT can include a great deal of detail about the execution environment associated with the TVM and, therefore, the workload being executed within it.
