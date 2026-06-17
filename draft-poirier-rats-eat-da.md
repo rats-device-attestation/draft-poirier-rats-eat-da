@@ -94,7 +94,8 @@ For the TVM to trust the device, the device must provide the TVM with attestatio
 This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
 The format is designed to be generic, extensible and architecture-agnostic.
 Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}.
-As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices.
+As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant PCIe devices.
+It does not support on-chip SPDM-compliant device, something that is left for future consideration.
 
 The TVM uses the platform, i.e., PCIe Data Object Exchange (DOE), to transport SPDM packets, but the SPDM protocol uses its own mechanisms and messages to guarantee the authenticity and privacy of the information it carries.
 It defines specific messages for creating and exchanging cryptographic keys between requester and responder to establish secure communication.
