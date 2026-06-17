@@ -1201,7 +1201,7 @@ Acknowledgments
 
    Thank you Basma El Gaabouri, Carl Wallace, Giri Mandyam, Ionuț
    Mihalcea, James Bottomley, Jon Lange, Lukas Wunner, Michael
-   Richardson, Ned Smith, Roksana Golizadeh Mojarad, Simon Frost Yogesh
+   Richardson, Ned Smith, Roksana Golizadeh Mojarad, Simon Frost, Yogesh
    Deshpande and Yousuf Sait for your comments and suggestions.
 
 Authors' Addresses
