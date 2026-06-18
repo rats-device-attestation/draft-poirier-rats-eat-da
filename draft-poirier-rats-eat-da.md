@@ -315,7 +315,7 @@ DAT supports the freshness models for attestation Evidence based on nonces and e
 No further assumptions are made about the specific remote attestation protocol.
 
 Note that the use of epoch IDs is subject by the type restrictions imposed by the `eat_nonce` syntax.
-For use in DAT, the epoch ID must be encodable as an opaque binary string of between 8 and 64 octets; an Epoclet can be used for this purpose (see {{-epoch-markers}}).
+For use in DAT, the epoch ID MUST be encodable as an opaque binary string of between 8 and 64 octets; an Epoclet can be used for this purpose (see {{-epoch-markers}}).
 
 ## Synopsis
 
