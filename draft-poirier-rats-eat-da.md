@@ -509,12 +509,17 @@ The Veraison project's `ratsd` daemon is an example of this behaviour.
 
 Thank you
 Basma El Gaabouri,
+Carl Wallace,
+Giri Mandyam,
+{{{Ionuț Mihalcea}},
 James Bottomley,
 Jon Lange,
 Lukas Wunner,
+Michael Richardson,
 Ned Smith,
 Roksana Golizadeh Mojarad,
-Simon Frost
+Simon Frost,
+Yogesh Deshpande
 and
 Yousuf Sait
 for your comments and suggestions.
