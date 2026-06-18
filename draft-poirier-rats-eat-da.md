@@ -162,7 +162,7 @@ Lastly, live migration of a TVM from one host to another is currently not addres
 The Device Assignment Token (DAT) is the encompassing envelope for the individual device claims to be presented.
 A DAT can be used as a standalone entity but can also be embedded in a larger, platform-specific attestation token.
 A DAT consists of an EAT profile identifier, a nonce and an EAT submodule ({{Section 4.2.18 of -rats-eat}}) that contains any number of individual device claims.
-Each individual device claim is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
+Each individual submodule is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
 The syntax of the device name depends on the type of bus or protocol used.
 Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
 See {{spdm-submod-name}} for SPDM devices, and {{pcie-legacy-submod-name}} for legacy PCIe devices.
