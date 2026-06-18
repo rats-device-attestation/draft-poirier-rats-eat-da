@@ -164,7 +164,7 @@ A DAT can be used as a standalone entity but can also be embedded in a larger, p
 A DAT consists of an EAT profile identifier, a nonce and an EAT submodule ({{Section 4.2.18 of -rats-eat}}) that contains any number of individual device claims.
 Each individual submodule is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
 The syntax of the device name depends on the type of bus or protocol used.
-Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
+Each name consists of two parts joined by a colon: a namespace and a bus-specific name.
 See {{spdm-submod-name}} for SPDM devices, and {{pcie-legacy-submod-name}} for legacy PCIe devices.
 As previously mentioned, this draft currently defines the claims-set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
 Careful consideration was also given to the overall design in order to leave room for future expansion.
