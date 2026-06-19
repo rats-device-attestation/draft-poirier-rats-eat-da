@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                    Linaro
 Intended status: Informational                               H. Birkholz
-Expires: 20 December 2026                                 Fraunhofer SIT
+Expires: 21 December 2026                                 Fraunhofer SIT
                                                               T. Fossati
                                                                   Linaro
-                                                            18 June 2026
+                                                            19 June 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 December 2026.
+   This Internet-Draft will expire on 21 December 2026.
 
 Copyright Notice
 
@@ -136,10 +136,9 @@ Table of Contents
    attestation Evidence confirming its identity and the state of its
    firmware and configuration.
 
-   Figure 1 described in Section 3.3 of [RFC9334] gives an overview of
-   the architecture targeted by this specification.  Devices assigned to
-   a TVM must be authenticated by a 3rd party verifier before being
-   accepted into the TCB.
+   Figure 1 gives an overview of the architecture targeted by this
+   specification.  Devices assigned to a TVM must be authenticated by a
+   3rd party verifier before being accepted into the TCB.
 
          .---------------.
         | Verifier / RP   |
@@ -232,15 +231,15 @@ Table of Contents
    identifier, a nonce and an EAT submodule (Section 4.2.18 of
    [RFC9711]) that contains any number of individual device claims.
    Each individual submodule is the combination of a device name and a
-   standard claims format based on the bus or protocol the device
-   supports.  The syntax of the device name depends on the type of bus
-   or protocol used.  Each name consists of two parts joined by a colon:
-   a namespace and a bus-specific name.  See Section 3.1.6 for SPDM
-   devices, and Section 3.2.1 for legacy PCIe devices.  As previously
-   mentioned, this draft currently defines the claims-set for SPDM
-   compliant devices and PCIe legacy devices that do not support the
-   SPDM protocol.  Careful consideration was also given to the overall
-   design in order to leave room for future expansion.
+   standard claims-set based on the bus or protocol the device supports.
+   The syntax of the device name depends on the type of bus or protocol
+   used.  Each name consists of two parts joined by a colon: a namespace
+   and a bus-specific name.  See Section 3.1.6 for SPDM devices, and
+   Section 3.2.1 for legacy PCIe devices.  As previously mentioned, this
+   draft currently defines the claims-set for SPDM compliant devices and
+   PCIe legacy devices that do not support the SPDM protocol.  Careful
+   consideration was also given to the overall design in order to leave
+   room for future expansion.
 
    dat = {
      &(eat_profile: 265) => "tag:linaro.org,2025:device#1.0.0"
@@ -893,13 +892,13 @@ Table of Contents
 
    PCIe devices are assigned to a TVM by way of their physical or
    virtual functions.  The hardware implementation of a device
-   guarantees that functions are mutually exclusive, i.e operations
-   happening on one function does not affect other functions.  The TDISP
-   standard also guarantees that in the CONFIG_LOCK and RUN state, the
-   characteristics of a device function can not be modified by untrusted
-   parties.  Faulty hardware or deficient implementation of the TDISP
-   specification can be leveraged by the attacker for side-channel
-   attacks.
+   guarantees that functions are mutually exclusive; in other words,
+   operations performed on one function do not affect other functions.
+   The TDISP standard also guarantees that, while a device function is
+   in the CONFIG_LOCK or RUN state, its characteristics cannot be
+   modified by untrusted parties.  However, faulty hardware or an
+   inadequate implementation of the TDISP specification could be
+   exploited by an attacker for side-channel attacks.
 
 8.  Privacy Considerations
 
