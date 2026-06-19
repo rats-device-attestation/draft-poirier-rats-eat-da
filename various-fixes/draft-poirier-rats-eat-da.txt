@@ -741,11 +741,12 @@ Table of Contents
    See Section 3.1.6 for the blueprint.
 
    The concrete name derived by the naming scheme is anticipated to be
-   used to map the Attester to a corresponding CoRIM environment map.
-   This map can then be used to locate matching Reference Values and
-   Endorsements during the appraisal process.  This type of "evidence
-   transformation" is outside the scope of this document and will be
-   covered by an associated CoRIM profile.
+   used to map the Attester to a corresponding CoRIM
+   [I-D.ietf-rats-corim] environment map.  This map can then be used to
+   locate matching Reference Values and Endorsements during the
+   appraisal process.  This type of "evidence transformation" is outside
+   the scope of this document and will be covered by an associated CoRIM
+   profile.
 
 5.3.  Claims Registrations
 
@@ -913,15 +914,15 @@ Table of Contents
 
    When DAT is an UCCS, the considerations in [RFC9781] also apply.
 
-   PCIe devices are assigned to a TVM by way of their physical or
-   virtual functions.  The hardware implementation of a device
-   guarantees that functions are mutually exclusive; in other words,
-   operations performed on one function do not affect other functions.
-   The TDISP standard also guarantees that, while a device function is
-   in the CONFIG_LOCK or RUN state, its characteristics cannot be
-   modified by untrusted parties.  However, faulty hardware or an
-   inadequate implementation of the TDISP specification could be
-   exploited by an attacker for side-channel attacks.
+   PCIe devices are assigned to a TVM via their physical or virtual
+   functions.  The hardware implementation of a device guarantees that
+   functions are mutually exclusive; in other words, operations
+   performed on one function do not affect other functions.  The TDISP
+   standard also guarantees that, while a device function is in the
+   CONFIG_LOCK or RUN state, its characteristics cannot be modified by
+   untrusted parties.  However, faulty hardware or an inadequate
+   implementation of the TDISP specification could be exploited by an
+   attacker for side-channel attacks.
 
 8.  Privacy Considerations
 
@@ -1137,6 +1138,13 @@ Table of Contents
               <https://www.rfc-editor.org/rfc/rfc8949>.
 
 10.2.  Informative References
+
+   [I-D.ietf-rats-corim]
+              Birkholz, H., Fossati, T., Deshpande, Y., Smith, N., and
+              W. Pan, "Concise Reference Integrity Manifest", Work in
+              Progress, Internet-Draft, draft-ietf-rats-corim-10, 2
+              March 2026, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-rats-corim-10>.
 
    [PCIe]     PCI-SIG, "PCI Express Base Specification Revision 7.0", 5
               June 2025.

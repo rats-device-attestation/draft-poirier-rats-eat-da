@@ -2022,7 +2022,7 @@ The claims-set <span class="bcp14">MUST</span> include a suitable <code>eat_prof
 <p id="section-5.2-1">A new claims-set <span class="bcp14">MUST</span> define a suitable naming convention for the <code>submod</code> keys associated with it.
 When creating this convention, ensure that it does not clash with any existing ones.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">See <a href="#spdm-submod-name" class="auto internal xref">Section 3.1.6</a> for the blueprint.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">The concrete name derived by the naming scheme is anticipated to be used to map the Attester to a corresponding CoRIM environment map.
+<p id="section-5.2-3">The concrete name derived by the naming scheme is anticipated to be used to map the Attester to a corresponding CoRIM <span>[<a href="#I-D.ietf-rats-corim" class="cite xref">I-D.ietf-rats-corim</a>]</span> environment map.
 This map can then be used to locate matching Reference Values and Endorsements during the appraisal process.
 This type of "evidence transformation" is outside the scope of this document and will be covered by an associated CoRIM profile.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 </section>
@@ -2202,7 +2202,7 @@ non-empty&lt;M&gt; = M .and ({+ any =&gt; any})
 The security and privacy considerations of these specifications therefore apply here too.
 In particular, the considerations discussed in Sections <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.1" class="relref">9.1</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.1" class="relref">Claim Trustworthiness</a>)</span>, <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.4" class="relref">9.4</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.4" class="relref">Multiple EAT Consumers</a>)</span> and <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.5" class="relref">9.5</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.5" class="relref">Detached EAT Bundle Digest Security Considerations</a>)</span> of <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> apply fully.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">When DAT is an UCCS, the considerations in <span>[<a href="#RFC9781" class="cite xref">RFC9781</a>]</span> also apply.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">PCIe devices are assigned to a TVM by way of their physical or virtual functions.
+<p id="section-7-3">PCIe devices are assigned to a TVM via their physical or virtual functions.
 The hardware implementation of a device guarantees that functions are mutually exclusive; in other words, operations performed on one function do not affect other functions.
 The TDISP standard also guarantees that, while a device function is in the CONFIG_LOCK or RUN state, its characteristics cannot be modified by untrusted parties.
 However, faulty hardware or an inadequate implementation of the TDISP specification could be exploited by an attacker for side-channel attacks.<a href="#section-7-3" class="pilcrow">¶</a></p>
@@ -2526,6 +2526,10 @@ The differential encryption considerations discussed in Section <span><a href="h
 <a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="I-D.ietf-rats-corim">[I-D.ietf-rats-corim]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Deshpande, Y.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Concise Reference Integrity Manifest"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-corim-10</span>, <time datetime="2026-03-02" class="refDate">2 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-10">https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-10</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="PCIe">[PCIe]</dt>
         <dd>
 <span class="refAuthor">PCI-SIG</span>, <span class="refTitle">"PCI Express Base Specification Revision 7.0"</span>, <time datetime="2025-06-05" class="refDate">5 June 2025</time>. </dd>
