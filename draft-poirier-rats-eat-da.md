@@ -91,7 +91,7 @@ This includes, for example, protection of device MMIO interfaces and device cach
 From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
 
-{{fig-ratsd}} described in {{Section 3.3 of -rats-arch}} gives an overview of the architecture targeted by this specification.
+{{fig-ratsd}} gives an overview of the architecture targeted by this specification.
 Devices assigned to a TVM must be authenticated by a 3rd party verifier before being accepted into the TCB.
 
 ~~~ aasvg
@@ -162,7 +162,7 @@ Lastly, live migration of a TVM from one host to another is currently not addres
 The Device Assignment Token (DAT) is the encompassing envelope for the individual device claims to be presented.
 A DAT can be used as a standalone entity but can also be embedded in a larger, platform-specific attestation token.
 A DAT consists of an EAT profile identifier, a nonce and an EAT submodule ({{Section 4.2.18 of -rats-eat}}) that contains any number of individual device claims.
-Each individual submodule is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
+Each individual submodule is the combination of a device name and a standard claims-set based on the bus or protocol the device supports.
 The syntax of the device name depends on the type of bus or protocol used.
 Each name consists of two parts joined by a colon: a namespace and a bus-specific name.
 See {{spdm-submod-name}} for SPDM devices, and {{pcie-legacy-submod-name}} for legacy PCIe devices.
@@ -378,9 +378,9 @@ In particular, the considerations discussed in {{Sections 9.1 (Claim Trustworthi
 When DAT is an UCCS, the considerations in {{-uccs}} also apply.
 
 PCIe devices are assigned to a TVM by way of their physical or virtual functions.
-The hardware implementation of a device guarantees that functions are mutually exclusive, i.e operations happening on one function does not affect other functions.
-The TDISP standard also guarantees that in the CONFIG_LOCK and RUN state, the characteristics of a device function can not be modified by untrusted parties.
-Faulty hardware or deficient implementation of the TDISP specification can be leveraged by the attacker for side-channel attacks.
+The hardware implementation of a device guarantees that functions are mutually exclusive; in other words, operations performed on one function do not affect other functions.
+The TDISP standard also guarantees that, while a device function is in the CONFIG_LOCK or RUN state, its characteristics cannot be modified by untrusted parties.
+However, faulty hardware or an inadequate implementation of the TDISP specification could be exploited by an attacker for side-channel attacks.
 
 # Privacy Considerations
 
