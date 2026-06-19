@@ -399,7 +399,7 @@ However, faulty hardware or an inadequate implementation of the TDISP specificat
 
 A DAT can include a great deal of detail about the execution environment associated with the TVM and, therefore, the workload being executed within it.
 This can provide insight into the type of computation being carried out by the workload.
-It can also enable tracking of a given workload across multiple TVM instances in both the temporal and spatial dimensions.
+It can also enable tracking of a given workload across multiple TVM instances in both the temporal dimension (e.g., across reboots of the hosting hardware) and the spatial dimension (e.g., across migrations between hardware, either within or between data centres).
 
 A DAT is usually one component of a composite evidence payload.
 In such cases, multiple Verifiers may be involved in the appraisal process.
