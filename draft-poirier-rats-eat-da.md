@@ -390,7 +390,7 @@ In particular, the considerations discussed in {{Sections 9.1 (Claim Trustworthi
 
 When DAT is an UCCS, the considerations in {{-uccs}} also apply.
 
-PCIe devices are assigned to a TVM by way of their physical or virtual functions.
+PCIe devices are assigned to a TVM via their physical or virtual functions.
 The hardware implementation of a device guarantees that functions are mutually exclusive; in other words, operations performed on one function do not affect other functions.
 The TDISP standard also guarantees that, while a device function is in the CONFIG_LOCK or RUN state, its characteristics cannot be modified by untrusted parties.
 However, faulty hardware or an inadequate implementation of the TDISP specification could be exploited by an attacker for side-channel attacks.
