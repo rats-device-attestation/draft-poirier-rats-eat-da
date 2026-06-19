@@ -364,6 +364,10 @@ When creating this convention, ensure that it does not clash with any existing o
 
 See {{spdm-submod-name}} for the blueprint.
 
+The concrete name derived by the naming scheme is anticipated to be used to map the Attester to a corresponding CoRIM environment map.
+This map can then be used to locate matching Reference Values and Endorsements during the appraisal process.
+This type of "evidence transformation" is outside the scope of this document and will be covered by an associated CoRIM profile.
+
 ## Claims Registrations
 
 A new claims-set can reuse any number of already registered claims.
