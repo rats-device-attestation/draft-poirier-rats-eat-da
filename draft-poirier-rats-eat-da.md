@@ -92,6 +92,9 @@ This includes, for example, protection of device MMIO interfaces and device cach
 From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
 
+{:aside}
+> test aside
+
 {{fig-ratsd}} gives an overview of the architecture targeted by this specification.
 Devices assigned to a TVM must be authenticated by a 3rd party verifier before being accepted into the TCB.
 
@@ -533,7 +536,7 @@ Thank you
 Basma El Gaabouri,
 Carl Wallace,
 Giri Mandyam,
-{{{Ionuț Mihalcea}},
+{{{Ionuț Mihalcea}}},
 James Bottomley,
 Jon Lange,
 Lukas Wunner,
