@@ -143,7 +143,7 @@ It does not support on-chip SPDM-compliant device, something that is left for fu
 
 The TVM uses the platform, i.e., PCIe Data Object Exchange (DOE), to transport SPDM packets, but the SPDM protocol uses its own mechanisms and messages to guarantee the authenticity and privacy of the information it carries.
 It defines specific messages for creating and exchanging cryptographic keys between requester and responder to establish secure communication.
-The cryptographic algorithms are selected based on the pre-negotiated capabilities of both parties.
+The cryptographic algorithms are selected based on the pre-negotiated capabilities of both parties (Section 10.16 of {{-spdm}}).
 The SPDM protocol does not rely on the hypervisor or host for anything else other than the physical delivery of content between the trusted and non-trusted worlds.
 
 This format is based on the information provided by the SPDM protocol without imposing additional security constraints.
