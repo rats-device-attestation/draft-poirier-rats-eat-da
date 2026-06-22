@@ -533,7 +533,7 @@ Thank you
 Basma El Gaabouri,
 Carl Wallace,
 Giri Mandyam,
-{{{Ionuț Mihalcea}},
+{{{Ionuț Mihalcea}}},
 James Bottomley,
 Jon Lange,
 Lukas Wunner,
