@@ -55,6 +55,7 @@ normative:
   I-D.ietf-rats-epoch-markers: epoch-markers
 
 informative:
+  I-D.ietf-rats-corim: corim
   SPDM:
     -: spdm
     target: https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.3.2.pdf
@@ -75,7 +76,7 @@ entity:
 --- abstract
 
 In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
-For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
+For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity, the state of its firmware and configuration.
 
 Since Evidence claims can be processed by 3rd party entities (e.g., Verifiers, Relying Parties) external to the TVM, there is a need to standardize the representation of DA-related information in Evidence to ensure interoperability.
 This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile.
@@ -91,10 +92,54 @@ This includes, for example, protection of device MMIO interfaces and device cach
 From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.
 
+{{fig-ratsd}} gives an overview of the architecture targeted by this specification.
+Devices assigned to a TVM must be authenticated by a 3rd party verifier before being accepted into the TCB.
+
+~~~ aasvg
+      .---------------.
+     | Verifier / RP   |
+      '---------------'
+              ^
+  .-----------+------------------------------------.
+ |            |                                     |
+ |  Attester  |                .-----------------.  |
+ |            |              .-+---------------. |  |
+ |  .---------+---------.  .-+---------------. | |  |
+ |  | TVM     |         |  | Assigned Device | | |  |
+ |  |         v         |  |                 | | |  |
+ |  | .---------------. |  |                 | | |  |
+ |  | | Lead Attester | |  |                 | | |  |
+ |  | '---------------' |  |                 | | |  |
+ |  |     ^       ^     |  |                 | | |  |
+ |  |     |       |     |  |                 | | |  |
+ |  |     v       v     |  | .-------------. | | |  |
+ |  | .---+-------+---. |  | | Device      | | | |  |
+ |  | | Guest Kernel  | |  | | Attester    | | | |  |
+ |  | '---------------' |  | '-------------' | +-'  |
+ |  |     ^       ^     |  |     ^           +-'    |
+ |  '-----|-------|-----'  '-----|-----------'      |
+ |        |       |              |                  |
+ |  .-----|-------|-----.  .-----|---------------.  |
+ |  |     |       |     |  | .---|-------------. |  |
+ |  |     v        '---------+--'  Host Kernel | |  |
+ |  | .---------------. |  | '-----------------' |  |
+ |  | | Platform      | |  |                     |  |
+ |  | | Attester      | |  |                     |  |
+ |  | '---------------' |  |                     |  |
+ |  |                   |  |                     |  |
+ |  | Confidential      |  | Untrusted           |  |
+ |  | Platform          |  | Platform            |  |
+ |  '-------------------'  '---------------------'  |
+ |                                                  |
+  '------------------------------------------------'
+~~~
+{: #fig-ratsd title="Confidential VM with Trusted Device(s)" align="center" }
+
 This document defines an attestation Evidence format for DA as an EAT {{-rats-eat}} profile.
 The format is designed to be generic, extensible and architecture-agnostic.
 Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol {{-spdm}}.
-As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices.
+As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant PCIe devices.
+It does not support on-chip SPDM-compliant device, something that is left for future consideration.
 
 The TVM uses the platform, i.e., PCIe Data Object Exchange (DOE), to transport SPDM packets, but the SPDM protocol uses its own mechanisms and messages to guarantee the authenticity and privacy of the information it carries.
 It defines specific messages for creating and exchanging cryptographic keys between requester and responder to establish secure communication.
@@ -106,8 +151,16 @@ It is incumbent upon other entities to describe, select and enforce those additi
 
 Since other bus architectures and protocols are expected to be supported as the technology gains wider adoption, provisions have been made for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
 This list is by no means exhaustive and is expected to expand.
-{{extend}} outlines the requirements for incorporating new bus technologies into the Device Assignment (DAT) framework.
+{{extend}} outlines the requirements for incorporating new bus technologies into the Device Assignment Token (DAT) framework.
 Lastly, live migration of a TVM from one host to another is currently not addressed by the SPDM specification and therefore not covered herein.
+
+As discussed in {{Section 3.4 of -rats-arch}}, a lead Attester may also act as an internal Verifier.
+For example, the lead Attester would verify the identity of the SPDM responder locally using a provisioned trust anchor.
+If satisfied, it would then repackage the sub-Attester claims in the format defined in this document.
+In other words, the lead Attester would use the framework and claims defined in this document to create Attestation Results.
+In this sense, DAT can be considered to provide both an Attestation Result format and an Evidence format.
+Generally, the distinction between Evidence and Attestation Results, when applied to Conceptual Messages generated by a composite device, may not always be completely transparent to the receiver.
+Note that when using CMW {{-cmw}} to wrap the collected claims, the `ind` field could be used to refine the Conceptual Message type expressed by the EAT media type {{-eat-media-types}}.
 
 # Conventions and Definitions
 
@@ -118,9 +171,9 @@ Lastly, live migration of a TVM from one host to another is currently not addres
 The Device Assignment Token (DAT) is the encompassing envelope for the individual device claims to be presented.
 A DAT can be used as a standalone entity but can also be embedded in a larger, platform-specific attestation token.
 A DAT consists of an EAT profile identifier, a nonce and an EAT submodule ({{Section 4.2.18 of -rats-eat}}) that contains any number of individual device claims.
-Each individual device claim is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
+Each individual submodule is the combination of a device name and a standard claims-set based on the bus or protocol the device supports.
 The syntax of the device name depends on the type of bus or protocol used.
-Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
+Each name consists of two parts joined by a colon: a namespace and a bus-specific name.
 See {{spdm-submod-name}} for SPDM devices, and {{pcie-legacy-submod-name}} for legacy PCIe devices.
 As previously mentioned, this draft currently defines the claims-set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
 Careful consideration was also given to the overall design in order to leave room for future expansion.
@@ -271,7 +324,7 @@ DAT supports the freshness models for attestation Evidence based on nonces and e
 No further assumptions are made about the specific remote attestation protocol.
 
 Note that the use of epoch IDs is subject by the type restrictions imposed by the `eat_nonce` syntax.
-For use in DAT, the epoch ID must be encodable as an opaque binary string of between 8 and 64 octets; an Epoclet can be used for this purpose (see {{-epoch-markers}}).
+For use in DAT, the epoch ID MUST be encodable as an opaque binary string of between 8 and 64 octets; an Epoclet can be used for this purpose (see {{-epoch-markers}}).
 
 ## Synopsis
 
@@ -312,6 +365,10 @@ When creating this convention, ensure that it does not clash with any existing o
 
 See {{spdm-submod-name}} for the blueprint.
 
+The concrete name derived by the naming scheme is anticipated to be used to map the Attester to a corresponding CoRIM {{-corim}} environment map.
+This map can then be used to locate matching Reference Values and Endorsements during the appraisal process.
+This type of "evidence transformation" is outside the scope of this document and will be covered by an associated CoRIM profile.
+
 ## Claims Registrations
 
 A new claims-set can reuse any number of already registered claims.
@@ -333,11 +390,16 @@ In particular, the considerations discussed in {{Sections 9.1 (Claim Trustworthi
 
 When DAT is an UCCS, the considerations in {{-uccs}} also apply.
 
+PCIe devices are assigned to a TVM via their physical or virtual functions.
+The hardware implementation of a device guarantees that functions are mutually exclusive; in other words, operations performed on one function do not affect other functions.
+The TDISP standard also guarantees that, while a device function is in the CONFIG_LOCK or RUN state, its characteristics cannot be modified by untrusted parties.
+However, faulty hardware or an inadequate implementation of the TDISP specification could be exploited by an attacker for side-channel attacks.
+
 # Privacy Considerations
 
 A DAT can include a great deal of detail about the execution environment associated with the TVM and, therefore, the workload being executed within it.
 This can provide insight into the type of computation being carried out by the workload.
-It can also enable tracking of a given workload across multiple TVM instances in both the temporal and spatial dimensions.
+It can also enable tracking of a given workload across multiple TVM instances in both the temporal dimension (e.g., across reboots of the hosting hardware) and the spatial dimension (e.g., across migrations between hardware, either within or between data centres).
 
 A DAT is usually one component of a composite evidence payload.
 In such cases, multiple Verifiers may be involved in the appraisal process.
@@ -434,46 +496,6 @@ In this setup, a Trusted Virtual Machine (TVM) executes on a Confidential Platfo
 One or more devices (e.g., a GPU) are assigned to the TVM.
 
 Within the TVM, a Lead Attester agent, e.g., a userland daemon, can collect Evidence from the Confidential Platform, as well as from all the assigned devices, using the relevant ABI offered by the guest OS kernel.
-
-~~~ aasvg
-      .---------------.
-     | Verifier / RP   |
-      '---------------'
-              ^
-  .-----------+------------------------------------.
- |            |                                     |
- |  Attester  |                .-----------------.  |
- |            |              .-+---------------. |  |
- |  .---------+---------.  .-+---------------. | |  |
- |  | TVM     |         |  | Assigned Device | | |  |
- |  |         v         |  |                 | | |  |
- |  | .---------------. |  |                 | | |  |
- |  | | Lead Attester | |  |                 | | |  |
- |  | '---------------' |  |                 | | |  |
- |  |     ^       ^     |  |                 | | |  |
- |  |     |       |     |  |                 | | |  |
- |  |     v       v     |  | .-------------. | | |  |
- |  | .---+-------+---. |  | | Device      | | | |  |
- |  | | Guest Kernel  | |  | | Attester    | | | |  |
- |  | '---------------' |  | '-------------' | +-'  |
- |  |     ^       ^     |  |     ^           +-'    |
- |  '-----|-------|-----'  '-----|-----------'      |
- |        |       |              |                  |
- |  .-----|-------|-----.  .-----|---------------.  |
- |  |     |       |     |  | .---|-------------. |  |
- |  |     v        '---------+--'  Host Kernel | |  |
- |  | .---------------. |  | '-----------------' |  |
- |  | | Platform      | |  |                     |  |
- |  | | Attester      | |  |                     |  |
- |  | '---------------' |  |                     |  |
- |  |                   |  |                     |  |
- |  | Confidential      |  | Untrusted           |  |
- |  | Platform          |  | Platform            |  |
- |  '-------------------'  '---------------------'  |
- |                                                  |
-  '------------------------------------------------'
-~~~
-{: #fig-ratsd title="Confidential VM with Trusted Device(s)" align="center" }
 
 When a challenger (i.e., a Verifier or a Relying Party) requests Evidence from the TVM, the Lead Attester broadcasts the received nonce to all the sub-Attesters, obtains Evidence from each of them and assembles the composite Evidence using a CMW Collection (Section 3.3 of {{-cmw}}).
 It then signs the composite Evidence using its key material as shown in {{fig-ratsd-token}}.
