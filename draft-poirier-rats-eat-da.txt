@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                    Linaro
 Intended status: Informational                               H. Birkholz
-Expires: 24 December 2026                                 Fraunhofer SIT
+Expires: 25 December 2026                                 Fraunhofer SIT
                                                               T. Fossati
                                                                   Linaro
-                                                            22 June 2026
+                                                            23 June 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 December 2026.
+   This Internet-Draft will expire on 25 December 2026.
 
 Copyright Notice
 
@@ -194,10 +194,10 @@ Table of Contents
    information it carries.  It defines specific messages for creating
    and exchanging cryptographic keys between requester and responder to
    establish secure communication.  The cryptographic algorithms are
-   selected based on the pre-negotiated capabilities of both parties.
-   The SPDM protocol does not rely on the hypervisor or host for
-   anything else other than the physical delivery of content between the
-   trusted and non-trusted worlds.
+   selected based on the pre-negotiated capabilities of both parties
+   (Section 10.16 of [SPDM]).  The SPDM protocol does not rely on the
+   hypervisor or host for anything else other than the physical delivery
+   of content between the trusted and non-trusted worlds.
 
    This format is based on the information provided by the SPDM protocol
    without imposing additional security constraints.  It is incumbent
@@ -237,6 +237,14 @@ Table of Contents
    "OPTIONAL" in this document are to be interpreted as described in
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
+
+   PCIe devices maximize hardware efficiency by splitting a single
+   physical card into multiple independent logical devices called
+   functions (see Section 9 of [PCIe]).  Because each physical or
+   virtual function operates in isolation, multiple VMs can directly and
+   safely share the same underlying hardware simultaneously.  In this
+   document, the terms "_device_", "_interface_" and "_device
+   interface_" refer to the physical or virtual function of a device.
 
 3.  Device Assignment Token (DAT) Claims
 
