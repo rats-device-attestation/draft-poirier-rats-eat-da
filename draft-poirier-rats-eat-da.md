@@ -166,9 +166,9 @@ Note that when using CMW {{-cmw}} to wrap the collected claims, the `ind` field 
 
 {::boilerplate bcp14-tagged}
 
-PCIe devices increase effective hardware resource utilisation by making available multiple functions (Section 9 of {{-pcie}}).
-Each device function, physical or virtual, is independent from other functions and allow sharing of a device between multiple VMs.
-From this point forward, the terms "*device*", "*interface*" and "*device interface*" implicitly refer to the physical or virtual function of a device.
+PCIe devices maximize hardware efficiency by splitting a single physical card into multiple independent logical devices called functions (see Section 9 of {{-pcie}}).
+Because each physical or virtual function operates in isolation, multiple VMs can directly and safely share the same underlying hardware simultaneously.
+In this document, the terms "*device*", "*interface*" and "*device interface*" refer to the physical or virtual function of a device.
 
 # Device Assignment Token (DAT) Claims {#dat-claims}
 
