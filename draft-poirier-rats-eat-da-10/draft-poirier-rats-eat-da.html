@@ -1,0 +1,2758 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>An EAT Profile for Trustworthy Device Assignment</title>
+<meta content="Mathieu Poirier" name="author">
+<meta content="Henk Birkholz" name="author">
+<meta content="Thomas Fossati" name="author">
+<meta content="
+       In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
+For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity, the state of its firmware and configuration. 
+       Since Evidence claims can be processed by 3rd party entities (e.g., Verifiers, Relying Parties) external to the TVM, there is a need to standardize the representation of DA-related information in Evidence to ensure interoperability.
+This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile. 
+    " name="description">
+<meta content="xml2rfc 3.34.0" name="generator">
+<meta content="attestation" name="keyword">
+<meta content="device assignment" name="keyword">
+<meta content="EAT" name="keyword">
+<meta content="draft-poirier-rats-eat-da-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.34.0
+    Python 3.14.5
+    ConfigArgParse 1.7.5
+    google-i18n-address 3.1.1
+    intervaltree 3.2.1
+    Jinja2 3.1.6
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.10.0
+    pycountry 24.6.1
+    PyYAML 6.0.3
+    requests 2.33.1
+    wcwidth 0.8.1
+-->
+<link href="draft-poirier-rats-eat-da.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+}
+
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  --font-title: "Sofia Sans Semi Condensed", sans-serif;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+section {
+  clear: both;
+}
+.section-number {
+  padding-right: 0.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 680;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1 {
+  &#title {
+    font-size: 32px;
+    line-height: 40px;
+    clear: both;
+    margin: 1.5em 0 0.2em;
+  }
+  &#rfcnum {
+    margin: 1.5em 0 0.2em;
+    & + h1#title {
+      margin: 0.2em 0;
+    }
+  }
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+  & code, & samp, & tt {
+    font-size: 16px;
+    line-height: 0;
+  }
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight {
+  margin: 1em 0;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    margin: 0;
+    float: right;
+    clear: both;
+  }
+  & > *:nth-child(2) {
+    clear: both;
+    display: block;
+    border: none;
+  }
+}
+svg {
+  display: block;
+  /* font-family isn't space-separated, but =~ will have to do */
+  &[font-family~="monospace" i], & [font-family~="monospace" i] {
+    font-family: var(--font-mono);
+  }
+}
+.alignCenter {
+  margin: 1em 0;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+       support flexbox yet.
+    */
+    display: table;
+    margin: 0 auto;
+  }
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+  & :is(ol, ul) {
+    margin-left: 1em;
+  }
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+  & li {
+    margin-top: 0.5em;
+  }
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  margin: 0 0 0 2em;
+  & li {
+    margin: 0;
+    & :first-child { margin-top: 0; }
+    & :last-child { margin-bottom: 0; }
+  }
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+  &.olPercent {
+    --indent: 5ch;
+    & > dt {
+      min-width: calc(var(--indent) - 2ch);
+      float: none;
+    }
+  }
+
+  dl > dd > & {
+    margin-top: 0.5em;
+    margin-bottom: 0;
+  }
+
+  &:not(.dlNewline) > dt {
+    float: left;
+    margin-right: 2ch;
+    min-width: 8ch;
+  }
+  & > dd {
+    margin-bottom: .8em;
+    margin-left: var(--indent) !important; /* stupid element overrides */
+    min-height: 2ex;
+  }
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+  & > :is(:first-child, .break:first-child + *) {
+    margin-top: 0;
+  }
+  & > :is(:last-child) {
+    margin-bottom: 0;
+  }
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a {
+  text-decoration: none;
+  &[href] {
+    color: var(--link-color);
+    &:hover { text-decoration: underline; }
+    &.selfRef {
+      color: var(--text-color);
+      &:hover {
+        text-decoration: none;
+        background-color: var(--highlight-color);
+      }
+    }
+  }
+}
+.iref + a[href].internal {
+  color: var(--text-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+  & blockquote {
+    margin: 0.8em 0.4em 0.4em;
+  }
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+  caption-side: bottom;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) {
+    & p {
+      margin: -2px 0;
+      max-height: 0;
+      transition: max-height 2s ease, margin 0.5s ease 0.5s;
+      overflow: hidden;
+    }
+    &:hover p,
+    & h2:target ~ p {
+      margin: 0.5em 0;
+      max-height: 500px;
+      overflow: auto;
+    }
+  }
+  pre, svg {
+    display: inline-block;
+    /* In the horizontal direction, sometimes people make over-sized figures.
+       Scrollbars for those is therefore necessary: auto adds them as necessary..
+       In the vertical direction, the line-height can combine with the font
+       asender/descender height to produce scrollbars: hidden avoids that. */
+    overflow: auto hidden;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+  border-left: 2px var(--pilcrow-strong) solid;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: auto;
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  &.right { margin-left: auto; }
+  &.center { margin-left: auto; margin-right: auto; }
+  &.left { margin-right: auto; }
+  & .text-left { text-align: left; }
+  & .text-center { text-align: center; }
+  & .text-right { text-align: right; }
+  & caption {
+    margin: 0;
+    padding: 3px 0 3px 1em;
+  }
+  & p { margin: 0; }
+}
+
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+  &[href] {
+    color: var(--pilcrow-weak);
+    &:hover { text-decoration: none; }
+  }
+  @media not print {
+    :hover > &, &:focus {
+      opacity: 1;
+    }
+    &[href]:hover {
+      color: var(--pilcrow-strong);
+      background-color: transparent;
+    }
+  }
+  @media print {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+  & dt {
+    width: var(--identifier-width);
+    min-width: var(--identifier-width);
+    clear: left;
+    float: left;
+    text-align: right;
+    margin-right: 1ch;
+  }
+  & dd {
+    margin: 0;
+    margin-left: calc(1em + var(--identifier-width)) !important;
+    min-width: 5em;
+  }
+  & .authors {
+    & .author {
+      display: inline-block;
+      margin-right: 1.5em;
+    }
+    & .org {
+      font-style: italic;
+    }
+  }
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+  & .prepared {
+    float: right;
+  }
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+
+  & nav {
+    & ul {
+      margin: 0 0.5em 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    & li {
+      line-height: 1.3em;
+      margin: 2px 0;
+      padding-left: 1.2em;
+      text-indent: -1.2em;
+    }
+  }
+  & a.xref {
+    white-space: normal;
+  }
+}
+
+.references {
+  & > dt {
+    text-align: right;
+    font-weight: bold;
+    min-width: 10ch;
+    margin-right: 1.5ch;
+    &:target::before {
+      content: "⇒";
+      margin: 0 10px 0 -25px;
+    }
+  }
+  & > dd {
+    margin-left: 12ch !important;
+    overflow: visible;
+    & .refInstance {
+      margin-bottom: 0.8em;
+    }
+    & .ascii {
+      margin-bottom: 0.25em;
+    }
+  }
+}
+
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  max-width: 20em;
+  margin: 1em auto 1em 0;
+
+  & .nameRole {
+    font-weight: 700;
+    margin-left: 0;
+  }
+  & .label {
+    margin: 0.5em 0;
+  }
+  & .type {
+    display: none;
+  }
+  & .alternative-contact {
+    margin: 0.5em 0 0.25em 0;
+  }
+  & .non-ascii {
+    margin: 0 0 0 2em;
+  }
+  & div.left {
+    text-align: left;
+  }
+  & div.right {
+    text-align: right;
+  }
+}
+
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses {
+    & > section {
+      column-count: 2;
+      column-gap: 20px;
+    }
+    & > section > h2 {
+      column-span: all;
+    }
+    /* hack for break-inside: avoid-column */
+    & address {
+      display: inline-block;
+      break-inside: avoid-column;
+    }
+  }
+}
+
+/* Comments */
+.rfcEditorRemove {
+  & p:first-of-type {
+    font-style: italic;
+  }
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+
+@media screen {
+  #toc {
+    & nav {
+      font-family: var(--font-title);
+      font-weight: 360;
+      & > ul { margin-bottom: 2em; }
+      & ul {
+        margin: 0 0 0 4px;
+        & :is(p, li) {
+          margin: 2px 0;
+        }
+      }
+    }
+    & a.toplink {
+      float: right;
+    }
+  }
+}
+@media not screen {
+  #toc a.toplink {
+    display: none;
+  }
+}
+
+
+/* TOC layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 1px 0 0 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+    & h2 {
+      margin: 0;
+      padding: 2px 0 2px 6px;
+      padding-right: 1em;
+      font-size: 18px;
+      line-height: 24px;
+      min-width: 190px;
+      text-align: right;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      &::before { /* css hamburger */
+        float: right;
+        position: relative;
+        width: 1em;
+        height: 1px;
+        left: -164px;
+        margin: 8px 0 0 0;
+        background: white none repeat scroll 0 0;
+        box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+        content: "";
+      }
+    }
+    & nav {
+      display: none;
+      background-color: var(--background-color);
+      padding: 0.5em 1em 1em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      height: calc(100vh - 48px);
+      border-left: 1px solid #ddd;
+    }
+    &.active {
+      opacity: 1;
+      & nav { display: block; }
+    }
+    /* Make the collapsed ToC header render white on gray also when it's a link */
+    & h2 a,
+    & h2 a:is(:link, :focus, :hover),
+    & a.toplink,
+    & a.toplink:hover {
+      color: white;
+      background-color: #444;
+      text-decoration: none;
+    }
+    & a.toplink {
+      margin: 2px 0.5em 0;
+    }
+  }
+}
+
+/* TOC layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+    & h2 {
+      margin: 0;
+      padding: 0.25em 1em 1em 0;
+    }
+    & nav {
+      display: block;
+      height: calc(90vh - 84px);
+      bottom: 0;
+      padding: 0.5em 0 2em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+    & a.toplink {
+      margin: 8px 0.5em 0;
+    }
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc {
+    page-break-before: always;
+    border-top: none;
+    padding-top: 0;
+  }
+  #n-introduction {
+    page-break-before: always;
+  }
+  figure, pre, .vcard {
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  :is(h2, h3, h4, h5, h6)+*, dd {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg {
+  & :is([stroke="black"], [stroke^="#000"]) {
+    stroke: var(--text-color);
+  }
+  & :is([stroke="white"], [stroke^="#fff"]) {
+    stroke: var(--background-color);
+  }
+  & :is([fill="black"], [fill^="#000"], :not([fill])) {
+    fill: var(--text-color);
+  }
+  & :is([fill="white"], [fill^="#fff"]) {
+    fill: var(--background-color);
+  }
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">EAT DA</td>
+<td class="right">June 2026</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Poirier, et al.</td>
+<td class="center">Expires 25 December 2026</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Remote ATtestation ProcedureS</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-poirier-rats-eat-da-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2026-06-23" class="published">23 June 2026</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2026-12-25">25 December 2026</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">M. Poirier</div>
+<div class="org">Linaro</div>
+</div>
+<div class="author">
+      <div class="author-name">H. Birkholz</div>
+<div class="org">Fraunhofer SIT</div>
+</div>
+<div class="author">
+      <div class="author-name">T. Fossati</div>
+<div class="org">Linaro</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">An EAT Profile for Trustworthy Device Assignment</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
+For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity, the state of its firmware and configuration.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">Since Evidence claims can be processed by 3rd party entities (e.g., Verifiers, Relying Parties) external to the TVM, there is a need to standardize the representation of DA-related information in Evidence to ensure interoperability.
+This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-about-this-document">
+<a href="#name-about-this-document" class="section-name selfRef">About This Document</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">
+        The latest revision of this draft can be found at <span><a href="https://rats-device-attestation.github.io/draft-poirier-rats-eat-da/draft-poirier-rats-eat-da.html">https://rats-device-attestation.github.io/draft-poirier-rats-eat-da/draft-poirier-rats-eat-da.html</a></span>.
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-poirier-rats-eat-da/">https://datatracker.ietf.org/doc/draft-poirier-rats-eat-da/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">
+        Discussion of this document takes place on the
+        Remote ATtestation ProcedureS Working Group mailing list (<span><a href="mailto:rats@ietf.org">mailto:rats@ietf.org</a></span>),
+        which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/rats/">https://mailarchive.ietf.org/arch/browse/rats/</a></span>.
+        Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/rats/">https://www.ietf.org/mailman/listinfo/rats/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+<p id="section-note.1-4">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/rats-device-attestation/draft-poirier-rats-eat-da">https://github.com/rats-device-attestation/draft-poirier-rats-eat-da</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 25 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2026 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-device-assignment-token-dat" class="internal xref">Device Assignment Token (DAT) Claims</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-spdm-claims" class="internal xref">SPDM Claims</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.1">
+                    <p id="section-toc.1-1.3.2.1.2.1.1" class="keepWithNext"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-measurements-claim" class="internal xref">Measurements Claim</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2">
+                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-spdm-challenge-claim" class="internal xref">SPDM Challenge Claim</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3">
+                    <p id="section-toc.1-1.3.2.1.2.3.1"><a href="#section-3.1.3" class="auto internal xref">3.1.3</a>.  <a href="#name-certificate-claims" class="internal xref">Certificate Claims</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.4">
+                    <p id="section-toc.1-1.3.2.1.2.4.1"><a href="#section-3.1.4" class="auto internal xref">3.1.4</a>.  <a href="#name-tdisp-device-interface-repo" class="internal xref">TDISP Device Interface Report</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.5">
+                    <p id="section-toc.1-1.3.2.1.2.5.1"><a href="#section-3.1.5" class="auto internal xref">3.1.5</a>.  <a href="#name-negotiated-state-preamble-v" class="internal xref">Negotiated State Preamble (Version, Capabilities and Algorithms)</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.6">
+                    <p id="section-toc.1-1.3.2.1.2.6.1"><a href="#section-3.1.6" class="auto internal xref">3.1.6</a>.  <a href="#name-submodule-naming" class="internal xref">Submodule Naming</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-pcie-legacy-device-claims" class="internal xref">PCIe Legacy Device Claims</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.1">
+                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="auto internal xref">3.2.1</a>.  <a href="#name-submodule-naming-2" class="internal xref">Submodule Naming</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-dat-eat-profile" class="internal xref">DAT EAT Profile</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-encoding" class="internal xref">Encoding</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-cryptographic-protection" class="internal xref">Cryptographic Protection</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-use-with-conceptual-message" class="internal xref">Use with Conceptual Message Wrappers</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-freshness-model" class="internal xref">Freshness Model</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="auto internal xref">4.5</a>.  <a href="#name-synopsis" class="internal xref">Synopsis</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-extending-the-dat-framework" class="internal xref">Extending the DAT Framework</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-claims-set-definition" class="internal xref">Claims-set Definition</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-naming-conventions-for-the-" class="internal xref">Naming Conventions for the <code>submod</code> Key</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-claims-registrations" class="internal xref">Claims Registrations</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-collated-cddl" class="internal xref">Collated CDDL</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-privacy-considerations" class="internal xref">Privacy Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-new-cwt-claims-registration" class="internal xref">New CWT Claims Registrations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.1">
+                    <p id="section-toc.1-1.9.2.1.2.1.1"><a href="#section-9.1.1" class="auto internal xref">9.1.1</a>.  <a href="#name-spdm-measurements-claim" class="internal xref">SPDM Measurements Claim</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.2">
+                    <p id="section-toc.1-1.9.2.1.2.2.1"><a href="#section-9.1.2" class="auto internal xref">9.1.2</a>.  <a href="#name-spdm-certificates-claim" class="internal xref">SPDM Certificates Claim</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.3">
+                    <p id="section-toc.1-1.9.2.1.2.3.1"><a href="#section-9.1.3" class="auto internal xref">9.1.3</a>.  <a href="#name-spdm-vca-claim" class="internal xref">SPDM VCA Claim</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.4">
+                    <p id="section-toc.1-1.9.2.1.2.4.1"><a href="#section-9.1.4" class="auto internal xref">9.1.4</a>.  <a href="#name-pcie-legacy-device-text-cla" class="internal xref">PCIe Legacy Device Text Claim</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.5">
+                    <p id="section-toc.1-1.9.2.1.2.5.1"><a href="#section-9.1.5" class="auto internal xref">9.1.5</a>.  <a href="#name-pcie-legacy-device-binary-c" class="internal xref">PCIe Legacy Device Binary Claim</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.6">
+                    <p id="section-toc.1-1.9.2.1.2.6.1"><a href="#section-9.1.6" class="auto internal xref">9.1.6</a>.  <a href="#name-spdm-challenge-claim-2" class="internal xref">SPDM Challenge Claim</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.7">
+                    <p id="section-toc.1-1.9.2.1.2.7.1"><a href="#section-9.1.7" class="auto internal xref">9.1.7</a>.  <a href="#name-tdisp-device-interface-repor" class="internal xref">TDISP Device Interface Report</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-example-composite-device" class="internal xref">Example Composite Device</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
+Most confidential computing platforms (e.g., Arm CCA, AMD SEV-SNP, Intel TDX) provide DA capabilities.
+Such capabilities prevent execution environments or software components that are untrusted by the TVM (including other TVMs and the host hypervisor) from accessing or controlling a device that has been assigned to the TVM.
+This includes, for example, protection of device MMIO interfaces and device caches.
+From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
+For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2"><a href="#fig-ratsd" class="auto internal xref">Figure 1</a> gives an overview of the architecture targeted by this specification.
+Devices assigned to a TVM must be authenticated by a 3rd party verifier before being accepted into the TCB.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<span id="name-confidential-vm-with-truste"></span><div id="fig-ratsd">
+<figure id="figure-1">
+        <div id="section-1-3.1">
+          <div class="alignCenter art-svg artwork" id="section-1-3.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="624" width="424" viewBox="0 0 424 624" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,112 L 8,576" fill="none" stroke="black"></path>
+              <path d="M 32,160 L 32,368" fill="none" stroke="black"></path>
+              <path d="M 32,400 L 32,560" fill="none" stroke="black"></path>
+              <path d="M 48,208 L 48,240" fill="none" stroke="black"></path>
+              <path d="M 48,304 L 48,336" fill="none" stroke="black"></path>
+              <path d="M 48,448 L 48,496" fill="none" stroke="black"></path>
+              <path d="M 80,248 L 80,296" fill="none" stroke="black"></path>
+              <path d="M 80,344 L 80,440" fill="none" stroke="black"></path>
+              <path d="M 112,72 L 112,200" fill="none" stroke="black"></path>
+              <path d="M 144,248 L 144,296" fill="none" stroke="black"></path>
+              <path d="M 144,344 L 144,416" fill="none" stroke="black"></path>
+              <path d="M 176,208 L 176,240" fill="none" stroke="black"></path>
+              <path d="M 176,304 L 176,336" fill="none" stroke="black"></path>
+              <path d="M 176,448 L 176,496" fill="none" stroke="black"></path>
+              <path d="M 192,160 L 192,368" fill="none" stroke="black"></path>
+              <path d="M 192,400 L 192,424" fill="none" stroke="black"></path>
+              <path d="M 192,440 L 192,560" fill="none" stroke="black"></path>
+              <path d="M 216,160 L 216,368" fill="none" stroke="black"></path>
+              <path d="M 216,400 L 216,424" fill="none" stroke="black"></path>
+              <path d="M 216,440 L 216,560" fill="none" stroke="black"></path>
+              <path d="M 232,144 L 232,160" fill="none" stroke="black"></path>
+              <path d="M 232,288 L 232,336" fill="none" stroke="black"></path>
+              <path d="M 232,416 L 232,448" fill="none" stroke="black"></path>
+              <path d="M 248,128 L 248,144" fill="none" stroke="black"></path>
+              <path d="M 264,344 L 264,416" fill="none" stroke="black"></path>
+              <path d="M 344,288 L 344,336" fill="none" stroke="black"></path>
+              <path d="M 360,160 L 360,368" fill="none" stroke="black"></path>
+              <path d="M 376,144 L 376,352" fill="none" stroke="black"></path>
+              <path d="M 376,416 L 376,448" fill="none" stroke="black"></path>
+              <path d="M 392,128 L 392,336" fill="none" stroke="black"></path>
+              <path d="M 392,400 L 392,560" fill="none" stroke="black"></path>
+              <path d="M 416,112 L 416,576" fill="none" stroke="black"></path>
+              <path d="M 56,32 L 168,32" fill="none" stroke="black"></path>
+              <path d="M 56,64 L 168,64" fill="none" stroke="black"></path>
+              <path d="M 24,96 L 400,96" fill="none" stroke="black"></path>
+              <path d="M 248,128 L 392,128" fill="none" stroke="black"></path>
+              <path d="M 232,144 L 376,144" fill="none" stroke="black"></path>
+              <path d="M 32,160 L 192,160" fill="none" stroke="black"></path>
+              <path d="M 216,160 L 360,160" fill="none" stroke="black"></path>
+              <path d="M 48,208 L 176,208" fill="none" stroke="black"></path>
+              <path d="M 48,240 L 176,240" fill="none" stroke="black"></path>
+              <path d="M 232,288 L 344,288" fill="none" stroke="black"></path>
+              <path d="M 48,304 L 176,304" fill="none" stroke="black"></path>
+              <path d="M 48,336 L 176,336" fill="none" stroke="black"></path>
+              <path d="M 232,336 L 344,336" fill="none" stroke="black"></path>
+              <path d="M 376,336 L 392,336" fill="none" stroke="black"></path>
+              <path d="M 360,352 L 376,352" fill="none" stroke="black"></path>
+              <path d="M 32,368 L 72,368" fill="none" stroke="black"></path>
+              <path d="M 88,368 L 136,368" fill="none" stroke="black"></path>
+              <path d="M 152,368 L 192,368" fill="none" stroke="black"></path>
+              <path d="M 216,368 L 256,368" fill="none" stroke="black"></path>
+              <path d="M 272,368 L 360,368" fill="none" stroke="black"></path>
+              <path d="M 32,400 L 72,400" fill="none" stroke="black"></path>
+              <path d="M 88,400 L 136,400" fill="none" stroke="black"></path>
+              <path d="M 152,400 L 192,400" fill="none" stroke="black"></path>
+              <path d="M 216,400 L 256,400" fill="none" stroke="black"></path>
+              <path d="M 272,400 L 392,400" fill="none" stroke="black"></path>
+              <path d="M 232,416 L 256,416" fill="none" stroke="black"></path>
+              <path d="M 272,416 L 376,416" fill="none" stroke="black"></path>
+              <path d="M 160,432 L 248,432" fill="none" stroke="black"></path>
+              <path d="M 48,448 L 176,448" fill="none" stroke="black"></path>
+              <path d="M 232,448 L 376,448" fill="none" stroke="black"></path>
+              <path d="M 48,496 L 176,496" fill="none" stroke="black"></path>
+              <path d="M 32,560 L 192,560" fill="none" stroke="black"></path>
+              <path d="M 216,560 L 392,560" fill="none" stroke="black"></path>
+              <path d="M 24,592 L 400,592" fill="none" stroke="black"></path>
+              <path d="M 56,32 C 47.16936,32 40,39.16936 40,48" fill="none" stroke="black"></path>
+              <path d="M 168,32 C 176.83064,32 184,39.16936 184,48" fill="none" stroke="black"></path>
+              <path d="M 56,64 C 47.16936,64 40,56.83064 40,48" fill="none" stroke="black"></path>
+              <path d="M 168,64 C 176.83064,64 184,56.83064 184,48" fill="none" stroke="black"></path>
+              <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+              <path d="M 400,96 C 408.83064,96 416,103.16936 416,112" fill="none" stroke="black"></path>
+              <path d="M 160,432 C 151.16936,432 144,424.83064 144,416" fill="none" stroke="black"></path>
+              <path d="M 248,432 C 256.83064,432 264,424.83064 264,416" fill="none" stroke="black"></path>
+              <path d="M 24,592 C 15.16936,592 8,584.83064 8,576" fill="none" stroke="black"></path>
+              <path d="M 400,592 C 408.83064,592 416,584.83064 416,576" fill="none" stroke="black"></path>
+              <polygon class="arrowhead" points="272,344 260,338.4 260,349.6" fill="black" transform="rotate(270,264,344)"></polygon>
+              <polygon class="arrowhead" points="152,344 140,338.4 140,349.6" fill="black" transform="rotate(270,144,344)"></polygon>
+              <polygon class="arrowhead" points="152,296 140,290.4 140,301.6" fill="black" transform="rotate(90,144,296)"></polygon>
+              <polygon class="arrowhead" points="152,248 140,242.4 140,253.6" fill="black" transform="rotate(270,144,248)"></polygon>
+              <polygon class="arrowhead" points="120,200 108,194.4 108,205.6" fill="black" transform="rotate(90,112,200)"></polygon>
+              <polygon class="arrowhead" points="120,72 108,66.4 108,77.6" fill="black" transform="rotate(270,112,72)"></polygon>
+              <polygon class="arrowhead" points="88,440 76,434.4 76,445.6" fill="black" transform="rotate(90,80,440)"></polygon>
+              <polygon class="arrowhead" points="88,344 76,338.4 76,349.6" fill="black" transform="rotate(270,80,344)"></polygon>
+              <polygon class="arrowhead" points="88,296 76,290.4 76,301.6" fill="black" transform="rotate(90,80,296)"></polygon>
+              <polygon class="arrowhead" points="88,248 76,242.4 76,253.6" fill="black" transform="rotate(270,80,248)"></polygon>
+              <g class="text">
+                <text x="84" y="52">Verifier</text>
+                <text x="128" y="52">/</text>
+                <text x="148" y="52">RP</text>
+                <text x="60" y="132">Attester</text>
+                <text x="56" y="180">TVM</text>
+                <text x="260" y="180">Assigned</text>
+                <text x="324" y="180">Device</text>
+                <text x="76" y="228">Lead</text>
+                <text x="132" y="228">Attester</text>
+                <text x="268" y="308">Device</text>
+                <text x="80" y="324">Guest</text>
+                <text x="132" y="324">Kernel</text>
+                <text x="276" y="324">Attester</text>
+                <text x="292" y="436">Host</text>
+                <text x="340" y="436">Kernel</text>
+                <text x="92" y="468">Platform</text>
+                <text x="92" y="484">Attester</text>
+                <text x="92" y="532">Confidential</text>
+                <text x="264" y="532">Untrusted</text>
+                <text x="76" y="548">Platform</text>
+                <text x="260" y="548">Platform</text>
+              </g>
+            </svg><a href="#section-1-3.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-confidential-vm-with-truste" class="selfRef">Confidential VM with Trusted Device(s)</a>
+        </figcaption></figure>
+</div>
+<p id="section-1-4">This document defines an attestation Evidence format for DA as an EAT <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> profile.
+The format is designed to be generic, extensible and architecture-agnostic.
+Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>.
+As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant PCIe devices.
+It does not support on-chip SPDM-compliant device, something that is left for future consideration.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">The TVM uses the platform, i.e., PCIe Data Object Exchange (DOE), to transport SPDM packets, but the SPDM protocol uses its own mechanisms and messages to guarantee the authenticity and privacy of the information it carries.
+It defines specific messages for creating and exchanging cryptographic keys between requester and responder to establish secure communication.
+The cryptographic algorithms are selected based on the pre-negotiated capabilities of both parties (Section 10.16 of <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>).
+The SPDM protocol does not rely on the hypervisor or host for anything else other than the physical delivery of content between the trusted and non-trusted worlds.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">This format is based on the information provided by the SPDM protocol without imposing additional security constraints.
+It is incumbent upon other entities to describe, select and enforce those additional security constraints based on operational requirements.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">Since other bus architectures and protocols are expected to be supported as the technology gains wider adoption, provisions have been made for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
+This list is by no means exhaustive and is expected to expand.
+<a href="#extend" class="auto internal xref">Section 5</a> outlines the requirements for incorporating new bus technologies into the Device Assignment Token (DAT) framework.
+Lastly, live migration of a TVM from one host to another is currently not addressed by the SPDM specification and therefore not covered herein.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8">As discussed in <span><a href="https://rfc-editor.org/rfc/rfc9334#section-3.4" class="relref">Section 3.4</a> of [<a href="#RFC9334" class="cite xref">RFC9334</a>]</span>, a lead Attester may also act as an internal Verifier.
+For example, the lead Attester would verify the identity of the SPDM responder locally using a provisioned trust anchor.
+If satisfied, it would then repackage the sub-Attester claims in the format defined in this document.
+In other words, the lead Attester would use the framework and claims defined in this document to create Attestation Results.
+In this sense, DAT can be considered to provide both an Attestation Result format and an Evidence format.
+Generally, the distinction between Evidence and Attestation Results, when applied to Conceptual Messages generated by a composite device, may not always be completely transparent to the receiver.
+Note that when using CMW <span>[<a href="#I-D.ietf-rats-msg-wrap" class="cite xref">I-D.ietf-rats-msg-wrap</a>]</span> to wrap the collected claims, the <code>ind</code> field could be used to refine the Conceptual Message type expressed by the EAT media type <span>[<a href="#RFC9782" class="cite xref">RFC9782</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions-and-definitions">
+<section id="section-2">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">PCIe devices maximize hardware efficiency by splitting a single physical card into multiple independent logical devices called functions (see Section 9 of <span>[<a href="#PCIe" class="cite xref">PCIe</a>]</span>).
+Because each physical or virtual function operates in isolation, multiple VMs can directly and safely share the same underlying hardware simultaneously.
+In this document, the terms "<em>device</em>", "<em>interface</em>" and "<em>device interface</em>" refer to the physical or virtual function of a device.<a href="#section-2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="dat-claims">
+<section id="section-3">
+      <h2 id="name-device-assignment-token-dat">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-device-assignment-token-dat" class="section-name selfRef">Device Assignment Token (DAT) Claims</a>
+      </h2>
+<p id="section-3-1">The Device Assignment Token (DAT) is the encompassing envelope for the individual device claims to be presented.
+A DAT can be used as a standalone entity but can also be embedded in a larger, platform-specific attestation token.
+A DAT consists of an EAT profile identifier, a nonce and an EAT submodule (<span><a href="https://rfc-editor.org/rfc/rfc9711#section-4.2.18" class="relref">Section 4.2.18</a> of [<a href="#RFC9711" class="cite xref">RFC9711</a>]</span>) that contains any number of individual device claims.
+Each individual submodule is the combination of a device name and a standard claims-set based on the bus or protocol the device supports.
+The syntax of the device name depends on the type of bus or protocol used.
+Each name consists of two parts joined by a colon: a namespace and a bus-specific name.
+See <a href="#spdm-submod-name" class="auto internal xref">Section 3.1.6</a> for SPDM devices, and <a href="#pcie-legacy-submod-name" class="auto internal xref">Section 3.2.1</a> for legacy PCIe devices.
+As previously mentioned, this draft currently defines the claims-set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
+Careful consideration was also given to the overall design in order to leave room for future expansion.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3-2">
+<pre>
+dat = {
+  &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device#1.0.0"
+  &amp;(eat_nonce: 10) =&gt; bytes .size (8..64)
+  &amp;(eat_submods: 266) =&gt; {
+    + device-name =&gt; $device-claims-set
+  }
+}
+
+device-name = text
+
+$device-claims-set /= spdm-claims
+$device-claims-set /= pcie-legacy-claims
+</pre><a href="#section-3-2" class="pilcrow">¶</a>
+</div>
+<div id="spdm-claims">
+<section id="section-3.1">
+        <h3 id="name-spdm-claims">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-spdm-claims" class="section-name selfRef">SPDM Claims</a>
+        </h3>
+<p id="section-3.1-1">A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
+Each instance consists of a measurements section, a certificates section, or both.
+These can be supplemented with two additional sections: (1) a challenge for Component Mesaurement and Authentication (CMA) scenarios and (2) a device interface report that contains information from the TEE Device Information Security Protocol (TDISP) Device Interface Report (see Chapter 11 of <span>[<a href="#PCIe" class="cite xref">PCIe</a>]</span>).
+A challenge needs certificate information from the certificate section and as such, can only be present if certificates are included in the SPDM artifacts.
+TDISP messages are embedded in the VENDOR_DEFINED_REQUEST and VENDOR_DEFINED_RESPONSE messages of the SPDM protocol.
+Optionally, the Negotiated State preamble (version, capabilities and algorithms) bytes can be included to present the full negotiated state between the SPDM requester and responder.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1-2">
+<pre>
+spdm-claims = {
+  &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-spdm#1.0.0"
+  spdm-artefacts
+  ? &amp;(vca: 3804) =&gt; bytes
+}
+
+spdm-artefacts //= (
+  &amp;(measurements: 3802) =&gt; spdm-measurements
+  &amp;(certificates: 3803) =&gt; spdm-certificates
+  ? &amp;(challenge: 3807) =&gt; spdm-signature
+  ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface-report
+)
+
+spdm-artefacts //= (
+  &amp;(measurements: 3802) =&gt; spdm-measurements
+  ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface-report
+)
+
+spdm-artefacts //= (
+  &amp;(certificates: 3803) =&gt; spdm-certificates
+  ? &amp;(challenge: 3807) =&gt; spdm-signature
+  ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface-report
+)
+</pre><a href="#section-3.1-2" class="pilcrow">¶</a>
+</div>
+<div id="spdm-measurements">
+<section id="section-3.1.1">
+          <h4 id="name-measurements-claim">
+<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-measurements-claim" class="section-name selfRef">Measurements Claim</a>
+          </h4>
+<p id="section-3.1.1-1">The SPDM specification reserves measurement indexes between 240 and 255, leaving space for 239 measurements per device.
+The entire measurement log is optionally signed by the certificate populated in one of the 8 certificate slots.
+It should be noted that measurements formalized herein follow the DMTF measurement specification (see Table 55 of <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>).<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.1-2">
+<pre>
+spdm-measurements = {
+  + block-id =&gt; spdm-measurement
+  ? "signature" =&gt; spdm-signature
+}
+
+block-id = 1..239
+</pre><a href="#section-3.1.1-2" class="pilcrow">¶</a>
+</div>
+<div id="measurement">
+<section id="section-3.1.1.1">
+            <h5 id="name-measurement">
+<a href="#section-3.1.1.1" class="section-number selfRef">3.1.1.1. </a><a href="#name-measurement" class="section-name selfRef">Measurement</a>
+            </h5>
+<p id="section-3.1.1.1-1">SPDM measurements start with a component type that reflects one of the 10 categories defined by the SPDM specification.
+Following is the measurement itself represented by either a raw bitstream or a digest.
+The size of the digest value is derived from the measurement hash algorithm conveyed by the SPDM ALGORITHMS message response.<a href="#section-3.1.1.1-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.1.1-2">
+<pre>
+spdm-measurement = {
+  &amp;(component-type: 1) =&gt; component-type
+  measurement
+}
+
+measurement //= ( &amp;(digest-measurement: 2) =&gt; digest-measurement )
+measurement //= ( &amp;(raw-measurement: 3) =&gt; raw-measurement )
+
+component-type /= &amp;(immutable-rom: 0)
+component-type /= &amp;(mutable-firmware: 1)
+component-type /= &amp;(hardware-config: 2)
+component-type /= &amp;(firmware-config: 3)
+component-type /= &amp;(freeform-measurement-manifest: 4)
+component-type /= &amp;(device-mode: 5)
+component-type /= &amp;(mutable-firmware-version: 6)
+component-type /= &amp;(mutable-firmware-svn: 7)
+component-type /= &amp;(hash-extend-measurement: 8)
+component-type /= &amp;(informational: 9)
+component-type /= &amp;(structured-measurement-manifest: 10)
+
+raw-measurement = bytes
+digest-measurement = digest
+
+digest = [
+  alg: uint / text
+  val: bytes
+]
+</pre><a href="#section-3.1.1.1-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="spdm-challenge">
+<section id="section-3.1.2">
+          <h4 id="name-spdm-challenge-claim">
+<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-spdm-challenge-claim" class="section-name selfRef">SPDM Challenge Claim</a>
+          </h4>
+<p id="section-3.1.2-1">SPDM compliant devices can optionally support the capability to authenticate responders through the challenge-response protocol and sign measurements.
+Included in the signature are all the elements needed by a third party entity to reconstruct the original transcript or measurement log signed by the device.
+Those elements include M1 for challenge signatures or L1 for measurement signatures (see CDDL below), the combined SPDM prefix, the hash algorithm used to generate a digest of the measurement log and nonces provided by the requester and responder.
+The slot number of the leaf certificate used to sign the measurement log is also provided.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+<div class="breakable lang-cddl sourcecode" id="section-3.1.2-2">
+<pre>
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
+;
+; What follows is based on SPDM v1.3.2 (DSP0274_1.3.2.pdf)
+;
+
+;
+; Algorithms currently supported by SPDM.
+; See "MeasurementHashAlgo", table 21, page 79.
+;
+hash-algorithm-type /= &amp;(tpm_alg_sha_256: 0)
+hash-algorithm-type /= &amp;(tpm_alg_sha_384: 2)
+hash-algorithm-type /= &amp;(tpm_alg_sha_512: 4)
+hash-algorithm-type /= &amp;(tpm_alg_sha3_256: 8)
+hash-algorithm-type /= &amp;(tpm_alg_sha3_384: 16)
+hash-algorithm-type /= &amp;(tpm_alg_sha3_512: 32)
+hash-algorithm-type /= &amp;(tpm_alg_sm3_256: 64)
+
+;
+; See signature generation and verification algorithms for
+; CHALLENGE_AUTH message on page 108.
+;
+; M1 is _one_ of the following:
+;
+; M1 /= GET_VERSION , GET_CAPABILITIES , NEGOTIATE_ALGORITHMS , \
+               GET_DIGESTS , GET_CERTIFICATE , CHALLENGE (A1, B1, C1)
+; M1 /= GET_VERSION , GET_CAPABILITIES , NEGOTIATE_ALGORITHMS , \
+                                 GET_DIGESTS , CHALLENGE (A1, B3, C1)
+; M1 /= GET_VERSION , GET_CAPABILITIES , NEGOTIATE_ALGORITHMS , \
+                             GET_CERTIFICATE , CHALLENGE (A1, B4, C1)
+; M1 /= GET_VERSION , GET_CAPABILITIES , NEGOTIATE_ALGORITHMS , \
+                                               CHALLENGE (A1, B2, C1)
+; M1 /= GET_DIGESTS , GET_CERTIFICATE , CHALLENGE (A2, B1, C1)
+; M1 /= GET_DIGESTS , CHALLENGE (A2, B3, C1)
+; M1 /= GET_CERTIFICATE , CHALLENGE (A2, B4, C1)
+; M1 /= CHALLENGE (A2, B2, C1)
+;
+; See signature generation and verification algorithms for
+; MEASUREMENTS messages on page 126.
+;
+; L1 = Concatenate(VCA, GET_MEASUREMENTS_REQUEST1,
+;               MEASUREMENTS_RESPONSE1, ...,
+;               GET_MEASUREMENTS_REQUESTn-1,
+;               MEASUREMENTS_RESPONSEn-1,
+;               GET_MEASUREMENTS_REQUESTn, MEASUREMENTS_RESPONSEn)
+;
+spdm-signature = {
+   &amp;(slot: 1) =&gt; 0..7, ; Slot of the certificate chain used to
+                       ; authenticate the measurement.  Default
+                       ; should be 0.
+   &amp;(requester-nonce: 2) =&gt; bytes .size 32,
+   &amp;(responder-nonce: 3) =&gt; bytes .size 32,
+   &amp;(combined-spdm-prefix: 4) =&gt; bytes .size 100,
+   &amp;(IL1: 5) =&gt; bytes, ; M1 or L1 (see comment above)
+   &amp;(base-hash-algo: 6) =&gt; hash-algorithm-type,
+   &amp;(signature: 7) =&gt; bytes
+}
+</pre><a href="#section-3.1.2-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="spdm-certificates">
+<section id="section-3.1.3">
+          <h4 id="name-certificate-claims">
+<a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-certificate-claims" class="section-name selfRef">Certificate Claims</a>
+          </h4>
+<p id="section-3.1.3-1">According to the specification, SPDM compliant devices should support at most 8 slots, with slot 0 populated by default.
+Slot 0 <span class="bcp14">SHALL</span> contain a certificate chain that follows the Device certificate model or the Alias certificate model.
+Regardless of the certificate model used, a certificate chain comprises one or more DER-encoded X.509 v3 certificates <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.
+The certificates <span class="bcp14">MUST</span> be concatenated with no intermediate padding.
+As described in paragraph 355 of Section 10.6.1 of <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>, the certificates in the chain are sorted in descending order, with the end-entity certificate (also known as the "leaf") appearing last.
+According to the same paragraph, a trust anchor may appear as the first certificate in the chain.
+If so, it should not be used to validate the chain without first confirming its presence in a trust anchor store.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.3-2">
+<pre>
+spdm-certificates = {
+  default-cert-slot =&gt; cert-chain
+  ? aux-cert-slot-1 =&gt; cert-chain
+  ? aux-cert-slot-2 =&gt; cert-chain
+  ? aux-cert-slot-3 =&gt; cert-chain
+  ? aux-cert-slot-4 =&gt; cert-chain
+  ? aux-cert-slot-5 =&gt; cert-chain
+  ? aux-cert-slot-6 =&gt; cert-chain
+  ? aux-cert-slot-7 =&gt; cert-chain
+}
+
+; ASN.1 DER-encoded certificates concatenated with no intermediate
+; padding.
+cert-chain = bytes
+
+default-cert-slot = 0
+
+aux-cert-slot-1 = 1
+aux-cert-slot-2 = 2
+aux-cert-slot-3 = 3
+aux-cert-slot-4 = 4
+aux-cert-slot-5 = 5
+aux-cert-slot-6 = 6
+aux-cert-slot-7 = 7
+</pre><a href="#section-3.1.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="interface-report">
+<section id="section-3.1.4">
+          <h4 id="name-tdisp-device-interface-repo">
+<a href="#section-3.1.4" class="section-number selfRef">3.1.4. </a><a href="#name-tdisp-device-interface-repo" class="section-name selfRef">TDISP Device Interface Report</a>
+          </h4>
+<p id="section-3.1.4-1">A TDISP Device Interface Report can only be obtained if the device interface has transitioned to the CONFIG_LOCK or RUN state of the TDISP state machine.
+Once in either of these states, the device's firmware ensures that modifications to the interface can't be made by an untrusted party.
+Trust in the device firmware's implemenation is imparted by its measurement and the signature it generates, both verifiable by a 3rd party entity.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.4-2">A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
+Next are 3 register fields pertaining to MSI-X (Message Signalled Interrupts), LNR (Lightweight Notification Requester) and TPH (TLP Processing Hints) capabilities.
+MMIO ranges are assigned from PCIe BAR(s) and provide information about the memory areas a device is working with.
+More information on the MMIO range bitfields and the ones defined as part of the device interface field (above) can be found in the TDISP section of the PCI Express specification.
+The last field is device-specific and optionally included to convey additional configuration information about the device.<a href="#section-3.1.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.4-3">The <code>tdisp-device-interface-report</code> map <span class="bcp14">MUST NOT</span> be empty.<a href="#section-3.1.4-3" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.4-4">
+<pre>
+tdisp-device-interface-report = non-empty&lt;{
+  ? &amp;(interface-info: 1) =&gt; interface-info-bits
+  ? &amp;(msi-x-message-control: 2) =&gt; bytes .size 2
+  ? &amp;(lnr-control: 3) =&gt; bytes .size 2
+  ? &amp;(tph-control: 4) =&gt; bytes .size 4
+  ? &amp;(mmio-ranges: 5) =&gt; mmio-ranges
+  ? &amp;(device-specific-info: 6) =&gt; bytes
+}&gt;
+
+interface-info-bits = bytes .bits interface-info-flags
+interface-info-flags = &amp;(bit0: 0,
+                         bit1: 1,
+                         bit2: 2,
+                         bit3: 3,
+                         bit4: 4,
+                         bit5: 5,
+                        )
+
+mmio-ranges = {
+  + &amp;(mmio-range: 1) =&gt; mmio-range
+}
+
+mmio-range = {
+  &amp;(first-4k-page: 1) =&gt; bytes .size 8
+  &amp;(number-of-4k-pages: 2) =&gt; bytes .size 4
+  &amp;(attributes: 3) =&gt; range-attributes
+}
+
+range-attributes = {
+  &amp;(range-attribute-bits: 1) =&gt; range-attribute-bits
+  &amp;(range-attribute-range-id: 2) =&gt; bytes .size 2
+}
+
+range-attribute-bits = bytes .bits range-attributes-flags
+range-attributes-flags = &amp;(bit0: 0,
+                           bit1: 1,
+                           bit2: 2,
+                           bit3: 3,
+                          )
+</pre><a href="#section-3.1.4-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="spdm-vca">
+<section id="section-3.1.5">
+          <h4 id="name-negotiated-state-preamble-v">
+<a href="#section-3.1.5" class="section-number selfRef">3.1.5. </a><a href="#name-negotiated-state-preamble-v" class="section-name selfRef">Negotiated State Preamble (Version, Capabilities and Algorithms)</a>
+          </h4>
+<p id="section-3.1.5-1">The Negotiated State Preamble (i.e., <code>vca</code>) claim contains the concatenation of messages GET_VERSION, VERSION, GET_CAPABILITIES, CAPABILITIES, NEGOTIATE_ALGORITHMS, and ALGORITHMS last exchanged between the SPDM Requester and Responder.<a href="#section-3.1.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="spdm-submod-name">
+<section id="section-3.1.6">
+          <h4 id="name-submodule-naming">
+<a href="#section-3.1.6" class="section-number selfRef">3.1.6. </a><a href="#name-submodule-naming" class="section-name selfRef">Submodule Naming</a>
+          </h4>
+<p id="section-3.1.6-1">The namespace used for SPDM submodules is "spdm".<a href="#section-3.1.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.6-2">The name associated with an SPDM submodule is extracted from the leaf certificate of the relevant device.<a href="#section-3.1.6-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.6-3.1">
+              <p id="section-3.1.6-3.1.1">If the leaf certificate contains a Subject Alternative Name of type DMTFOtherName, the submodule name is the value contained in <code>ub-DMTF-device-info</code>.
+For example: "spdm:ACME:WIDGET:0123456789".<a href="#section-3.1.6-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3.1.6-3.2">
+              <p id="section-3.1.6-3.2.1">Otherwise, the submod name is the string representation of the certificate Subject, as described in <span>[<a href="#RFC4514" class="cite xref">RFC4514</a>]</span>.
+For example: "spdm:C=CA,O=ACME,OU=Widget,CN=0123456789".<a href="#section-3.1.6-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="pcie-legacy-device">
+<section id="section-3.2">
+        <h3 id="name-pcie-legacy-device-claims">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-pcie-legacy-device-claims" class="section-name selfRef">PCIe Legacy Device Claims</a>
+        </h3>
+<p id="section-3.2-1">A definition is provided for a device claims-set for PCIe legacy devices that do not implement the necessary extensions to attest to their provenance and configuration.
+This makes it possible to keep using current assets as secured ones are being provisioned.
+This legacy device claims-set simply mirrors the type 0/1 common registers of the PCIe configuration space, mandating only that the vendor and device identification code be provided.
+Other fields of the configuration space header may optionally be included should they add value.
+A binary format of the PCIe configuration space is made available for processing by existing PCIe configuration space tools.
+Implementers may optionally choose to include both text and binary versions should there be a use case to support this representation.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.2-2">
+<pre>
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
+pcie-legacy-claims = {
+  &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-pcie-legacy#1.0\
+                                                                  .0"
+  pcie-legacy-artefacts
+  ? $$pcie-legacy-claim-extension
+}
+
+
+pcie-legacy-artefacts //= (
+  &amp;(artefacts-text: 3805) =&gt; pcie-type-0-1-config-space-text
+  &amp;(artefacts-bytes: 3806) =&gt; pcie-type-0-1-config-space-bytes
+)
+
+pcie-legacy-artefacts //= (
+  &amp;(artefacts-text: 3805) =&gt; pcie-type-0-1-config-space-text
+)
+
+pcie-legacy-artefacts //= (
+  &amp;(artefacts-bytes: 3806) =&gt; pcie-type-0-1-config-space-bytes
+)
+
+pcie-type-0-1-config-space-bytes = bytes .size 256
+
+pcie-type-0-1-config-space-text = {
+  &amp;(vendorID: 1) =&gt; bytes .size 2
+  &amp;(deviceID: 2) =&gt; bytes .size 2
+  ? &amp;(command: 3) =&gt; bytes .size 2
+  ? &amp;(status: 4) =&gt; bytes .size 2
+  ? &amp;(revisionID: 5) =&gt; bytes .size 1
+  ? &amp;(classCode: 6) =&gt; bytes .size 3
+  ? &amp;(cacheLineSize: 7) =&gt; bytes .size 1
+  ? &amp;(latencyTimer: 8) =&gt; bytes .size 1
+  ? &amp;(headerType: 9) =&gt; bytes .size 1
+  ? &amp;(BITS: 10) =&gt; bytes .size 1
+}
+</pre><a href="#section-3.2-2" class="pilcrow">¶</a>
+</div>
+<div id="pcie-legacy-submod-name">
+<section id="section-3.2.1">
+          <h4 id="name-submodule-naming-2">
+<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-submodule-naming-2" class="section-name selfRef">Submodule Naming</a>
+          </h4>
+<p id="section-3.2.1-1">The namespace used for legacy PCIe submodules is "legacy-pcie".<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-2">The name is any arbitrary string chosen by the implementation.
+For example, "legacy-pcie:0000:01:02.0" where "0000" is the domain, "01" the PCI bus id, "02" the device on the bus and "0" the device function.<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="profile">
+<section id="section-4">
+      <h2 id="name-dat-eat-profile">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-dat-eat-profile" class="section-name selfRef">DAT EAT Profile</a>
+      </h2>
+<div id="encoding">
+<section id="section-4.1">
+        <h3 id="name-encoding">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-encoding" class="section-name selfRef">Encoding</a>
+        </h3>
+<p id="section-4.1-1">A DAT is encoded in CBOR <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>.
+The CBOR representation of a DAT <span class="bcp14">MUST</span> be "valid" according to the definition in <span><a href="https://rfc-editor.org/rfc/rfc8949#section-1.2" class="relref">Section 1.2</a> of [<a href="#STD94" class="cite xref">STD94</a>]</span>.
+Only definite-length strings, arrays, and maps are allowed.
+Since a DAT emitter may be found in a constrained environment, it may not be able to emit CBOR preferred serializations (<span><a href="https://rfc-editor.org/rfc/rfc8949#section-4.1" class="relref">Section 4.1</a> of [<a href="#STD94" class="cite xref">STD94</a>]</span>).
+Therefore, the Verifier <span class="bcp14">MUST</span> be a variation-tolerant CBOR decoder.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="cryptographic-protection">
+<section id="section-4.2">
+        <h3 id="name-cryptographic-protection">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-cryptographic-protection" class="section-name selfRef">Cryptographic Protection</a>
+        </h3>
+<p id="section-4.2-1">Cryptographic protection can be obtained by wrapping the <code>dat</code> claims-set in a COSE Web Token (CWT) <span>[<a href="#RFC8392" class="cite xref">RFC8392</a>]</span>.
+In this case, the signature structure <span class="bcp14">MUST</span> be a tagged (18) COSE_Sign1.
+Alternatively, a DAT can be part of a Conceptual Message Wrapper (CMW) <span>[<a href="#I-D.ietf-rats-msg-wrap" class="cite xref">I-D.ietf-rats-msg-wrap</a>]</span> collection.
+In this case, the DAT claims-set can be a UCCS <span>[<a href="#RFC9781" class="cite xref">RFC9781</a>]</span> and the protection is provided by the signed CMW.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">The flexibility provided by the COSE <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span> format should be sufficient to adapt to the level of cryptographic agility required for specific use cases.
+It is <span class="bcp14">RECOMMENDED</span> that commonly adopted algorithms, such as those discussed in <span>[<a href="#RFC9053" class="cite xref">RFC9053</a>]</span>, are used.
+While receivers are expected to accept a wide range of algorithms, Attesters will produce DAT using only one such algorithm.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="use-with-conceptual-message-wrappers">
+<section id="section-4.3">
+        <h3 id="name-use-with-conceptual-message">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-use-with-conceptual-message" class="section-name selfRef">Use with Conceptual Message Wrappers</a>
+        </h3>
+<p id="section-4.3-1">When used in a CMW, the collector will wrap the serialised COSE_Sign1 or UCCS with the appropriate media type or CoAP Content-Format defined in <span>[<a href="#RFC9782" class="cite xref">RFC9782</a>]</span>.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="freshness-model">
+<section id="section-4.4">
+        <h3 id="name-freshness-model">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-freshness-model" class="section-name selfRef">Freshness Model</a>
+        </h3>
+<p id="section-4.4-1">DAT supports the freshness models for attestation Evidence based on nonces and epoch IDs (see Section <a href="https://rfc-editor.org/rfc/rfc9334#section-10.2" class="relref">10.2</a> and Section <a href="https://rfc-editor.org/rfc/rfc9334#section-10.3" class="relref">10.3</a> of <span>[<a href="#RFC9334" class="cite xref">RFC9334</a>]</span>) using the <code>eat_nonce</code> claim to convey the nonce or epoch ID supplied by the Verifier.
+No further assumptions are made about the specific remote attestation protocol.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">Note that the use of epoch IDs is subject by the type restrictions imposed by the <code>eat_nonce</code> syntax.
+For use in DAT, the epoch ID <span class="bcp14">MUST</span> be encodable as an opaque binary string of between 8 and 64 octets; an Epoclet can be used for this purpose (see <span>[<a href="#I-D.ietf-rats-epoch-markers" class="cite xref">I-D.ietf-rats-epoch-markers</a>]</span>).<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="synopsis">
+<section id="section-4.5">
+        <h3 id="name-synopsis">
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-synopsis" class="section-name selfRef">Synopsis</a>
+        </h3>
+<p id="section-4.5-1"><a href="#tbl-profile" class="auto internal xref">Table 1</a> presents a concise view of the requirements described in the preceding sections.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
+<span id="name-dat-profile-synopsis"></span><div id="tbl-profile">
+<table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-dat-profile-synopsis" class="selfRef">DAT Profile Synopsis</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Issue</th>
+              <th class="text-left" rowspan="1" colspan="1">Profile Definition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">CBOR/JSON</td>
+              <td class="text-left" rowspan="1" colspan="1">CBOR <span class="bcp14">MUST</span> be used</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">CBOR Encoding</td>
+              <td class="text-left" rowspan="1" colspan="1">Definite length maps and arrays <span class="bcp14">MUST</span> be used</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">CBOR Encoding</td>
+              <td class="text-left" rowspan="1" colspan="1">Definite length strings <span class="bcp14">MUST</span> be used</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">CBOR Serialization</td>
+              <td class="text-left" rowspan="1" colspan="1">Variant serialization <span class="bcp14">MAY</span> be used</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">COSE Protection</td>
+              <td class="text-left" rowspan="1" colspan="1">COSE_Sign1 <span class="bcp14">MUST</span> be used (directly or via CMW)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Algorithms</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span>[<a href="#RFC9053" class="cite xref">RFC9053</a>]</span> <span class="bcp14">SHOULD</span> be used</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Detached EAT Bundle Usage</td>
+              <td class="text-left" rowspan="1" colspan="1">Detached EAT bundles <span class="bcp14">MUST NOT</span> be sent</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Verification Key Identification</td>
+              <td class="text-left" rowspan="1" colspan="1">Any identification method listed in <span><a href="https://rfc-editor.org/rfc/rfc9711#appendix-F.1" class="relref">Appendix F.1</a> of [<a href="#RFC9711" class="cite xref">RFC9711</a>]</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Freshness</td>
+              <td class="text-left" rowspan="1" colspan="1">nonce or epoch ID based (Section <a href="https://rfc-editor.org/rfc/rfc9334#section-10.2" class="relref">10.2</a> and Section <a href="https://rfc-editor.org/rfc/rfc9334#section-10.3" class="relref">10.3</a> of <span>[<a href="#RFC9334" class="cite xref">RFC9334</a>]</span>)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Claims</td>
+              <td class="text-left" rowspan="1" colspan="1">Those defined in <a href="#dat-claims" class="auto internal xref">Section 3</a>. As per general EAT rules, the receiver <span class="bcp14">MUST NOT</span> error out on claims it does not understand.</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="extend">
+<section id="section-5">
+      <h2 id="name-extending-the-dat-framework">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-extending-the-dat-framework" class="section-name selfRef">Extending the DAT Framework</a>
+      </h2>
+<p id="section-5-1">An extension to the DAT framework that introduces support for a new bus technology <span class="bcp14">MUST</span> provide the following information in a public document (e.g., an Internet-Draft):<a href="#section-5-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-2.1">
+          <p id="section-5-2.1.1">A precise definition of the new claims-set,<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.2">
+          <p id="section-5-2.2.1">A naming convention for the <code>submod</code> map entry,<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-2.3">
+          <p id="section-5-2.3.1">The registration of any new claims with IANA.<a href="#section-5-2.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<div id="claims-set-definition">
+<section id="section-5.1">
+        <h3 id="name-claims-set-definition">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-claims-set-definition" class="section-name selfRef">Claims-set Definition</a>
+        </h3>
+<p id="section-5.1-1">The new claims-set <span class="bcp14">MUST</span> be specified clearly and unambiguously, ideally using CDDL, with a separate prose description of each claim.
+The claims-set <span class="bcp14">MUST</span> include a suitable <code>eat_profile</code> value.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">See <a href="#spdm-claims" class="auto internal xref">Section 3.1</a> for the blueprint.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="naming-conventions-for-the-submod-key">
+<section id="section-5.2">
+        <h3 id="name-naming-conventions-for-the-">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-naming-conventions-for-the-" class="section-name selfRef">Naming Conventions for the <code>submod</code> Key</a>
+        </h3>
+<p id="section-5.2-1">A new claims-set <span class="bcp14">MUST</span> define a suitable naming convention for the <code>submod</code> keys associated with it.
+When creating this convention, ensure that it does not clash with any existing ones.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">See <a href="#spdm-submod-name" class="auto internal xref">Section 3.1.6</a> for the blueprint.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">The concrete name derived by the naming scheme is anticipated to be used to map the Attester to a corresponding CoRIM <span>[<a href="#I-D.ietf-rats-corim" class="cite xref">I-D.ietf-rats-corim</a>]</span> environment map.
+This map can then be used to locate matching Reference Values and Endorsements during the appraisal process.
+This type of "evidence transformation" is outside the scope of this document and will be covered by an associated CoRIM profile.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="claims-registrations">
+<section id="section-5.3">
+        <h3 id="name-claims-registrations">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-claims-registrations" class="section-name selfRef">Claims Registrations</a>
+        </h3>
+<p id="section-5.3-1">A new claims-set can reuse any number of already registered claims.
+If the claims-set needs to define new claims to express the desired semantics, and if these claims have generally applicable semantics, they <span class="bcp14">SHOULD</span> be registered with IANA.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">See <a href="#iana-claims-regs" class="auto internal xref">Section 9.1</a> for the blueprint.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="collated-cddl">
+<section id="section-6">
+      <h2 id="name-collated-cddl">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-collated-cddl" class="section-name selfRef">Collated CDDL</a>
+      </h2>
+<div class="breakable lang-cddl sourcecode" id="section-6-1">
+<pre>
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
+dat = {
+  &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device#1.0.0",
+  &amp;(eat_nonce: 10) =&gt; bytes .size (8 .. 64),
+  &amp;(eat_submods: 266) =&gt; {+ device-name =&gt; $device-claims-set},
+}
+device-name = text
+$device-claims-set /= spdm-claims / pcie-legacy-claims
+spdm-claims = {
+  &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-spdm#1.0.0",
+  spdm-artefacts,
+  ? &amp;(vca: 3804) =&gt; bytes,
+}
+spdm-artefacts //= ((
+        &amp;(measurements: 3802) =&gt; spdm-measurements,
+        &amp;(certificates: 3803) =&gt; spdm-certificates,
+        ? &amp;(challenge: 3807) =&gt; spdm-signature,
+        ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface\
+                                                             -report,
+      ) // (
+        &amp;(measurements: 3802) =&gt; spdm-measurements,
+        ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface\
+                                                             -report,
+      ) // (
+        &amp;(certificates: 3803) =&gt; spdm-certificates,
+        ? &amp;(challenge: 3807) =&gt; spdm-signature,
+        ? &amp;(device-interface-report: 3808) =&gt; tdisp-device-interface\
+                                                             -report,
+      ))
+spdm-measurement = {
+  &amp;(component-type: 1) =&gt; component-type,
+  measurement,
+}
+measurement //= (&amp;(digest-measurement: 2) =&gt; digest-measurement // &amp;\
+                             (raw-measurement: 3) =&gt; raw-measurement)
+component-type /= &amp;(immutable-rom: 0) / &amp;(mutable-firmware: 1) / &amp;(\
+hardware-config: 2) / &amp;(firmware-config: 3) / &amp;(freeform-measurement\
+-manifest: 4) / &amp;(device-mode: 5) / &amp;(mutable-firmware-version: 6) \
+/ &amp;(mutable-firmware-svn: 7) / &amp;(hash-extend-measurement: 8) / &amp;(\
+           informational: 9) / &amp;(structured-measurement-manifest: 10)
+raw-measurement = bytes
+digest-measurement = digest
+digest = [
+  alg: uint / text,
+  val: bytes,
+]
+spdm-certificates = {
+  default-cert-slot =&gt; cert-chain,
+  ? aux-cert-slot-1 =&gt; cert-chain,
+  ? aux-cert-slot-2 =&gt; cert-chain,
+  ? aux-cert-slot-3 =&gt; cert-chain,
+  ? aux-cert-slot-4 =&gt; cert-chain,
+  ? aux-cert-slot-5 =&gt; cert-chain,
+  ? aux-cert-slot-6 =&gt; cert-chain,
+  ? aux-cert-slot-7 =&gt; cert-chain,
+}
+cert-chain = bytes
+default-cert-slot = 0
+aux-cert-slot-1 = 1
+aux-cert-slot-2 = 2
+aux-cert-slot-3 = 3
+aux-cert-slot-4 = 4
+aux-cert-slot-5 = 5
+aux-cert-slot-6 = 6
+aux-cert-slot-7 = 7
+spdm-measurements = {
+  + block-id =&gt; spdm-measurement,
+  ? "signature" =&gt; spdm-signature,
+}
+block-id = 1 .. 239
+hash-algorithm-type /= &amp;(tpm_alg_sha_256: 0) / &amp;(tpm_alg_sha_384: 2\
+) / &amp;(tpm_alg_sha_512: 4) / &amp;(tpm_alg_sha3_256: 8) / &amp;(\
+tpm_alg_sha3_384: 16) / &amp;(tpm_alg_sha3_512: 32) / &amp;(tpm_alg_sm3_256\
+                                                                : 64)
+spdm-signature = {
+  &amp;(slot: 1) =&gt; 0 .. 7,
+  &amp;(requester-nonce: 2) =&gt; bytes .size 32,
+  &amp;(responder-nonce: 3) =&gt; bytes .size 32,
+  &amp;(combined-spdm-prefix: 4) =&gt; bytes .size 100,
+  &amp;(IL1: 5) =&gt; bytes,
+  &amp;(base-hash-algo: 6) =&gt; hash-algorithm-type,
+  &amp;(signature: 7) =&gt; bytes,
+}
+pcie-legacy-claims = {
+  &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device-pcie-legacy#1.0\
+                                                                 .0",
+  pcie-legacy-artefacts,
+  ? $$pcie-legacy-claim-extension,
+}
+pcie-legacy-artefacts //= ((
+        &amp;(artefacts-text: 3805) =&gt; pcie-type-0-1-config-space-text,
+        &amp;(artefacts-bytes: 3806) =&gt; pcie-type-0-1-config-space-bytes,
+      ) // &amp;(artefacts-text: 3805) =&gt; pcie-type-0-1-config-space-\
+text // &amp;(artefacts-bytes: 3806) =&gt; pcie-type-0-1-config-space-bytes)
+pcie-type-0-1-config-space-bytes = bytes .size 256
+pcie-type-0-1-config-space-text = {
+  &amp;(vendorID: 1) =&gt; bytes .size 2,
+  &amp;(deviceID: 2) =&gt; bytes .size 2,
+  ? &amp;(command: 3) =&gt; bytes .size 2,
+  ? &amp;(status: 4) =&gt; bytes .size 2,
+  ? &amp;(revisionID: 5) =&gt; bytes .size 1,
+  ? &amp;(classCode: 6) =&gt; bytes .size 3,
+  ? &amp;(cacheLineSize: 7) =&gt; bytes .size 1,
+  ? &amp;(latencyTimer: 8) =&gt; bytes .size 1,
+  ? &amp;(headerType: 9) =&gt; bytes .size 1,
+  ? &amp;(BITS: 10) =&gt; bytes .size 1,
+}
+tdisp-device-interface-report = non-empty&lt;{
+    ? &amp;(interface-info: 1) =&gt; interface-info-bits,
+    ? &amp;(msi-x-message-control: 2) =&gt; bytes .size 2,
+    ? &amp;(lnr-control: 3) =&gt; bytes .size 2,
+    ? &amp;(tph-control: 4) =&gt; bytes .size 4,
+    ? &amp;(mmio-ranges: 5) =&gt; mmio-ranges,
+    ? &amp;(device-specific-info: 6) =&gt; bytes,
+}&gt;
+interface-info-bits = bytes .bits interface-info-flags
+interface-info-flags = &amp;(
+  bit0: 0,
+  bit1: 1,
+  bit2: 2,
+  bit3: 3,
+  bit4: 4,
+  bit5: 5,
+)
+mmio-ranges = {+ &amp;(mmio-range: 1) =&gt; mmio-range}
+mmio-range = {
+  &amp;(first-4k-page: 1) =&gt; bytes .size 8,
+  &amp;(number-of-4k-pages: 2) =&gt; bytes .size 4,
+  &amp;(attributes: 3) =&gt; range-attributes,
+}
+range-attributes = {
+  &amp;(range-attribute-bits: 1) =&gt; range-attribute-bits,
+  &amp;(range-attribute-range-id: 2) =&gt; bytes .size 2,
+}
+range-attribute-bits = bytes .bits range-attributes-flags
+range-attributes-flags = &amp;(
+  bit0: 0,
+  bit1: 1,
+  bit2: 2,
+  bit3: 3,
+)
+non-empty&lt;M&gt; = M .and ({+ any =&gt; any})
+</pre><a href="#section-6-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-7">
+      <h2 id="name-security-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-7-1">As this specification reuses the EAT specification <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span>, it also reuses the CWT specification <span>[<a href="#RFC8392" class="cite xref">RFC8392</a>]</span>.
+The security and privacy considerations of these specifications therefore apply here too.
+In particular, the considerations discussed in Sections <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.1" class="relref">9.1</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.1" class="relref">Claim Trustworthiness</a>)</span>, <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.4" class="relref">9.4</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.4" class="relref">Multiple EAT Consumers</a>)</span> and <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.5" class="relref">9.5</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.5" class="relref">Detached EAT Bundle Digest Security Considerations</a>)</span> of <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> apply fully.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">When DAT is an UCCS, the considerations in <span>[<a href="#RFC9781" class="cite xref">RFC9781</a>]</span> also apply.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">PCIe devices are assigned to a TVM via their physical or virtual functions.
+The hardware implementation of a device guarantees that functions are mutually exclusive; in other words, operations performed on one function do not affect other functions.
+The TDISP standard also guarantees that, while a device function is in the CONFIG_LOCK or RUN state, its characteristics cannot be modified by untrusted parties.
+However, faulty hardware or an inadequate implementation of the TDISP specification could be exploited by an attacker for side-channel attacks.<a href="#section-7-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="privacy-considerations">
+<section id="section-8">
+      <h2 id="name-privacy-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-privacy-considerations" class="section-name selfRef">Privacy Considerations</a>
+      </h2>
+<p id="section-8-1">A DAT can include a great deal of detail about the execution environment associated with the TVM and, therefore, the workload being executed within it.
+This can provide insight into the type of computation being carried out by the workload.
+It can also enable tracking of a given workload across multiple TVM instances in both the temporal dimension (e.g., across reboots of the hosting hardware) and the spatial dimension (e.g., across migrations between hardware, either within or between data centres).<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">A DAT is usually one component of a composite evidence payload.
+In such cases, multiple Verifiers may be involved in the appraisal process.
+The differential encryption considerations discussed in Section <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.4" class="relref">9.4</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.4" class="relref">Multiple EAT Consumers</a>)</span> of <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> therefore apply.<a href="#section-8-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-9">
+      <h2 id="name-iana-considerations">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<div id="iana-claims-regs">
+<section id="section-9.1">
+        <h3 id="name-new-cwt-claims-registration">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-new-cwt-claims-registration" class="section-name selfRef">New CWT Claims Registrations</a>
+        </h3>
+<p id="section-9.1-1">IANA is requested to register the following claims in the "CBOR Web Token (CWT) Claims" registry <span>[<a href="#IANA.cwt" class="cite xref">IANA.cwt</a>]</span>.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<div id="spdm-measurements-claim">
+<section id="section-9.1.1">
+          <h4 id="name-spdm-measurements-claim">
+<a href="#section-9.1.1" class="section-number selfRef">9.1.1. </a><a href="#name-spdm-measurements-claim" class="section-name selfRef">SPDM Measurements Claim</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-9.1.1-1.1">
+              <p id="section-9.1.1-1.1.1">Claim Name: spdm-measurements<a href="#section-9.1.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.1-1.2">
+              <p id="section-9.1.1-1.2.1">Claim Description: SPDM Measurements<a href="#section-9.1.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.1-1.3">
+              <p id="section-9.1.1-1.3.1">JWT Claim Name: N/A<a href="#section-9.1.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.1-1.4">
+              <p id="section-9.1.1-1.4.1">Claim Key: 3802<a href="#section-9.1.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.1-1.5">
+              <p id="section-9.1.1-1.5.1">Claim Value Type(s): map<a href="#section-9.1.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.1-1.6">
+              <p id="section-9.1.1-1.6.1">Change Controller: IETF<a href="#section-9.1.1-1.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.1-1.7">
+              <p id="section-9.1.1-1.7.1">Specification Document(s): <a href="#spdm-measurements" class="auto internal xref">Section 3.1.1</a> of RFCthis<a href="#section-9.1.1-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="spdm-certificates-claim">
+<section id="section-9.1.2">
+          <h4 id="name-spdm-certificates-claim">
+<a href="#section-9.1.2" class="section-number selfRef">9.1.2. </a><a href="#name-spdm-certificates-claim" class="section-name selfRef">SPDM Certificates Claim</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-9.1.2-1.1">
+              <p id="section-9.1.2-1.1.1">Claim Name: spdm-certificates<a href="#section-9.1.2-1.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.2-1.2">
+              <p id="section-9.1.2-1.2.1">Claim Description: SPDM Certificates<a href="#section-9.1.2-1.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.2-1.3">
+              <p id="section-9.1.2-1.3.1">JWT Claim Name: N/A<a href="#section-9.1.2-1.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.2-1.4">
+              <p id="section-9.1.2-1.4.1">Claim Key: 3803<a href="#section-9.1.2-1.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.2-1.5">
+              <p id="section-9.1.2-1.5.1">Claim Value Type(s): map<a href="#section-9.1.2-1.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.2-1.6">
+              <p id="section-9.1.2-1.6.1">Change Controller: IETF<a href="#section-9.1.2-1.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.2-1.7">
+              <p id="section-9.1.2-1.7.1">Specification Document(s): <a href="#spdm-certificates" class="auto internal xref">Section 3.1.3</a> of RFCthis<a href="#section-9.1.2-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="spdm-vca-claim">
+<section id="section-9.1.3">
+          <h4 id="name-spdm-vca-claim">
+<a href="#section-9.1.3" class="section-number selfRef">9.1.3. </a><a href="#name-spdm-vca-claim" class="section-name selfRef">SPDM VCA Claim</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-9.1.3-1.1">
+              <p id="section-9.1.3-1.1.1">Claim Name: spdm-vca<a href="#section-9.1.3-1.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.3-1.2">
+              <p id="section-9.1.3-1.2.1">Claim Description: SPDM Version, Capabilities and Algorithms<a href="#section-9.1.3-1.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.3-1.3">
+              <p id="section-9.1.3-1.3.1">JWT Claim Name: N/A<a href="#section-9.1.3-1.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.3-1.4">
+              <p id="section-9.1.3-1.4.1">Claim Key: 3804<a href="#section-9.1.3-1.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.3-1.5">
+              <p id="section-9.1.3-1.5.1">Claim Value Type(s): bytes<a href="#section-9.1.3-1.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.3-1.6">
+              <p id="section-9.1.3-1.6.1">Change Controller: IETF<a href="#section-9.1.3-1.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.3-1.7">
+              <p id="section-9.1.3-1.7.1">Specification Document(s): <a href="#spdm-vca" class="auto internal xref">Section 3.1.5</a> of RFCthis<a href="#section-9.1.3-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="pcie-legacy-device-text-claim">
+<section id="section-9.1.4">
+          <h4 id="name-pcie-legacy-device-text-cla">
+<a href="#section-9.1.4" class="section-number selfRef">9.1.4. </a><a href="#name-pcie-legacy-device-text-cla" class="section-name selfRef">PCIe Legacy Device Text Claim</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-9.1.4-1.1">
+              <p id="section-9.1.4-1.1.1">Claim Name: pcie-legacy-device-text<a href="#section-9.1.4-1.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.4-1.2">
+              <p id="section-9.1.4-1.2.1">Claim Description: PCIe Legacy Device Textual Representation<a href="#section-9.1.4-1.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.4-1.3">
+              <p id="section-9.1.4-1.3.1">JWT Claim Name: N/A<a href="#section-9.1.4-1.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.4-1.4">
+              <p id="section-9.1.4-1.4.1">Claim Key: 3805<a href="#section-9.1.4-1.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.4-1.5">
+              <p id="section-9.1.4-1.5.1">Claim Value Type(s): map<a href="#section-9.1.4-1.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.4-1.6">
+              <p id="section-9.1.4-1.6.1">Change Controller: IETF<a href="#section-9.1.4-1.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.4-1.7">
+              <p id="section-9.1.4-1.7.1">Specification Document(s): <a href="#pcie-legacy-device" class="auto internal xref">Section 3.2</a> of RFCthis<a href="#section-9.1.4-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="pcie-legacy-device-binary-claim">
+<section id="section-9.1.5">
+          <h4 id="name-pcie-legacy-device-binary-c">
+<a href="#section-9.1.5" class="section-number selfRef">9.1.5. </a><a href="#name-pcie-legacy-device-binary-c" class="section-name selfRef">PCIe Legacy Device Binary Claim</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-9.1.5-1.1">
+              <p id="section-9.1.5-1.1.1">Claim Name: pcie-legacy-device-binary<a href="#section-9.1.5-1.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.5-1.2">
+              <p id="section-9.1.5-1.2.1">Claim Description: PCIe Legacy Device Binary Representation<a href="#section-9.1.5-1.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.5-1.3">
+              <p id="section-9.1.5-1.3.1">JWT Claim Name: N/A<a href="#section-9.1.5-1.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.5-1.4">
+              <p id="section-9.1.5-1.4.1">Claim Key: 3806<a href="#section-9.1.5-1.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.5-1.5">
+              <p id="section-9.1.5-1.5.1">Claim Value Type(s): bytes<a href="#section-9.1.5-1.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.5-1.6">
+              <p id="section-9.1.5-1.6.1">Change Controller: IETF<a href="#section-9.1.5-1.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.5-1.7">
+              <p id="section-9.1.5-1.7.1">Specification Document(s): <a href="#pcie-legacy-device" class="auto internal xref">Section 3.2</a> of RFCthis<a href="#section-9.1.5-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="spdm-challenge-claim">
+<section id="section-9.1.6">
+          <h4 id="name-spdm-challenge-claim-2">
+<a href="#section-9.1.6" class="section-number selfRef">9.1.6. </a><a href="#name-spdm-challenge-claim-2" class="section-name selfRef">SPDM Challenge Claim</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-9.1.6-1.1">
+              <p id="section-9.1.6-1.1.1">Claim Name: spdm-challenge<a href="#section-9.1.6-1.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.6-1.2">
+              <p id="section-9.1.6-1.2.1">Claim Description: SPDM Challenge signature block<a href="#section-9.1.6-1.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.6-1.3">
+              <p id="section-9.1.6-1.3.1">JWT Claim Name: N/A<a href="#section-9.1.6-1.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.6-1.4">
+              <p id="section-9.1.6-1.4.1">Claim Key: 3807<a href="#section-9.1.6-1.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.6-1.5">
+              <p id="section-9.1.6-1.5.1">Claim Value Type(s): map<a href="#section-9.1.6-1.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.6-1.6">
+              <p id="section-9.1.6-1.6.1">Change Controller: IETF<a href="#section-9.1.6-1.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.6-1.7">
+              <p id="section-9.1.6-1.7.1">Specification Document(s): <a href="#spdm-challenge" class="auto internal xref">Section 3.1.2</a> of RFCthis<a href="#section-9.1.6-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="tdisp-device-interface-report">
+<section id="section-9.1.7">
+          <h4 id="name-tdisp-device-interface-repor">
+<a href="#section-9.1.7" class="section-number selfRef">9.1.7. </a><a href="#name-tdisp-device-interface-repor" class="section-name selfRef">TDISP Device Interface Report</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-9.1.7-1.1">
+              <p id="section-9.1.7-1.1.1">Claim Name: tdisp-device-interface-report<a href="#section-9.1.7-1.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.7-1.2">
+              <p id="section-9.1.7-1.2.1">Claim Description: TDISP Device Interface Report<a href="#section-9.1.7-1.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.7-1.3">
+              <p id="section-9.1.7-1.3.1">JWT Claim Name: N/A<a href="#section-9.1.7-1.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.7-1.4">
+              <p id="section-9.1.7-1.4.1">Claim Key: 3808<a href="#section-9.1.7-1.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.7-1.5">
+              <p id="section-9.1.7-1.5.1">Claim Value Type(s): map<a href="#section-9.1.7-1.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.7-1.6">
+              <p id="section-9.1.7-1.6.1">Change Controller: IETF<a href="#section-9.1.7-1.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.1.7-1.7">
+              <p id="section-9.1.7-1.7.1">Specification Document(s): <a href="#interface-report" class="auto internal xref">Section 3.1.4</a> of RFCthis<a href="#section-9.1.7-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-combined-references">
+<section id="section-10">
+      <h2 id="name-references">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<div id="sec-normative-references">
+<section id="section-10.1">
+        <h3 id="name-normative-references">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.ietf-rats-epoch-markers">[I-D.ietf-rats-epoch-markers]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Pan, W.</span>, <span class="refAuthor">Mihalcea, I.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Epoch Markers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-epoch-markers-04</span>, <time datetime="2026-05-18" class="refDate">18 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-epoch-markers-04">https://datatracker.ietf.org/doc/html/draft-ietf-rats-epoch-markers-04</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-rats-msg-wrap">[I-D.ietf-rats-msg-wrap]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Smith, N.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">D. Glaze</span>, <span class="refTitle">"RATS Conceptual Messages Wrapper (CMW)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-msg-wrap-23</span>, <time datetime="2025-12-11" class="refDate">11 December 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-msg-wrap-23">https://datatracker.ietf.org/doc/html/draft-ietf-rats-msg-wrap-23</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.cwt">[IANA.cwt]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"CBOR Web Token (CWT) Claims"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cwt">https://www.iana.org/assignments/cwt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4514">[RFC4514]</dt>
+        <dd>
+<span class="refAuthor">Zeilenga, K., Ed.</span>, <span class="refTitle">"Lightweight Directory Access Protocol (LDAP): String Representation of Distinguished Names"</span>, <span class="seriesInfo">RFC 4514</span>, <span class="seriesInfo">DOI 10.17487/RFC4514</span>, <time datetime="2006-06" class="refDate">June 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4514">https://www.rfc-editor.org/rfc/rfc4514</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5280">[RFC5280]</dt>
+        <dd>
+<span class="refAuthor">Cooper, D.</span>, <span class="refAuthor">Santesson, S.</span>, <span class="refAuthor">Farrell, S.</span>, <span class="refAuthor">Boeyen, S.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">W. Polk</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"</span>, <span class="seriesInfo">RFC 5280</span>, <span class="seriesInfo">DOI 10.17487/RFC5280</span>, <time datetime="2008-05" class="refDate">May 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5280">https://www.rfc-editor.org/rfc/rfc5280</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8392">[RFC8392]</dt>
+        <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"CBOR Web Token (CWT)"</span>, <span class="seriesInfo">RFC 8392</span>, <span class="seriesInfo">DOI 10.17487/RFC8392</span>, <time datetime="2018-05" class="refDate">May 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8392">https://www.rfc-editor.org/rfc/rfc8392</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9052">[RFC9052]</dt>
+        <dd>
+<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Structures and Process"</span>, <span class="seriesInfo">STD 96</span>, <span class="seriesInfo">RFC 9052</span>, <span class="seriesInfo">DOI 10.17487/RFC9052</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9052">https://www.rfc-editor.org/rfc/rfc9052</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9053">[RFC9053]</dt>
+        <dd>
+<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Initial Algorithms"</span>, <span class="seriesInfo">RFC 9053</span>, <span class="seriesInfo">DOI 10.17487/RFC9053</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9053">https://www.rfc-editor.org/rfc/rfc9053</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9334">[RFC9334]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Thaler, D.</span>, <span class="refAuthor">Richardson, M.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Remote ATtestation procedureS (RATS) Architecture"</span>, <span class="seriesInfo">RFC 9334</span>, <span class="seriesInfo">DOI 10.17487/RFC9334</span>, <time datetime="2023-01" class="refDate">January 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9334">https://www.rfc-editor.org/rfc/rfc9334</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9711">[RFC9711]</dt>
+        <dd>
+<span class="refAuthor">Lundblade, L.</span>, <span class="refAuthor">Mandyam, G.</span>, <span class="refAuthor">O'Donoghue, J.</span>, and <span class="refAuthor">C. Wallace</span>, <span class="refTitle">"The Entity Attestation Token (EAT)"</span>, <span class="seriesInfo">RFC 9711</span>, <span class="seriesInfo">DOI 10.17487/RFC9711</span>, <time datetime="2025-04" class="refDate">April 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9711">https://www.rfc-editor.org/rfc/rfc9711</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9781">[RFC9781]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">O'Donoghue, J.</span>, <span class="refAuthor">Cam-Winget, N.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"A Concise Binary Object Representation (CBOR) Tag for Unprotected CBOR Web Token Claims Sets (UCCS)"</span>, <span class="seriesInfo">RFC 9781</span>, <span class="seriesInfo">DOI 10.17487/RFC9781</span>, <time datetime="2025-05" class="refDate">May 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9781">https://www.rfc-editor.org/rfc/rfc9781</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9782">[RFC9782]</dt>
+        <dd>
+<span class="refAuthor">Lundblade, L.</span>, <span class="refAuthor">Birkholz, H.</span>, and <span class="refAuthor">T. Fossati</span>, <span class="refTitle">"Entity Attestation Token (EAT) Media Types"</span>, <span class="seriesInfo">RFC 9782</span>, <span class="seriesInfo">DOI 10.17487/RFC9782</span>, <time datetime="2025-05" class="refDate">May 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9782">https://www.rfc-editor.org/rfc/rfc9782</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="STD94">[STD94]</dt>
+      <dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8949">https://www.rfc-editor.org/rfc/rfc8949</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-10.2">
+        <h3 id="name-informative-references">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.ietf-rats-corim">[I-D.ietf-rats-corim]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Deshpande, Y.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Concise Reference Integrity Manifest"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-corim-10</span>, <time datetime="2026-03-02" class="refDate">2 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-10">https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-10</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="PCIe">[PCIe]</dt>
+        <dd>
+<span class="refAuthor">PCI-SIG</span>, <span class="refTitle">"PCI Express Base Specification Revision 7.0"</span>, <time datetime="2025-06-05" class="refDate">5 June 2025</time>. </dd>
+<dd class="break"></dd>
+<dt id="SPDM">[SPDM]</dt>
+      <dd>
+<span class="refAuthor">DMTF</span>, <span class="refTitle">"Security Protocol and Data Model (SPDM) Specification Version: 1.3.2"</span>, <time datetime="2024-08-21" class="refDate">21 August 2024</time>, <span>&lt;<a href="https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.3.2.pdf">https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.3.2.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="examples">
+<section id="appendix-A">
+      <h2 id="name-examples">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
+      </h2>
+<div class="lang-cbor-diag sourcecode" id="appendix-A-1">
+<pre>
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
+{
+  / profile / 265: "tag:linaro.org,2025:device#1.0.0",
+  / nonce / 10: h'\
+f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
+       aa40cd86cd30ebaae746fb19f008c1e6a1f23ad6a178e18dceda918f7f6e',
+  / submods / 266: {
+    "spdm:ACME:WIDGET-A:0123456789": {
+      / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
+      / measurements / 0x0eda: {
+        1: {
+          / component-type /  1: 2, / hardware config /
+          / raw-measurement / 3: h'4f6d616861'
+        }
+      },
+      / certificates / 0x0edb: {
+        / device certs / 0: h'\
+                          676f616e6e61747261646974696f6e6d6f6e676572'
+        / no aux certs /
+      }
+    },
+    "spdm:C=CA,O=ACME,OU=Widget-B,CN=9876543210": {
+      / profile / 265: "tag:linaro.org,2025:device-spdm#1.0.0",
+      / measurements / 0x0eda: {
+        1: {
+          / component-type / 1: 1, / mutable firmware /
+          / digest-measurement / 2: [
+            / alg / 1,
+            / val / h'6b656e6e656c6c79'
+          ]
+        },
+        6: {
+          / component-type / 1: 2, / hardware config /
+          / digest measurement / 2: [
+            / alg / 0,
+            / val / h'756e646572637279'
+          ]
+        }
+      },
+      / certificates / 0x0edb: {
+        / device certs / 0: h'61746865697A656178696C6C6172',
+        / aux certs (slot=2) / 2: h'23451576923AE99106783948598A'
+      }
+    }
+  }
+}
+</pre><a href="#appendix-A-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="example-composite-device">
+<section id="appendix-B">
+      <h2 id="name-example-composite-device">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-example-composite-device" class="section-name selfRef">Example Composite Device</a>
+      </h2>
+<p id="appendix-B-1"><a href="#fig-ratsd" class="auto internal xref">Figure 1</a> shows an example of the composite device described in <span><a href="https://rfc-editor.org/rfc/rfc9334#section-3.3" class="relref">Section 3.3</a> of [<a href="#RFC9334" class="cite xref">RFC9334</a>]</span> within a confidential computing environment.
+In this setup, a Trusted Virtual Machine (TVM) executes on a Confidential Platform, which provides the confidential computing environment.
+One or more devices (e.g., a GPU) are assigned to the TVM.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">Within the TVM, a Lead Attester agent, e.g., a userland daemon, can collect Evidence from the Confidential Platform, as well as from all the assigned devices, using the relevant ABI offered by the guest OS kernel.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<p id="appendix-B-3">When a challenger (i.e., a Verifier or a Relying Party) requests Evidence from the TVM, the Lead Attester broadcasts the received nonce to all the sub-Attesters, obtains Evidence from each of them and assembles the composite Evidence using a CMW Collection (Section 3.3 of <span>[<a href="#I-D.ietf-rats-msg-wrap" class="cite xref">I-D.ietf-rats-msg-wrap</a>]</span>).
+It then signs the composite Evidence using its key material as shown in <a href="#fig-ratsd-token" class="auto internal xref">Figure 2</a>.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-4">The claims obtained by the assigned devices are repackaged into DAT submods, which are then signed as part of the CMW collection using the Lead Attester key.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
+<span id="name-composite-attestation-evide"></span><div id="fig-ratsd-token">
+<figure id="figure-2">
+        <div id="appendix-B-5.1">
+          <div class="alignCenter art-svg artwork" id="appendix-B-5.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="336" width="560" viewBox="0 0 560 336" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 72,80 L 72,240" fill="none" stroke="black"></path>
+              <path d="M 120,48 L 120,72" fill="none" stroke="black"></path>
+              <path d="M 120,88 L 120,152" fill="none" stroke="black"></path>
+              <path d="M 120,168 L 120,232" fill="none" stroke="black"></path>
+              <path d="M 120,248 L 120,272" fill="none" stroke="black"></path>
+              <path d="M 144,64 L 144,112" fill="none" stroke="black"></path>
+              <path d="M 144,144 L 144,192" fill="none" stroke="black"></path>
+              <path d="M 144,224 L 144,256" fill="none" stroke="black"></path>
+              <path d="M 272,64 L 272,112" fill="none" stroke="black"></path>
+              <path d="M 272,144 L 272,192" fill="none" stroke="black"></path>
+              <path d="M 272,224 L 272,256" fill="none" stroke="black"></path>
+              <path d="M 296,48 L 296,232" fill="none" stroke="black"></path>
+              <path d="M 296,248 L 296,272" fill="none" stroke="black"></path>
+              <path d="M 320,176 L 320,304" fill="none" stroke="black"></path>
+              <path d="M 552,176 L 552,304" fill="none" stroke="black"></path>
+              <path d="M 120,48 L 296,48" fill="none" stroke="black"></path>
+              <path d="M 144,64 L 272,64" fill="none" stroke="black"></path>
+              <path d="M 72,80 L 136,80" fill="none" stroke="black"></path>
+              <path d="M 144,112 L 272,112" fill="none" stroke="black"></path>
+              <path d="M 144,144 L 272,144" fill="none" stroke="black"></path>
+              <path d="M 56,160 L 136,160" fill="none" stroke="black"></path>
+              <path d="M 320,176 L 552,176" fill="none" stroke="black"></path>
+              <path d="M 144,192 L 272,192" fill="none" stroke="black"></path>
+              <path d="M 144,224 L 272,224" fill="none" stroke="black"></path>
+              <path d="M 72,240 L 136,240" fill="none" stroke="black"></path>
+              <path d="M 144,256 L 272,256" fill="none" stroke="black"></path>
+              <path d="M 120,272 L 296,272" fill="none" stroke="black"></path>
+              <path d="M 320,304 L 552,304" fill="none" stroke="black"></path>
+              <polygon class="arrowhead" points="144,240 132,234.4 132,245.6" fill="black" transform="rotate(0,136,240)"></polygon>
+              <polygon class="arrowhead" points="144,160 132,154.4 132,165.6" fill="black" transform="rotate(0,136,160)"></polygon>
+              <polygon class="arrowhead" points="144,80 132,74.4 132,85.6" fill="black" transform="rotate(0,136,80)"></polygon>
+              <g class="text">
+                <text x="184" y="36">signed-cbor-cmw</text>
+                <text x="172" y="84">Lead</text>
+                <text x="228" y="84">Attester</text>
+                <text x="188" y="100">Evidence</text>
+                <text x="24" y="164">nonce</text>
+                <text x="188" y="164">Platform</text>
+                <text x="188" y="180">Evidence</text>
+                <text x="376" y="196">eat_profile</text>
+                <text x="368" y="212">eat_nonce</text>
+                <text x="356" y="228">submod</text>
+                <text x="392" y="228">{</text>
+                <text x="168" y="244">DAT</text>
+                <text x="280" y="244">-</text>
+                <text x="296" y="244">-</text>
+                <text x="312" y="244">-</text>
+                <text x="384" y="244">"spdm:A":</text>
+                <text x="432" y="244">{</text>
+                <text x="456" y="244">...</text>
+                <text x="480" y="244">}</text>
+                <text x="412" y="260">"legacy-pcie:B":</text>
+                <text x="488" y="260">{</text>
+                <text x="512" y="260">...</text>
+                <text x="536" y="260">}</text>
+                <text x="384" y="276">"spdm:C":</text>
+                <text x="432" y="276">{</text>
+                <text x="456" y="276">...</text>
+                <text x="480" y="276">}</text>
+                <text x="336" y="292">}</text>
+              </g>
+            </svg><a href="#appendix-B-5.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-composite-attestation-evide" class="selfRef">Composite Attestation Evidence</a>
+        </figcaption></figure>
+</div>
+<p id="appendix-B-6">The Veraison project's <code>ratsd</code> daemon is an example of this behaviour.<a href="#appendix-B-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="appendix-C">
+      <h2 id="name-acknowledgments">
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-C-1">Thank you
+Basma El Gaabouri,
+Carl Wallace,
+Giri Mandyam,
+<span class="contact-name">Ionuț Mihalcea</span>,
+James Bottomley,
+Jon Lange,
+Lukas Wunner,
+Michael Richardson,
+Ned Smith,
+Roksana Golizadeh Mojarad,
+Simon Frost,
+Yogesh Deshpande
+and
+Yousuf Sait
+for your comments and suggestions.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-D">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Mathieu Poirier</span></div>
+<div dir="auto" class="left"><span class="org">Linaro</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:mathieu.poirier@linaro.org" class="email">mathieu.poirier@linaro.org</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Henk Birkholz</span></div>
+<div dir="auto" class="left"><span class="org">Fraunhofer SIT</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:henk.birkholz@ietf.contact" class="email">henk.birkholz@ietf.contact</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Thomas Fossati</span></div>
+<div dir="auto" class="left"><span class="org">Linaro</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:thomas.fossati@linaro.org" class="email">thomas.fossati@linaro.org</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
