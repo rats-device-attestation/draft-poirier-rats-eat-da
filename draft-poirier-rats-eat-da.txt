@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                    Linaro
 Intended status: Informational                               H. Birkholz
-Expires: 25 December 2026                                 Fraunhofer SIT
+Expires: 17 January 2027                                  Fraunhofer SIT
                                                               T. Fossati
                                                                   Linaro
-                                                            23 June 2026
+                                                            16 July 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 December 2026.
+   This Internet-Draft will expire on 17 January 2027.
 
 Copyright Notice
 
@@ -1074,9 +1074,9 @@ Table of Contents
    [I-D.ietf-rats-epoch-markers]
               Birkholz, H., Fossati, T., Pan, W., Mihalcea, I., and C.
               Bormann, "Epoch Markers", Work in Progress, Internet-
-              Draft, draft-ietf-rats-epoch-markers-04, 18 May 2026,
+              Draft, draft-ietf-rats-epoch-markers-05, 3 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-rats-
-              epoch-markers-04>.
+              epoch-markers-05>.
 
    [I-D.ietf-rats-msg-wrap]
               Birkholz, H., Smith, N., Fossati, T., Tschofenig, H., and
@@ -1152,9 +1152,9 @@ Table of Contents
    [I-D.ietf-rats-corim]
               Birkholz, H., Fossati, T., Deshpande, Y., Smith, N., and
               W. Pan, "Concise Reference Integrity Manifest", Work in
-              Progress, Internet-Draft, draft-ietf-rats-corim-10, 2
-              March 2026, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-rats-corim-10>.
+              Progress, Internet-Draft, draft-ietf-rats-corim-11, 6 July
+              2026, <https://datatracker.ietf.org/doc/html/draft-ietf-
+              rats-corim-11>.
 
    [PCIe]     PCI-SIG, "PCI Express Base Specification Revision 7.0", 5
               June 2025.
