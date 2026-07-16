@@ -10,28 +10,29 @@
 <meta content="Thomas Fossati" name="author">
 <meta content="
        In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
-For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration. 
+For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity, the state of its firmware and configuration. 
        Since Evidence claims can be processed by 3rd party entities (e.g., Verifiers, Relying Parties) external to the TVM, there is a need to standardize the representation of DA-related information in Evidence to ensure interoperability.
 This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile. 
     " name="description">
-<meta content="xml2rfc 3.33.0" name="generator">
+<meta content="xml2rfc 3.34.0" name="generator">
 <meta content="attestation" name="keyword">
 <meta content="device assignment" name="keyword">
 <meta content="EAT" name="keyword">
 <meta content="draft-poirier-rats-eat-da-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.33.0
-    Python 3.12.13
-    ConfigArgParse 1.7
+  xml2rfc 3.34.0
+    Python 3.14.5
+    ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 6.0.2
-    platformdirs 4.9.6
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.10.0
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.7.0
+    wcwidth 0.8.2
 -->
 <link href="draft-poirier-rats-eat-da.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1050,11 +1051,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">EAT DA</td>
-<td class="right">May 2026</td>
+<td class="right">July 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Poirier, et al.</td>
-<td class="center">Expires 29 November 2026</td>
+<td class="center">Expires 17 January 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1068,12 @@ svg {
 <dd class="internet-draft">draft-poirier-rats-eat-da-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-05-28" class="published">28 May 2026</time>
+<time datetime="2026-07-16" class="published">16 July 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-11-29">29 November 2026</time></dd>
+<dd class="expires"><time datetime="2027-01-17">17 January 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1094,7 +1095,7 @@ svg {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">In confidential computing, device assignment (DA) is the method by which a device (e.g., network adapter, GPU), whether on-chip or behind a PCIe Root Port, is assigned to a Trusted Virtual Machine (TVM).
-For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+For the TVM to trust an assigned device, the device must provide the TVM with attestation Evidence confirming its identity, the state of its firmware and configuration.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">Since Evidence claims can be processed by 3rd party entities (e.g., Verifiers, Relying Parties) external to the TVM, there is a need to standardize the representation of DA-related information in Evidence to ensure interoperability.
 This document defines an attestation Evidence format for DA as an EAT (Entity Attestation Token) profile.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
@@ -1133,7 +1134,7 @@ This document defines an attestation Evidence format for DA as an EAT (Entity At
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 29 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1313,16 +1314,151 @@ Such capabilities prevent execution environments or software components that are
 This includes, for example, protection of device MMIO interfaces and device caches.
 From a trust perspective, DA allows a device to be included in the TVM's Trusted Computing Base (TCB).
 For the TVM to trust the device, the device must provide the TVM with attestation Evidence confirming its identity and the state of its firmware and configuration.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">This document defines an attestation Evidence format for DA as an EAT <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> profile.
+<p id="section-1-2"><a href="#fig-ratsd" class="auto internal xref">Figure 1</a> gives an overview of the architecture targeted by this specification.
+Devices assigned to a TVM must be authenticated by a 3rd party verifier before being accepted into the TCB.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<span id="name-confidential-vm-with-truste"></span><div id="fig-ratsd">
+<figure id="figure-1">
+        <div id="section-1-3.1">
+          <div class="alignCenter art-svg artwork" id="section-1-3.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="624" width="424" viewBox="0 0 424 624" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+              <path d="M 8,112 L 8,576" fill="none" stroke="black"></path>
+              <path d="M 32,160 L 32,368" fill="none" stroke="black"></path>
+              <path d="M 32,400 L 32,560" fill="none" stroke="black"></path>
+              <path d="M 48,208 L 48,240" fill="none" stroke="black"></path>
+              <path d="M 48,304 L 48,336" fill="none" stroke="black"></path>
+              <path d="M 48,448 L 48,496" fill="none" stroke="black"></path>
+              <path d="M 80,248 L 80,296" fill="none" stroke="black"></path>
+              <path d="M 80,344 L 80,440" fill="none" stroke="black"></path>
+              <path d="M 112,72 L 112,200" fill="none" stroke="black"></path>
+              <path d="M 144,248 L 144,296" fill="none" stroke="black"></path>
+              <path d="M 144,344 L 144,416" fill="none" stroke="black"></path>
+              <path d="M 176,208 L 176,240" fill="none" stroke="black"></path>
+              <path d="M 176,304 L 176,336" fill="none" stroke="black"></path>
+              <path d="M 176,448 L 176,496" fill="none" stroke="black"></path>
+              <path d="M 192,160 L 192,368" fill="none" stroke="black"></path>
+              <path d="M 192,400 L 192,424" fill="none" stroke="black"></path>
+              <path d="M 192,440 L 192,560" fill="none" stroke="black"></path>
+              <path d="M 216,160 L 216,368" fill="none" stroke="black"></path>
+              <path d="M 216,400 L 216,424" fill="none" stroke="black"></path>
+              <path d="M 216,440 L 216,560" fill="none" stroke="black"></path>
+              <path d="M 232,144 L 232,160" fill="none" stroke="black"></path>
+              <path d="M 232,288 L 232,336" fill="none" stroke="black"></path>
+              <path d="M 232,416 L 232,448" fill="none" stroke="black"></path>
+              <path d="M 248,128 L 248,144" fill="none" stroke="black"></path>
+              <path d="M 264,344 L 264,416" fill="none" stroke="black"></path>
+              <path d="M 344,288 L 344,336" fill="none" stroke="black"></path>
+              <path d="M 360,160 L 360,368" fill="none" stroke="black"></path>
+              <path d="M 376,144 L 376,352" fill="none" stroke="black"></path>
+              <path d="M 376,416 L 376,448" fill="none" stroke="black"></path>
+              <path d="M 392,128 L 392,336" fill="none" stroke="black"></path>
+              <path d="M 392,400 L 392,560" fill="none" stroke="black"></path>
+              <path d="M 416,112 L 416,576" fill="none" stroke="black"></path>
+              <path d="M 56,32 L 168,32" fill="none" stroke="black"></path>
+              <path d="M 56,64 L 168,64" fill="none" stroke="black"></path>
+              <path d="M 24,96 L 400,96" fill="none" stroke="black"></path>
+              <path d="M 248,128 L 392,128" fill="none" stroke="black"></path>
+              <path d="M 232,144 L 376,144" fill="none" stroke="black"></path>
+              <path d="M 32,160 L 192,160" fill="none" stroke="black"></path>
+              <path d="M 216,160 L 360,160" fill="none" stroke="black"></path>
+              <path d="M 48,208 L 176,208" fill="none" stroke="black"></path>
+              <path d="M 48,240 L 176,240" fill="none" stroke="black"></path>
+              <path d="M 232,288 L 344,288" fill="none" stroke="black"></path>
+              <path d="M 48,304 L 176,304" fill="none" stroke="black"></path>
+              <path d="M 48,336 L 176,336" fill="none" stroke="black"></path>
+              <path d="M 232,336 L 344,336" fill="none" stroke="black"></path>
+              <path d="M 376,336 L 392,336" fill="none" stroke="black"></path>
+              <path d="M 360,352 L 376,352" fill="none" stroke="black"></path>
+              <path d="M 32,368 L 72,368" fill="none" stroke="black"></path>
+              <path d="M 88,368 L 136,368" fill="none" stroke="black"></path>
+              <path d="M 152,368 L 192,368" fill="none" stroke="black"></path>
+              <path d="M 216,368 L 256,368" fill="none" stroke="black"></path>
+              <path d="M 272,368 L 360,368" fill="none" stroke="black"></path>
+              <path d="M 32,400 L 72,400" fill="none" stroke="black"></path>
+              <path d="M 88,400 L 136,400" fill="none" stroke="black"></path>
+              <path d="M 152,400 L 192,400" fill="none" stroke="black"></path>
+              <path d="M 216,400 L 256,400" fill="none" stroke="black"></path>
+              <path d="M 272,400 L 392,400" fill="none" stroke="black"></path>
+              <path d="M 232,416 L 256,416" fill="none" stroke="black"></path>
+              <path d="M 272,416 L 376,416" fill="none" stroke="black"></path>
+              <path d="M 160,432 L 248,432" fill="none" stroke="black"></path>
+              <path d="M 48,448 L 176,448" fill="none" stroke="black"></path>
+              <path d="M 232,448 L 376,448" fill="none" stroke="black"></path>
+              <path d="M 48,496 L 176,496" fill="none" stroke="black"></path>
+              <path d="M 32,560 L 192,560" fill="none" stroke="black"></path>
+              <path d="M 216,560 L 392,560" fill="none" stroke="black"></path>
+              <path d="M 24,592 L 400,592" fill="none" stroke="black"></path>
+              <path d="M 56,32 C 47.16936,32 40,39.16936 40,48" fill="none" stroke="black"></path>
+              <path d="M 168,32 C 176.83064,32 184,39.16936 184,48" fill="none" stroke="black"></path>
+              <path d="M 56,64 C 47.16936,64 40,56.83064 40,48" fill="none" stroke="black"></path>
+              <path d="M 168,64 C 176.83064,64 184,56.83064 184,48" fill="none" stroke="black"></path>
+              <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
+              <path d="M 400,96 C 408.83064,96 416,103.16936 416,112" fill="none" stroke="black"></path>
+              <path d="M 160,432 C 151.16936,432 144,424.83064 144,416" fill="none" stroke="black"></path>
+              <path d="M 248,432 C 256.83064,432 264,424.83064 264,416" fill="none" stroke="black"></path>
+              <path d="M 24,592 C 15.16936,592 8,584.83064 8,576" fill="none" stroke="black"></path>
+              <path d="M 400,592 C 408.83064,592 416,584.83064 416,576" fill="none" stroke="black"></path>
+              <polygon class="arrowhead" points="272,344 260,338.4 260,349.6" fill="black" transform="rotate(270,264,344)"></polygon>
+              <polygon class="arrowhead" points="152,344 140,338.4 140,349.6" fill="black" transform="rotate(270,144,344)"></polygon>
+              <polygon class="arrowhead" points="152,296 140,290.4 140,301.6" fill="black" transform="rotate(90,144,296)"></polygon>
+              <polygon class="arrowhead" points="152,248 140,242.4 140,253.6" fill="black" transform="rotate(270,144,248)"></polygon>
+              <polygon class="arrowhead" points="120,200 108,194.4 108,205.6" fill="black" transform="rotate(90,112,200)"></polygon>
+              <polygon class="arrowhead" points="120,72 108,66.4 108,77.6" fill="black" transform="rotate(270,112,72)"></polygon>
+              <polygon class="arrowhead" points="88,440 76,434.4 76,445.6" fill="black" transform="rotate(90,80,440)"></polygon>
+              <polygon class="arrowhead" points="88,344 76,338.4 76,349.6" fill="black" transform="rotate(270,80,344)"></polygon>
+              <polygon class="arrowhead" points="88,296 76,290.4 76,301.6" fill="black" transform="rotate(90,80,296)"></polygon>
+              <polygon class="arrowhead" points="88,248 76,242.4 76,253.6" fill="black" transform="rotate(270,80,248)"></polygon>
+              <g class="text">
+                <text x="84" y="52">Verifier</text>
+                <text x="128" y="52">/</text>
+                <text x="148" y="52">RP</text>
+                <text x="60" y="132">Attester</text>
+                <text x="56" y="180">TVM</text>
+                <text x="260" y="180">Assigned</text>
+                <text x="324" y="180">Device</text>
+                <text x="76" y="228">Lead</text>
+                <text x="132" y="228">Attester</text>
+                <text x="268" y="308">Device</text>
+                <text x="80" y="324">Guest</text>
+                <text x="132" y="324">Kernel</text>
+                <text x="276" y="324">Attester</text>
+                <text x="292" y="436">Host</text>
+                <text x="340" y="436">Kernel</text>
+                <text x="92" y="468">Platform</text>
+                <text x="92" y="484">Attester</text>
+                <text x="92" y="532">Confidential</text>
+                <text x="264" y="532">Untrusted</text>
+                <text x="76" y="548">Platform</text>
+                <text x="260" y="548">Platform</text>
+              </g>
+            </svg><a href="#section-1-3.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-confidential-vm-with-truste" class="selfRef">Confidential VM with Trusted Device(s)</a>
+        </figcaption></figure>
+</div>
+<p id="section-1-4">This document defines an attestation Evidence format for DA as an EAT <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> profile.
 The format is designed to be generic, extensible and architecture-agnostic.
 Ongoing work on DA concentrates on PCIe devices that support the SPDM protocol <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>.
-As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant devices.
-This format is based on the information provided by the SPDM protocol without imposing additional security constraints.
-It is incumbent upon other entities to describe, select and enforce those additional security constraints based on operational requirements.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">Since other bus architectures and protocols are expected to be supported as the technology gains wider adoption, provisions have been made for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
+As such, this document focuses on establishing the overall framework and formalizing an Evidence format for SPDM-compliant PCIe devices.
+It does not support on-chip SPDM-compliant device, something that is left for future consideration.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">The TVM uses the platform, i.e., PCIe Data Object Exchange (DOE), to transport SPDM packets, but the SPDM protocol uses its own mechanisms and messages to guarantee the authenticity and privacy of the information it carries.
+It defines specific messages for creating and exchanging cryptographic keys between requester and responder to establish secure communication.
+The cryptographic algorithms are selected based on the pre-negotiated capabilities of both parties (Section 10.16 of <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>).
+The SPDM protocol does not rely on the hypervisor or host for anything else other than the physical delivery of content between the trusted and non-trusted worlds.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">This format is based on the information provided by the SPDM protocol without imposing additional security constraints.
+It is incumbent upon other entities to describe, select and enforce those additional security constraints based on operational requirements.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">Since other bus architectures and protocols are expected to be supported as the technology gains wider adoption, provisions have been made for the definition of other Evidence formats such as Compute Express Link (CXL) and the Coherent Hub Interface (CHI).
 This list is by no means exhaustive and is expected to expand.
-<a href="#extend" class="auto internal xref">Section 5</a> outlines the requirements for incorporating new bus technologies into the DAT framework.
-Lastly, live migration of a TVM from one host to another is currently not addressed by the SPDM specification and therefore not covered herein.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<a href="#extend" class="auto internal xref">Section 5</a> outlines the requirements for incorporating new bus technologies into the Device Assignment Token (DAT) framework.
+Lastly, live migration of a TVM from one host to another is currently not addressed by the SPDM specification and therefore not covered herein.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8">As discussed in <span><a href="https://rfc-editor.org/rfc/rfc9334#section-3.4" class="relref">Section 3.4</a> of [<a href="#RFC9334" class="cite xref">RFC9334</a>]</span>, a lead Attester may also act as an internal Verifier.
+For example, the lead Attester would verify the identity of the SPDM responder locally using a provisioned trust anchor.
+If satisfied, it would then repackage the sub-Attester claims in the format defined in this document.
+In other words, the lead Attester would use the framework and claims defined in this document to create Attestation Results.
+In this sense, DAT can be considered to provide both an Attestation Result format and an Evidence format.
+Generally, the distinction between Evidence and Attestation Results, when applied to Conceptual Messages generated by a composite device, may not always be completely transparent to the receiver.
+Note that when using CMW <span>[<a href="#I-D.ietf-rats-msg-wrap" class="cite xref">I-D.ietf-rats-msg-wrap</a>]</span> to wrap the collected claims, the <code>ind</code> field could be used to refine the Conceptual Message type expressed by the EAT media type <span>[<a href="#RFC9782" class="cite xref">RFC9782</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1334,6 +1470,9 @@ Lastly, live migration of a TVM from one host to another is currently not addres
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">PCIe devices maximize hardware efficiency by splitting a single physical card into multiple independent logical devices called functions (see Section 9 of <span>[<a href="#PCIe" class="cite xref">PCIe</a>]</span>).
+Because each physical or virtual function operates in isolation, multiple VMs can directly and safely share the same underlying hardware simultaneously.
+In this document, the terms "<em>device</em>", "<em>interface</em>" and "<em>device interface</em>" refer to the physical or virtual function of a device.<a href="#section-2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="dat-claims">
@@ -1344,17 +1483,17 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <p id="section-3-1">The Device Assignment Token (DAT) is the encompassing envelope for the individual device claims to be presented.
 A DAT can be used as a standalone entity but can also be embedded in a larger, platform-specific attestation token.
 A DAT consists of an EAT profile identifier, a nonce and an EAT submodule (<span><a href="https://rfc-editor.org/rfc/rfc9711#section-4.2.18" class="relref">Section 4.2.18</a> of [<a href="#RFC9711" class="cite xref">RFC9711</a>]</span>) that contains any number of individual device claims.
-Each individual device claim is the combination of a device name and a standard claims format based on the bus or protocol the device supports.
+Each individual submodule is the combination of a device name and a standard claims-set based on the bus or protocol the device supports.
 The syntax of the device name depends on the type of bus or protocol used.
-Each name consists of two parts joined by a semicolon: a namespace and a bus-specific name.
+Each name consists of two parts joined by a colon: a namespace and a bus-specific name.
 See <a href="#spdm-submod-name" class="auto internal xref">Section 3.1.6</a> for SPDM devices, and <a href="#pcie-legacy-submod-name" class="auto internal xref">Section 3.2.1</a> for legacy PCIe devices.
-As previously mentioned, this draft currently defines the claims set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
-Careful condideration was also given to the overall design in order to leave room for future expansion.<a href="#section-3-1" class="pilcrow">¶</a></p>
+As previously mentioned, this draft currently defines the claims-set for SPDM compliant devices and PCIe legacy devices that do not support the SPDM protocol.
+Careful consideration was also given to the overall design in order to leave room for future expansion.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3-2">
 <pre>
 dat = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device#1.0.0"
-  &amp;(eat_nonce: 10) =&gt; bytes .size 64
+  &amp;(eat_nonce: 10) =&gt; bytes .size (8..64)
   &amp;(eat_submods: 266) =&gt; {
     + device-name =&gt; $device-claims-set
   }
@@ -1373,7 +1512,7 @@ $device-claims-set /= pcie-legacy-claims
         </h3>
 <p id="section-3.1-1">A SPDM claim instance is expected to be present for each SPDM compatible device to be attested.
 Each instance consists of a measurements section, a certificates section, or both.
-These can be supplemented with two additional sections: (1) a challenge for Component Mesaurement and Authentication (CMA) scenarios and (2) a device interface report that contains information from the TEE Device Information Security Protocol (TDISP) Device Interface Report.
+These can be supplemented with two additional sections: (1) a challenge for Component Mesaurement and Authentication (CMA) scenarios and (2) a device interface report that contains information from the TEE Device Information Security Protocol (TDISP) Device Interface Report (see Chapter 11 of <span>[<a href="#PCIe" class="cite xref">PCIe</a>]</span>).
 A challenge needs certificate information from the certificate section and as such, can only be present if certificates are included in the SPDM artifacts.
 TDISP messages are embedded in the VENDOR_DEFINED_REQUEST and VENDOR_DEFINED_RESPONSE messages of the SPDM protocol.
 Optionally, the Negotiated State preamble (version, capabilities and algorithms) bytes can be included to present the full negotiated state between the SPDM requester and responder.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
@@ -1409,8 +1548,9 @@ spdm-artefacts //= (
           <h4 id="name-measurements-claim">
 <a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-measurements-claim" class="section-name selfRef">Measurements Claim</a>
           </h4>
-<p id="section-3.1.1-1">There can be up to 239 measurements per device with the entire measurement log optionally signed by the certificate populated in one of the 8 certificate slots.
-It should be noted that measurements formalized herein follow the DMTF measurement specification.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-1">The SPDM specification reserves measurement indexes between 240 and 255, leaving space for 239 measurements per device.
+The entire measurement log is optionally signed by the certificate populated in one of the 8 certificate slots.
+It should be noted that measurements formalized herein follow the DMTF measurement specification (see Table 55 of <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>).<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.1-2">
 <pre>
 spdm-measurements = {
@@ -1544,7 +1684,10 @@ spdm-signature = {
 <p id="section-3.1.3-1">According to the specification, SPDM compliant devices should support at most 8 slots, with slot 0 populated by default.
 Slot 0 <span class="bcp14">SHALL</span> contain a certificate chain that follows the Device certificate model or the Alias certificate model.
 Regardless of the certificate model used, a certificate chain comprises one or more DER-encoded X.509 v3 certificates <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.
-The certificates <span class="bcp14">MUST</span> be concatenated with no intermediate padding.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+The certificates <span class="bcp14">MUST</span> be concatenated with no intermediate padding.
+As described in paragraph 355 of Section 10.6.1 of <span>[<a href="#SPDM" class="cite xref">SPDM</a>]</span>, the certificates in the chain are sorted in descending order, with the end-entity certificate (also known as the "leaf") appearing last.
+According to the same paragraph, a trust anchor may appear as the first certificate in the chain.
+If so, it should not be used to validate the chain without first confirming its presence in a trust anchor store.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.3-2">
 <pre>
 spdm-certificates = {
@@ -1580,22 +1723,25 @@ aux-cert-slot-7 = 7
           <h4 id="name-tdisp-device-interface-repo">
 <a href="#section-3.1.4" class="section-number selfRef">3.1.4. </a><a href="#name-tdisp-device-interface-repo" class="section-name selfRef">TDISP Device Interface Report</a>
           </h4>
-<p id="section-3.1.4-1">A TDISP Device Interface Report can only be obtained if the device interface has transitioned to the CONFIG_LOCK or RUN state of the TDISP state machine.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.4-2">It begins with various bitfields indicating the state and characteristics of the PCIe device interface.
+<p id="section-3.1.4-1">A TDISP Device Interface Report can only be obtained if the device interface has transitioned to the CONFIG_LOCK or RUN state of the TDISP state machine.
+Once in either of these states, the device's firmware ensures that modifications to the interface can't be made by an untrusted party.
+Trust in the device firmware's implemenation is imparted by its measurement and the signature it generates, both verifiable by a 3rd party entity.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.4-2">A TDISP Device Interface Report begins with various bitfields indicating the state and characteristics of the PCIe device interface.
 Next are 3 register fields pertaining to MSI-X (Message Signalled Interrupts), LNR (Lightweight Notification Requester) and TPH (TLP Processing Hints) capabilities.
 MMIO ranges are assigned from PCIe BAR(s) and provide information about the memory areas a device is working with.
 More information on the MMIO range bitfields and the ones defined as part of the device interface field (above) can be found in the TDISP section of the PCI Express specification.
 The last field is device-specific and optionally included to convey additional configuration information about the device.<a href="#section-3.1.4-2" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.4-3">
+<p id="section-3.1.4-3">The <code>tdisp-device-interface-report</code> map <span class="bcp14">MUST NOT</span> be empty.<a href="#section-3.1.4-3" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.4-4">
 <pre>
-tdisp-device-interface-report = {
+tdisp-device-interface-report = non-empty&lt;{
   ? &amp;(interface-info: 1) =&gt; interface-info-bits
   ? &amp;(msi-x-message-control: 2) =&gt; bytes .size 2
-  ? &amp;(lnr-control: 2) =&gt; bytes .size 2
-  ? &amp;(tph-control: 3) =&gt; bytes .size 4
-  ? &amp;(mmio-ranges: 4) =&gt; mmio-ranges
-  ? &amp;(device-specific-info: 5) =&gt; bytes
-}
+  ? &amp;(lnr-control: 3) =&gt; bytes .size 2
+  ? &amp;(tph-control: 4) =&gt; bytes .size 4
+  ? &amp;(mmio-ranges: 5) =&gt; mmio-ranges
+  ? &amp;(device-specific-info: 6) =&gt; bytes
+}&gt;
 
 interface-info-bits = bytes .bits interface-info-flags
 interface-info-flags = &amp;(bit0: 0,
@@ -1627,7 +1773,7 @@ range-attributes-flags = &amp;(bit0: 0,
                            bit2: 2,
                            bit3: 3,
                           )
-</pre><a href="#section-3.1.4-3" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.4-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1665,8 +1811,9 @@ For example: "spdm:C=CA,O=ACME,OU=Widget,CN=0123456789".<a href="#section-3.1.6-
         <h3 id="name-pcie-legacy-device-claims">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-pcie-legacy-device-claims" class="section-name selfRef">PCIe Legacy Device Claims</a>
         </h3>
-<p id="section-3.2-1">The definition of a device claims set for PCIe legacy devices that do not implement the extensions needed to attest for their provenance and configuration is provided, making it is possible to keep using current assets as secures ones are being provisioned.
-This legacy device claims set simply mirrors the type 0/1 common registers of the PCIe configuration space, mandating only that the vendor and device identification code be provided.
+<p id="section-3.2-1">A definition is provided for a device claims-set for PCIe legacy devices that do not implement the necessary extensions to attest to their provenance and configuration.
+This makes it possible to keep using current assets as secured ones are being provisioned.
+This legacy device claims-set simply mirrors the type 0/1 common registers of the PCIe configuration space, mandating only that the vendor and device identification code be provided.
 Other fields of the configuration space header may optionally be included should they add value.
 A binary format of the PCIe configuration space is made available for processing by existing PCIe configuration space tools.
 Implementers may optionally choose to include both text and binary versions should there be a use case to support this representation.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
@@ -1772,7 +1919,7 @@ While receivers are expected to accept a wide range of algorithms, Attesters wil
 <p id="section-4.4-1">DAT supports the freshness models for attestation Evidence based on nonces and epoch IDs (see Section <a href="https://rfc-editor.org/rfc/rfc9334#section-10.2" class="relref">10.2</a> and Section <a href="https://rfc-editor.org/rfc/rfc9334#section-10.3" class="relref">10.3</a> of <span>[<a href="#RFC9334" class="cite xref">RFC9334</a>]</span>) using the <code>eat_nonce</code> claim to convey the nonce or epoch ID supplied by the Verifier.
 No further assumptions are made about the specific remote attestation protocol.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <p id="section-4.4-2">Note that the use of epoch IDs is subject by the type restrictions imposed by the <code>eat_nonce</code> syntax.
-For use in DAT, the epoch ID must be encodable as an opaque binary string of between 8 and 64 octets; an Epoclet can be used for this purpose (see <span>[<a href="#I-D.ietf-rats-epoch-markers" class="cite xref">I-D.ietf-rats-epoch-markers</a>]</span>).<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+For use in DAT, the epoch ID <span class="bcp14">MUST</span> be encodable as an opaque binary string of between 8 and 64 octets; an Epoclet can be used for this purpose (see <span>[<a href="#I-D.ietf-rats-epoch-markers" class="cite xref">I-D.ietf-rats-epoch-markers</a>]</span>).<a href="#section-4.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="synopsis">
@@ -1878,6 +2025,9 @@ The claims-set <span class="bcp14">MUST</span> include a suitable <code>eat_prof
 <p id="section-5.2-1">A new claims-set <span class="bcp14">MUST</span> define a suitable naming convention for the <code>submod</code> keys associated with it.
 When creating this convention, ensure that it does not clash with any existing ones.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">See <a href="#spdm-submod-name" class="auto internal xref">Section 3.1.6</a> for the blueprint.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">The concrete name derived by the naming scheme is anticipated to be used to map the Attester to a corresponding CoRIM <span>[<a href="#I-D.ietf-rats-corim" class="cite xref">I-D.ietf-rats-corim</a>]</span> environment map.
+This map can then be used to locate matching Reference Values and Endorsements during the appraisal process.
+This type of "evidence transformation" is outside the scope of this document and will be covered by an associated CoRIM profile.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="claims-registrations">
@@ -1903,7 +2053,7 @@ If the claims-set needs to define new claims to express the desired semantics, a
 
 dat = {
   &amp;(eat_profile: 265) =&gt; "tag:linaro.org,2025:device#1.0.0",
-  &amp;(eat_nonce: 10) =&gt; bytes .size 64,
+  &amp;(eat_nonce: 10) =&gt; bytes .size (8 .. 64),
   &amp;(eat_submods: 266) =&gt; {+ device-name =&gt; $device-claims-set},
 }
 device-name = text
@@ -2007,14 +2157,14 @@ pcie-type-0-1-config-space-text = {
   ? &amp;(headerType: 9) =&gt; bytes .size 1,
   ? &amp;(BITS: 10) =&gt; bytes .size 1,
 }
-tdisp-device-interface-report = {
-  ? &amp;(interface-info: 1) =&gt; interface-info-bits,
-  ? &amp;(msi-x-message-control: 2) =&gt; bytes .size 2,
-  ? &amp;(lnr-control: 2) =&gt; bytes .size 2,
-  ? &amp;(tph-control: 3) =&gt; bytes .size 4,
-  ? &amp;(mmio-ranges: 4) =&gt; mmio-ranges,
-  ? &amp;(device-specific-info: 5) =&gt; bytes,
-}
+tdisp-device-interface-report = non-empty&lt;{
+    ? &amp;(interface-info: 1) =&gt; interface-info-bits,
+    ? &amp;(msi-x-message-control: 2) =&gt; bytes .size 2,
+    ? &amp;(lnr-control: 3) =&gt; bytes .size 2,
+    ? &amp;(tph-control: 4) =&gt; bytes .size 4,
+    ? &amp;(mmio-ranges: 5) =&gt; mmio-ranges,
+    ? &amp;(device-specific-info: 6) =&gt; bytes,
+}&gt;
 interface-info-bits = bytes .bits interface-info-flags
 interface-info-flags = &amp;(
   bit0: 0,
@@ -2041,6 +2191,7 @@ range-attributes-flags = &amp;(
   bit2: 2,
   bit3: 3,
 )
+non-empty&lt;M&gt; = M .and ({+ any =&gt; any})
 </pre><a href="#section-6-1" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2054,6 +2205,10 @@ range-attributes-flags = &amp;(
 The security and privacy considerations of these specifications therefore apply here too.
 In particular, the considerations discussed in Sections <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.1" class="relref">9.1</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.1" class="relref">Claim Trustworthiness</a>)</span>, <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.4" class="relref">9.4</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.4" class="relref">Multiple EAT Consumers</a>)</span> and <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.5" class="relref">9.5</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.5" class="relref">Detached EAT Bundle Digest Security Considerations</a>)</span> of <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> apply fully.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">When DAT is an UCCS, the considerations in <span>[<a href="#RFC9781" class="cite xref">RFC9781</a>]</span> also apply.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">PCIe devices are assigned to a TVM via their physical or virtual functions.
+The hardware implementation of a device guarantees that functions are mutually exclusive; in other words, operations performed on one function do not affect other functions.
+The TDISP standard also guarantees that, while a device function is in the CONFIG_LOCK or RUN state, its characteristics cannot be modified by untrusted parties.
+However, faulty hardware or an inadequate implementation of the TDISP specification could be exploited by an attacker for side-channel attacks.<a href="#section-7-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="privacy-considerations">
@@ -2063,7 +2218,7 @@ In particular, the considerations discussed in Sections <span><a href="https://r
       </h2>
 <p id="section-8-1">A DAT can include a great deal of detail about the execution environment associated with the TVM and, therefore, the workload being executed within it.
 This can provide insight into the type of computation being carried out by the workload.
-It can also enable tracking of a given workload across multiple TVM instances in both the temporal and spatial dimensions.<a href="#section-8-1" class="pilcrow">¶</a></p>
+It can also enable tracking of a given workload across multiple TVM instances in both the temporal dimension (e.g., across reboots of the hosting hardware) and the spatial dimension (e.g., across migrations between hardware, either within or between data centres).<a href="#section-8-1" class="pilcrow">¶</a></p>
 <p id="section-8-2">A DAT is usually one component of a composite evidence payload.
 In such cases, multiple Verifiers may be involved in the appraisal process.
 The differential encryption considerations discussed in Section <span><a href="https://rfc-editor.org/rfc/rfc9711#section-9.4" class="relref">9.4</a> (<a href="https://rfc-editor.org/rfc/rfc9711#section-9.4" class="relref">Multiple EAT Consumers</a>)</span> of <span>[<a href="#RFC9711" class="cite xref">RFC9711</a>]</span> therefore apply.<a href="#section-8-2" class="pilcrow">¶</a></p>
@@ -2307,7 +2462,7 @@ The differential encryption considerations discussed in Section <span><a href="h
 <dl class="references">
 <dt id="I-D.ietf-rats-epoch-markers">[I-D.ietf-rats-epoch-markers]</dt>
         <dd>
-<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Pan, W.</span>, <span class="refAuthor">Mihalcea, I.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Epoch Markers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-epoch-markers-04</span>, <time datetime="2026-05-18" class="refDate">18 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-epoch-markers-04">https://datatracker.ietf.org/doc/html/draft-ietf-rats-epoch-markers-04</a>&gt;</span>. </dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Pan, W.</span>, <span class="refAuthor">Mihalcea, I.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Epoch Markers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-epoch-markers-05</span>, <time datetime="2026-07-03" class="refDate">3 July 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-epoch-markers-05">https://datatracker.ietf.org/doc/html/draft-ietf-rats-epoch-markers-05</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-rats-msg-wrap">[I-D.ietf-rats-msg-wrap]</dt>
         <dd>
@@ -2374,6 +2529,14 @@ The differential encryption considerations discussed in Section <span><a href="h
 <a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="I-D.ietf-rats-corim">[I-D.ietf-rats-corim]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Deshpande, Y.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Concise Reference Integrity Manifest"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-corim-11</span>, <time datetime="2026-07-06" class="refDate">6 July 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-11">https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-11</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="PCIe">[PCIe]</dt>
+        <dd>
+<span class="refAuthor">PCI-SIG</span>, <span class="refTitle">"PCI Express Base Specification Revision 7.0"</span>, <time datetime="2025-06-05" class="refDate">5 June 2025</time>. </dd>
+<dd class="break"></dd>
 <dt id="SPDM">[SPDM]</dt>
       <dd>
 <span class="refAuthor">DMTF</span>, <span class="refTitle">"Security Protocol and Data Model (SPDM) Specification Version: 1.3.2"</span>, <time datetime="2024-08-21" class="refDate">21 August 2024</time>, <span>&lt;<a href="https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.3.2.pdf">https://www.dmtf.org/sites/default/files/standards/documents/DSP0274_1.3.2.pdf</a>&gt;</span>. </dd>
@@ -2450,134 +2613,13 @@ f9efc3341597f75f8d94432ad39566a8c5704b2004ba001c094f475bfc057f9f25d7\
 In this setup, a Trusted Virtual Machine (TVM) executes on a Confidential Platform, which provides the confidential computing environment.
 One or more devices (e.g., a GPU) are assigned to the TVM.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <p id="appendix-B-2">Within the TVM, a Lead Attester agent, e.g., a userland daemon, can collect Evidence from the Confidential Platform, as well as from all the assigned devices, using the relevant ABI offered by the guest OS kernel.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
-<span id="name-confidential-vm-with-truste"></span><div id="fig-ratsd">
-<figure id="figure-1">
-        <div id="appendix-B-3.1">
-          <div class="alignCenter art-svg artwork" id="appendix-B-3.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="624" width="424" viewBox="0 0 424 624" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-              <path d="M 8,112 L 8,576" fill="none" stroke="black"></path>
-              <path d="M 32,160 L 32,368" fill="none" stroke="black"></path>
-              <path d="M 32,400 L 32,560" fill="none" stroke="black"></path>
-              <path d="M 48,208 L 48,240" fill="none" stroke="black"></path>
-              <path d="M 48,304 L 48,336" fill="none" stroke="black"></path>
-              <path d="M 48,448 L 48,496" fill="none" stroke="black"></path>
-              <path d="M 80,248 L 80,296" fill="none" stroke="black"></path>
-              <path d="M 80,344 L 80,440" fill="none" stroke="black"></path>
-              <path d="M 112,72 L 112,200" fill="none" stroke="black"></path>
-              <path d="M 144,248 L 144,296" fill="none" stroke="black"></path>
-              <path d="M 144,344 L 144,416" fill="none" stroke="black"></path>
-              <path d="M 176,208 L 176,240" fill="none" stroke="black"></path>
-              <path d="M 176,304 L 176,336" fill="none" stroke="black"></path>
-              <path d="M 176,448 L 176,496" fill="none" stroke="black"></path>
-              <path d="M 192,160 L 192,368" fill="none" stroke="black"></path>
-              <path d="M 192,400 L 192,424" fill="none" stroke="black"></path>
-              <path d="M 192,440 L 192,560" fill="none" stroke="black"></path>
-              <path d="M 216,160 L 216,368" fill="none" stroke="black"></path>
-              <path d="M 216,400 L 216,424" fill="none" stroke="black"></path>
-              <path d="M 216,440 L 216,560" fill="none" stroke="black"></path>
-              <path d="M 232,144 L 232,160" fill="none" stroke="black"></path>
-              <path d="M 232,288 L 232,336" fill="none" stroke="black"></path>
-              <path d="M 232,416 L 232,448" fill="none" stroke="black"></path>
-              <path d="M 248,128 L 248,144" fill="none" stroke="black"></path>
-              <path d="M 264,344 L 264,416" fill="none" stroke="black"></path>
-              <path d="M 344,288 L 344,336" fill="none" stroke="black"></path>
-              <path d="M 360,160 L 360,368" fill="none" stroke="black"></path>
-              <path d="M 376,144 L 376,352" fill="none" stroke="black"></path>
-              <path d="M 376,416 L 376,448" fill="none" stroke="black"></path>
-              <path d="M 392,128 L 392,336" fill="none" stroke="black"></path>
-              <path d="M 392,400 L 392,560" fill="none" stroke="black"></path>
-              <path d="M 416,112 L 416,576" fill="none" stroke="black"></path>
-              <path d="M 56,32 L 168,32" fill="none" stroke="black"></path>
-              <path d="M 56,64 L 168,64" fill="none" stroke="black"></path>
-              <path d="M 24,96 L 400,96" fill="none" stroke="black"></path>
-              <path d="M 248,128 L 392,128" fill="none" stroke="black"></path>
-              <path d="M 232,144 L 376,144" fill="none" stroke="black"></path>
-              <path d="M 32,160 L 192,160" fill="none" stroke="black"></path>
-              <path d="M 216,160 L 360,160" fill="none" stroke="black"></path>
-              <path d="M 48,208 L 176,208" fill="none" stroke="black"></path>
-              <path d="M 48,240 L 176,240" fill="none" stroke="black"></path>
-              <path d="M 232,288 L 344,288" fill="none" stroke="black"></path>
-              <path d="M 48,304 L 176,304" fill="none" stroke="black"></path>
-              <path d="M 48,336 L 176,336" fill="none" stroke="black"></path>
-              <path d="M 232,336 L 344,336" fill="none" stroke="black"></path>
-              <path d="M 376,336 L 392,336" fill="none" stroke="black"></path>
-              <path d="M 360,352 L 376,352" fill="none" stroke="black"></path>
-              <path d="M 32,368 L 72,368" fill="none" stroke="black"></path>
-              <path d="M 88,368 L 136,368" fill="none" stroke="black"></path>
-              <path d="M 152,368 L 192,368" fill="none" stroke="black"></path>
-              <path d="M 216,368 L 256,368" fill="none" stroke="black"></path>
-              <path d="M 272,368 L 360,368" fill="none" stroke="black"></path>
-              <path d="M 32,400 L 72,400" fill="none" stroke="black"></path>
-              <path d="M 88,400 L 136,400" fill="none" stroke="black"></path>
-              <path d="M 152,400 L 192,400" fill="none" stroke="black"></path>
-              <path d="M 216,400 L 256,400" fill="none" stroke="black"></path>
-              <path d="M 272,400 L 392,400" fill="none" stroke="black"></path>
-              <path d="M 232,416 L 256,416" fill="none" stroke="black"></path>
-              <path d="M 272,416 L 376,416" fill="none" stroke="black"></path>
-              <path d="M 160,432 L 248,432" fill="none" stroke="black"></path>
-              <path d="M 48,448 L 176,448" fill="none" stroke="black"></path>
-              <path d="M 232,448 L 376,448" fill="none" stroke="black"></path>
-              <path d="M 48,496 L 176,496" fill="none" stroke="black"></path>
-              <path d="M 32,560 L 192,560" fill="none" stroke="black"></path>
-              <path d="M 216,560 L 392,560" fill="none" stroke="black"></path>
-              <path d="M 24,592 L 400,592" fill="none" stroke="black"></path>
-              <path d="M 56,32 C 47.16936,32 40,39.16936 40,48" fill="none" stroke="black"></path>
-              <path d="M 168,32 C 176.83064,32 184,39.16936 184,48" fill="none" stroke="black"></path>
-              <path d="M 56,64 C 47.16936,64 40,56.83064 40,48" fill="none" stroke="black"></path>
-              <path d="M 168,64 C 176.83064,64 184,56.83064 184,48" fill="none" stroke="black"></path>
-              <path d="M 24,96 C 15.16936,96 8,103.16936 8,112" fill="none" stroke="black"></path>
-              <path d="M 400,96 C 408.83064,96 416,103.16936 416,112" fill="none" stroke="black"></path>
-              <path d="M 160,432 C 151.16936,432 144,424.83064 144,416" fill="none" stroke="black"></path>
-              <path d="M 248,432 C 256.83064,432 264,424.83064 264,416" fill="none" stroke="black"></path>
-              <path d="M 24,592 C 15.16936,592 8,584.83064 8,576" fill="none" stroke="black"></path>
-              <path d="M 400,592 C 408.83064,592 416,584.83064 416,576" fill="none" stroke="black"></path>
-              <polygon class="arrowhead" points="272,344 260,338.4 260,349.6" fill="black" transform="rotate(270,264,344)"></polygon>
-              <polygon class="arrowhead" points="152,344 140,338.4 140,349.6" fill="black" transform="rotate(270,144,344)"></polygon>
-              <polygon class="arrowhead" points="152,296 140,290.4 140,301.6" fill="black" transform="rotate(90,144,296)"></polygon>
-              <polygon class="arrowhead" points="152,248 140,242.4 140,253.6" fill="black" transform="rotate(270,144,248)"></polygon>
-              <polygon class="arrowhead" points="120,200 108,194.4 108,205.6" fill="black" transform="rotate(90,112,200)"></polygon>
-              <polygon class="arrowhead" points="120,72 108,66.4 108,77.6" fill="black" transform="rotate(270,112,72)"></polygon>
-              <polygon class="arrowhead" points="88,440 76,434.4 76,445.6" fill="black" transform="rotate(90,80,440)"></polygon>
-              <polygon class="arrowhead" points="88,344 76,338.4 76,349.6" fill="black" transform="rotate(270,80,344)"></polygon>
-              <polygon class="arrowhead" points="88,296 76,290.4 76,301.6" fill="black" transform="rotate(90,80,296)"></polygon>
-              <polygon class="arrowhead" points="88,248 76,242.4 76,253.6" fill="black" transform="rotate(270,80,248)"></polygon>
-              <g class="text">
-                <text x="84" y="52">Verifier</text>
-                <text x="128" y="52">/</text>
-                <text x="148" y="52">RP</text>
-                <text x="60" y="132">Attester</text>
-                <text x="56" y="180">TVM</text>
-                <text x="260" y="180">Assigned</text>
-                <text x="324" y="180">Device</text>
-                <text x="76" y="228">Lead</text>
-                <text x="132" y="228">Attester</text>
-                <text x="268" y="308">Device</text>
-                <text x="80" y="324">Guest</text>
-                <text x="132" y="324">Kernel</text>
-                <text x="276" y="324">Attester</text>
-                <text x="292" y="436">Host</text>
-                <text x="340" y="436">Kernel</text>
-                <text x="92" y="468">Platform</text>
-                <text x="92" y="484">Attester</text>
-                <text x="92" y="532">Confidential</text>
-                <text x="264" y="532">Untrusted</text>
-                <text x="76" y="548">Platform</text>
-                <text x="260" y="548">Platform</text>
-              </g>
-            </svg><a href="#appendix-B-3.1.1" class="pilcrow">¶</a>
-</div>
-</div>
-<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-confidential-vm-with-truste" class="selfRef">Confidential VM with Trusted Device(s)</a>
-        </figcaption></figure>
-</div>
-<p id="appendix-B-4">When a challenger (i.e., a Verifier or a Relying Party) requests Evidence from the TVM, the Lead Attester broadcasts the received nonce to all the sub-Attesters, obtains Evidence from each of them and assembles the composite Evidence using a CMW Collection (Section 3.3 of <span>[<a href="#I-D.ietf-rats-msg-wrap" class="cite xref">I-D.ietf-rats-msg-wrap</a>]</span>).
-It then signs the composite Evidence using its key material as shown in <a href="#fig-ratsd-token" class="auto internal xref">Figure 2</a>.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
-<p id="appendix-B-5">The claims obtained by the assigned devices are repackaged into DAT submods, which are then signed as part of the CMW collection using the Lead Attester key.<a href="#appendix-B-5" class="pilcrow">¶</a></p>
+<p id="appendix-B-3">When a challenger (i.e., a Verifier or a Relying Party) requests Evidence from the TVM, the Lead Attester broadcasts the received nonce to all the sub-Attesters, obtains Evidence from each of them and assembles the composite Evidence using a CMW Collection (Section 3.3 of <span>[<a href="#I-D.ietf-rats-msg-wrap" class="cite xref">I-D.ietf-rats-msg-wrap</a>]</span>).
+It then signs the composite Evidence using its key material as shown in <a href="#fig-ratsd-token" class="auto internal xref">Figure 2</a>.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-4">The claims obtained by the assigned devices are repackaged into DAT submods, which are then signed as part of the CMW collection using the Lead Attester key.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
 <span id="name-composite-attestation-evide"></span><div id="fig-ratsd-token">
 <figure id="figure-2">
-        <div id="appendix-B-6.1">
-          <div class="alignCenter art-svg artwork" id="appendix-B-6.1.1">
+        <div id="appendix-B-5.1">
+          <div class="alignCenter art-svg artwork" id="appendix-B-5.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="336" width="560" viewBox="0 0 560 336" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
               <path d="M 72,80 L 72,240" fill="none" stroke="black"></path>
               <path d="M 120,48 L 120,72" fill="none" stroke="black"></path>
@@ -2640,14 +2682,14 @@ It then signs the composite Evidence using its key material as shown in <a href=
                 <text x="480" y="276">}</text>
                 <text x="336" y="292">}</text>
               </g>
-            </svg><a href="#appendix-B-6.1.1" class="pilcrow">¶</a>
+            </svg><a href="#appendix-B-5.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
 <a href="#name-composite-attestation-evide" class="selfRef">Composite Attestation Evidence</a>
         </figcaption></figure>
 </div>
-<p id="appendix-B-7">The Veraison project's <code>ratsd</code> daemon is an example of this behaviour.<a href="#appendix-B-7" class="pilcrow">¶</a></p>
+<p id="appendix-B-6">The Veraison project's <code>ratsd</code> daemon is an example of this behaviour.<a href="#appendix-B-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="acknowledgments">
@@ -2657,12 +2699,17 @@ It then signs the composite Evidence using its key material as shown in <a href=
       </h2>
 <p id="appendix-C-1">Thank you
 Basma El Gaabouri,
+Carl Wallace,
+Giri Mandyam,
+<span class="contact-name">Ionuț Mihalcea</span>,
 James Bottomley,
 Jon Lange,
 Lukas Wunner,
+Michael Richardson,
 Ned Smith,
 Roksana Golizadeh Mojarad,
-Simon Frost
+Simon Frost,
+Yogesh Deshpande
 and
 Yousuf Sait
 for your comments and suggestions.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
