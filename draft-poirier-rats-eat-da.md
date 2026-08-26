@@ -420,7 +420,7 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Claim Name: spdm-measurements
 * Claim Description: SPDM Measurements
 * JWT Claim Name: N/A
-* Claim Key: 3802
+* Claim Key: CPA3802
 * Claim Value Type(s): map
 * Change Controller: IETF
 * Specification Document(s): {{spdm-measurements}} of {{&SELF}}
@@ -430,7 +430,7 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Claim Name: spdm-certificates
 * Claim Description: SPDM Certificates
 * JWT Claim Name: N/A
-* Claim Key: 3803
+* Claim Key: CPA3803
 * Claim Value Type(s): map
 * Change Controller: IETF
 * Specification Document(s): {{spdm-certificates}} of {{&SELF}}
@@ -440,7 +440,7 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Claim Name: spdm-vca
 * Claim Description: SPDM Version, Capabilities and Algorithms
 * JWT Claim Name: N/A
-* Claim Key: 3804
+* Claim Key: CPA3804
 * Claim Value Type(s): bytes
 * Change Controller: IETF
 * Specification Document(s): {{spdm-vca}} of {{&SELF}}
@@ -450,7 +450,7 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Claim Name: pcie-legacy-device-text
 * Claim Description: PCIe Legacy Device Textual Representation
 * JWT Claim Name: N/A
-* Claim Key: 3805
+* Claim Key: CPA3805
 * Claim Value Type(s): map
 * Change Controller: IETF
 * Specification Document(s): {{pcie-legacy-device}} of {{&SELF}}
@@ -460,7 +460,7 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Claim Name: pcie-legacy-device-binary
 * Claim Description: PCIe Legacy Device Binary Representation
 * JWT Claim Name: N/A
-* Claim Key: 3806
+* Claim Key: CPA3806
 * Claim Value Type(s): bytes
 * Change Controller: IETF
 * Specification Document(s): {{pcie-legacy-device}} of {{&SELF}}
@@ -470,7 +470,7 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Claim Name: spdm-challenge
 * Claim Description: SPDM Challenge signature block
 * JWT Claim Name: N/A
-* Claim Key: 3807
+* Claim Key: CPA3807
 * Claim Value Type(s): map
 * Change Controller: IETF
 * Specification Document(s): {{spdm-challenge}} of {{&SELF}}
@@ -480,7 +480,7 @@ IANA is requested to register the following claims in the "CBOR Web Token (CWT) 
 * Claim Name: tdisp-device-interface-report
 * Claim Description: TDISP Device Interface Report
 * JWT Claim Name: N/A
-* Claim Key: 3808
+* Claim Key: CPA3808
 * Claim Value Type(s): map
 * Change Controller: IETF
 * Specification Document(s): {{interface-report}} of {{&SELF}}
