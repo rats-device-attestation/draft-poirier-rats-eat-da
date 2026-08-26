@@ -5,10 +5,10 @@
 Remote ATtestation ProcedureS                                 M. Poirier
 Internet-Draft                                                    Linaro
 Intended status: Informational                               H. Birkholz
-Expires: 17 January 2027                                  Fraunhofer SIT
+Expires: 27 February 2027                                 Fraunhofer SIT
                                                               T. Fossati
                                                                   Linaro
-                                                            16 July 2026
+                                                          26 August 2026
 
 
             An EAT Profile for Trustworthy Device Assignment
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 January 2027.
+   This Internet-Draft will expire on 27 February 2027.
 
 Copyright Notice
 
@@ -963,7 +963,7 @@ Table of Contents
 
    *  JWT Claim Name: N/A
 
-   *  Claim Key: 3802
+   *  Claim Key: CPA3802
 
    *  Claim Value Type(s): map
 
@@ -979,7 +979,7 @@ Table of Contents
 
    *  JWT Claim Name: N/A
 
-   *  Claim Key: 3803
+   *  Claim Key: CPA3803
 
    *  Claim Value Type(s): map
 
@@ -995,7 +995,7 @@ Table of Contents
 
    *  JWT Claim Name: N/A
 
-   *  Claim Key: 3804
+   *  Claim Key: CPA3804
 
    *  Claim Value Type(s): bytes
 
@@ -1011,7 +1011,7 @@ Table of Contents
 
    *  JWT Claim Name: N/A
 
-   *  Claim Key: 3805
+   *  Claim Key: CPA3805
 
    *  Claim Value Type(s): map
 
@@ -1027,7 +1027,7 @@ Table of Contents
 
    *  JWT Claim Name: N/A
 
-   *  Claim Key: 3806
+   *  Claim Key: CPA3806
 
    *  Claim Value Type(s): bytes
 
@@ -1043,7 +1043,7 @@ Table of Contents
 
    *  JWT Claim Name: N/A
 
-   *  Claim Key: 3807
+   *  Claim Key: CPA3807
 
    *  Claim Value Type(s): map
 
@@ -1059,7 +1059,7 @@ Table of Contents
 
    *  JWT Claim Name: N/A
 
-   *  Claim Key: 3808
+   *  Claim Key: CPA3808
 
    *  Claim Value Type(s): map
 
